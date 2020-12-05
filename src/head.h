@@ -5,3 +5,6 @@
 #define Clear system("clear");
 
 int welcome(int a);
+void help();
+
+int iffile(char a[50]);
