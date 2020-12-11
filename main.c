@@ -28,40 +28,12 @@ void help() {
 	puts("\t\t\t游戏帮助");
 	printf("按Enter返回：");
 	getchar();
-/*
-	int i;
-	char b[200];
-	FILE *fp;
-
-	fp = fopen("~/.cgamefile/cgame2/help","r");
-	if (!fp) {
-		puts("\t\t\t\t 帮助文档缺失！");
-		printf("按任意按键退出：\n");
-		getchar();
-		return;
-	}
-	else {
-		for (i = 0; i < 10; i++) {
-			fgets(b,200,fp);
-			printf("%s",b);
-		}
-		fclose(fp);
-	}
-*/
 	return;
 }
 
 int main() {
 	int a=0,b=0;
 
-/*
-	if(iffile("~/.cgamefile/cgame2/help") == 0) {
-		system("mkdir ~/.cgamefile");
-		system("mkdir ~/.cgamefile/cgame2");
-		system("touch ~/.cgamefile/cgame2/help");
-		system("echo -e \"\\t\\t\\t游戏帮助\\n\" >> ~/.cgamefile/cgame2/help");
-	}
-*/
 	Clear
 	while (welcome(a) <= 200) {
 		b = getchar();
