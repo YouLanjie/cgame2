@@ -25,7 +25,7 @@ int welcome(int a) {
 }
 
 void help() {
-	puts("\t\t\t游戏帮助");
+	puts("\t\t\t\t   游戏帮助");
 	printf("按Enter返回：");
 	getchar();
 	return;
@@ -61,7 +61,9 @@ int main() {
 				break;
 			default:
 				Clear
-				return 0;
+				puts("输入错误！按下Enter重试");
+				getchar();
+				Clear
 				break;
 		}
 		Clear
