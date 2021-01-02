@@ -2,9 +2,9 @@
 #include <stdlib.h>                          //system();srand();rand();
 #include <string.h>                          //strcmp();
 
+#include "kbhit_if.h"
+
 #define Clear system("clear");
 
-int welcome(int a);
+void welcome();
 void help();
-
-int iffile(char a[50]);

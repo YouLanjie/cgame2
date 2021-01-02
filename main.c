@@ -1,46 +1,18 @@
 #include "src/head.h"                           //导入头文件
 
-int iffile(char a[50]) {
-	int b = 1;
-	FILE *fp;
-
-	fp = fopen(a,"r");
-	if(!fp) {
-		b = 0;
-		return b;
-	}
-	fclose(fp);
-	return b;
-}
-
-int welcome(int a) {
-	puts("\t\t\t\t     欢迎\n");
-	puts("\t\t\t\t  1.开始游戏");
-	puts("\t\t\t\t  2.游戏记录");
-	puts("\t\t\t\t  3.游戏帮助");
-	puts("\t\t\t\t  0.退出游戏");
-	printf("请选择：");
-	a++;
-	return a;
-}
-
-void help() {
-	puts("\t\t\t\t   游戏帮助");
-	printf("按Enter返回：");
-	getchar();
-	return;
-}
-
 int main() {
-	int a=0,b=0;
+	int a=0,b;
 
 	Clear
-	while (welcome(a) <= 200) {
-		b = getchar();
+	while (a <= 100) {
+		welcome();
+		b = kbhit();
 		getchar();
 		switch (b) {
 			case 0x1B:
 			case 0x30:
+			case 0x51:
+			case 0x71:
 				Clear
 				return 0;
 				break;
@@ -62,6 +34,7 @@ int main() {
 			default:
 				Clear
 				puts("输入错误！按下Enter重试");
+				a++;
 				getchar();
 				Clear
 				break;
@@ -70,4 +43,24 @@ int main() {
 	}
 	Clear
 	return 0;
+}
+
+void welcome() {
+	printf("\n                                     \033[;31m欢迎\033[0m\n\n\n");
+	printf("\033[;33m--------------------------------------------------------------------------------\n");
+	printf("\033[;33m|                                                                              |\n");
+	printf("\033[;33m|                                                                              |\033[0m\n");
+	printf("\033[;33m|\033[0m                   1.开始游戏                    2.游戏记录                   \033[;33m|\033[0m\n");
+	printf("\033[;33m|\033[0m                   3.游戏帮助                    0.退出游戏                   \033[;33m|\033[0m\n");
+	printf("\033[;33m|\033[0m  请选择:\033[69C\033[;33m|\n");
+	printf("\033[;33m|                                                                              |\n");
+	printf("--------------------------------------------------------------------------------\033[0m\033[2A\033[69D");
+	return;
+}
+
+void help() {
+	puts("\t\t\t\t   游戏帮助");
+	printf("按Enter返回：");
+	getchar();
+	return;
 }
