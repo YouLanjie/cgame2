@@ -7,4 +7,5 @@
 #define Clear system("clear");
 
 void welcome();
+void game();
 void help();

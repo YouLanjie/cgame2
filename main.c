@@ -1,42 +1,36 @@
 #include "src/head.h"                           //导入头文件
 
 int main() {
-	int a=0,b;
-
+	int a;
 	Clear
-	while (a <= 100) {
+	while (a != 0x1B && 0x30 && 0x51 && 0x71) {
 		welcome();
-		b = kbhit();
+		a = kbhit();
 		getchar();
-		switch (b) {
-			case 0x1B:
+		printf("\n\n\n");
+		Clear
+		switch (a) {
 			case 0x30:
 			case 0x51:
 			case 0x71:
-				Clear
 				return 0;
 				break;
 			case 0x31:
-				Clear
-				printf("暂未开发\n");
-				getchar();
+				game();
 				break;
 			case 0x32:
-				Clear
 				printf("暂未开发\n");
+				kbhit();
 				getchar();
 				break;
 			case 0x33:
-				Clear
 				help();
-				Clear
 				break;
 			default:
-				Clear
-				puts("输入错误！按下Enter重试");
-				a++;
+				puts("\n\t\t\t\t    错误！");
+				puts("\t\t\t       按任意按键返回");
+				kbhit();
 				getchar();
-				Clear
 				break;
 		}
 		Clear
@@ -46,7 +40,8 @@ int main() {
 }
 
 void welcome() {
-	printf("\n                                     \033[;31m欢迎\033[0m\n\n\n");
+	Clear
+	printf("\n                                     \033[;37m欢迎\033[0m\n\n\n");
 	printf("\033[;33m--------------------------------------------------------------------------------\n");
 	printf("\033[;33m|                                                                              |\n");
 	printf("\033[;33m|                                                                              |\033[0m\n");
@@ -55,6 +50,11 @@ void welcome() {
 	printf("\033[;33m|\033[0m  请选择:\033[69C\033[;33m|\n");
 	printf("\033[;33m|                                                                              |\n");
 	printf("--------------------------------------------------------------------------------\033[0m\033[2A\033[69D");
+	return;
+}
+
+void game() {
+
 	return;
 }
 
