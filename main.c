@@ -10,6 +10,7 @@ int main() {
 		printf("\n\n\n");
 		Clear
 		switch (a) {
+			case 0x1B:
 			case 0x30:
 			case 0x51:
 			case 0x71:
@@ -60,7 +61,8 @@ void game() {
 
 void help() {
 	puts("\t\t\t\t   游戏帮助");
-	printf("按Enter返回：");
+	printf("按任意按键返回：");
+	kbhit();
 	getchar();
 	return;
 }

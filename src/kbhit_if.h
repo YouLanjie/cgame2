@@ -1,6 +1,3 @@
-/*
-来自“https://github.com/youlanjie/C-head/”仓库
-*/
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
