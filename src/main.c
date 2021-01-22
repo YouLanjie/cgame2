@@ -1,4 +1,4 @@
-#include "src/head.h"                           //导入头文件
+#include "headfile/head.h"                           //导入头文件
 
 int main() {
 	int a;
