@@ -5,6 +5,7 @@
 #include "kbhit_if.h"
 
 #define Clear system("clear");
+#define Max 15
 
 void welcome();
 void game();
