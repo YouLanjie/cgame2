@@ -1,6 +1,7 @@
 #include <stdio.h>                           //标准库
 #include <stdlib.h>                          //system();srand();rand();malloc();free();
 #include <string.h>                          //strcmp();
+#include <unistd.h>
 
 #include "kbhit_input.h"
 
@@ -13,7 +14,10 @@ struct Chess
 	int count;
 };
 
+void init();
 void welcome();
-void game();
+void game(int *count);
+void save(struct Chess *p,int Count);
+void history();
 void help();
-void printboard();
+void printboard(struct Chess *p);
