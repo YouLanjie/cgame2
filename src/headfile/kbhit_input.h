@@ -24,3 +24,15 @@ int kbhit() {
 	} while (ch == EOF);                            //如果没有键入字符则重来一次
 	return 0;
 }
+
+int input() {
+	int a;
+	a = kbhit();
+	getchar();
+	return a;
+}
+
+void inputp(int *p) {
+	*p = kbhit();
+	getchar();
+}

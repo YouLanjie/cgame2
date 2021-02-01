@@ -5,8 +5,7 @@ int main() {
 	Clear
 	while (a != 0x1B && 0x30 && 0x51 && 0x71) {
 		welcome();
-		a = kbhit();
-		getchar();
+		a = input();
 		printf("\n\n\n");
 		Clear
 		switch (a) {
@@ -42,25 +41,29 @@ int main() {
 
 void welcome() {
 	Clear
-	printf("\n                                 \033[;32m\033[;1m欢迎\033[0m\n\n\n");
-	printf("\033[;33m------------------------------------------------------------------------\n");
-	printf("\033[;33m|                                                                      |\n");
-	printf("\033[;33m|                                                                      |\033[0m\n");
-	printf("\033[;33m|\033[0m                1.开始游戏                  2.游戏记录                \033[;33m|\033[0m\n");
-	printf("\033[;33m|\033[0m                3.游戏帮助                  0.退出游戏                \033[;33m|\033[0m\n");
-	printf("\033[;33m|\033[31m  请选择:\033[;0m\033[61C\033[;33m|\n");
-	printf("\033[;33m|                                                                      |\n");
-	printf("------------------------------------------------------------------------\033[0m\033[2A\033[61D");
+	printf("\n                          \033[1;32m欢迎\033[0m\n\n\n");
+	printf("\033[34m--------------------------------------------------------\n");
+	printf("\033[34m|                                                      |\n");
+	printf("\033[34m|                                                      |\033[0m\n");
+	printf("\033[34m|\033[1;33m         1.开始游戏                2.游戏记录         \033[0;34m|\033[0m\n");
+	printf("\033[34m|\033[1;33m         3.游戏帮助                0.退出游戏         \033[0;34m|\033[0m\n");
+	printf("\033[34m|\033[1;31m  请选择:\033[0m\033[45C\033[34m|\n");
+	printf("\033[34m|                                                      |\n");
+	printf("--------------------------------------------------------\033[0m\033[2A\033[45D");
 	return;
 }
 
 void game() {
-	int iChess[Max][Max];
-	int iCount;
-	int iForcount;
-	for (iForcount = 0; iForcount < Max; iForcount++) {    //打印棋盘
-		/* code */
-	}
+	struct Chess *p;
+
+	p = (struct Chess*) malloc(sizeof(struct Chess));
+	p -> board[10][10] = 1;
+
+	printboard(p);
+	kbhit();
+	getchar();
+	free(p);
+	Clear
 	return;
 }
 
@@ -72,4 +75,27 @@ void help() {
 	kbhit();
 	getchar();
 	return;
+}
+
+void printboard(struct Chess *p) {
+	int count;
+	int count2;
+
+	printf("\033[1;33m-----------------------------------------------\n");
+	for (count = 0; count < Max; count++) {    //打印棋盘
+		printf("|\033[0m");
+		for (count2= 0; count2 < Max; count2++) {
+			if (p -> board[count][count2] == 0) {
+				printf(" + ");
+			}
+			else if (p -> board[count][count2] == 1) {
+				printf("⚫ ");
+			}
+			else if (p -> board[count][count2] == 2) {
+				printf("⚪ ");
+			}
+		}
+		printf("\033[1;33m|\n");
+	}
+	printf("-----------------------------------------------\033[0m\n");
 }
