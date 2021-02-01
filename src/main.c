@@ -57,7 +57,6 @@ void game() {
 	struct Chess *p;
 
 	p = (struct Chess*) malloc(sizeof(struct Chess));
-	p -> board[10][10] = 1;
 
 	printboard(p);
 	kbhit();
