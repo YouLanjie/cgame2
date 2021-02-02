@@ -2,10 +2,12 @@
 
 int main() {
 	int a;
-	int count = 0, *p = &count;
+	struct Chess *p;
+	
+	p = (struct Chess *)malloc(sizeof(struct Chess));
 	Clear
 	while (a != 0x1B && 0x30 && 0x51 && 0x71) {
-		init();
+		init(p);
 		welcome();
 		a = input();
 		printf("\n\n\n");
@@ -21,9 +23,7 @@ int main() {
 				game(p);
 				break;
 			case 0x32:
-				printf("暂未开发\n");
-				kbhit();
-				getchar();
+				history(p);
 				break;
 			case 0x33:
 				help();
@@ -41,11 +41,14 @@ int main() {
 	return 0;
 }
 
-void init() {
+void init(struct Chess *p) {
 	FILE *fp;
 	int a = 0;
-	if (access("./.save",0)) {
-		fopen("./.save","w");
+
+	if (access("./.save",0) == EOF) {
+		fp = fopen("./.save","w");
+		p -> count = 0;
+		return;
 	}
 	else {
 		return;
@@ -68,22 +71,18 @@ void welcome() {
 	return;
 }
 
-void game(int *count) {
-	struct Chess *p;
+void game(struct Chess *p) {
+	p -> count += 1;
 
-	p = (struct Chess*) malloc(sizeof(struct Chess));
-	*count += 1;
-
-	printf("第%d局：\n",*count);
+	printf("第%d局：\n",p -> count);
 	printboard(p);
 	input();
-	save(p,*count);
-	free(p);
+	save(p);
 	Clear
 	return;
 }
 
-void save(struct Chess *p,int Count) {
+void save(struct Chess *p) {
 	int count;
 	int count2;
 	FILE *fp;
@@ -94,7 +93,7 @@ void save(struct Chess *p,int Count) {
 		input();
 		return;
 	}
-	fprintf(fp,"第%d局：\n",Count);
+	fprintf(fp,"第%d局：\n",p -> count);
 	for (count = 0; count < Max; count++) {    //打印棋盘到文件
 		for (count2= 0; count2 < Max; count2++) {
 			if (p -> board[count][count2] == 0) {
@@ -113,20 +112,55 @@ void save(struct Chess *p,int Count) {
 	return;
 }
 
-void history() {
+void history(struct Chess *p) {
 	int count;
-	char a[100];
+	int b;
+	char a[p -> count * (Max + 1)][100];
 	FILE *fp;
 
+	if(p -> count == 0) {
+		printf("\033[1;33m你还没有游戏记录，赶紧去玩一下吧！\033[0m\n输入任意按键返回\n");
+		input();
+		return;
+	}
 	fp = fopen("./.save","r");
 	if (!fp) {
 		printf("无法打开存档，请自行确认存档文件是否存在！\n按任意按键返回\n");
 		input();
 		return;
 	}
-	for (count = 0; count < Max; count++) {
-		fgets(a,sizeof(a),fp);
-		puts(a);
+	for (count = 0; count < p -> count * (Max + 1); count++) {
+		fgets(a[count],sizeof(a),fp);
+		if ((count + 1) % (Max + 1) == 0) {
+			printf("按下W查看上一局，按下S查看下一局，输入数字查看对应局数\n");
+			b = input();
+			switch (b) {
+				case 0x57:
+				case 0x77:
+					if (count + 1 - Max + 1 == 0) {
+						Clear
+						printf("这已经是第一局了\n");
+						count -= Max + 2;
+					}
+					else {
+						count -= 2 * (Max + 1);
+					}
+					break;
+				case 0x53:
+				case 0x73:
+					if (count + 1 == p -> count) {
+						Clear
+						printf("这已经是最后一局了\n");
+						count -= Max + 1;
+					}
+					break;
+				default:
+					count -= Max + 1;
+					break;
+			}
+		}
+		
+		puts(a[count]);
 	}
 	
 	fclose(fp);

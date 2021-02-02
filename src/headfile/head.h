@@ -14,10 +14,10 @@ struct Chess
 	int count;
 };
 
-void init();
+void init(struct Chess *p);
 void welcome();
-void game(int *count);
-void save(struct Chess *p,int Count);
-void history();
+void game(struct Chess *p);
+void save(struct Chess *p);
+void history(struct Chess *p);
 void help();
 void printboard(struct Chess *p);
