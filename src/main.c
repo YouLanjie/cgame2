@@ -132,15 +132,21 @@ void history(struct Chess *p) {
 	for (count = 0; count < p -> count * (Max + 1); count++) {
 		fgets(a[count],sizeof(a),fp);
 		if ((count + 1) % (Max + 1) == 0) {
-			printf("按下W查看上一局，按下S查看下一局，输入数字查看对应局数\n");
+			printf("按下W查看上一局，按下S查看下一局，输入数字查看对应局数,0退出\n");
 			b = input();
 			switch (b) {
+				case 0x1B:
+				case 0x30:
+				case 0x51:
+				case 0x71:
+					return;
+					break;
 				case 0x57:
 				case 0x77:
 					if (count + 1 - Max + 1 == 0) {
 						Clear
 						printf("这已经是第一局了\n");
-						count -= Max + 2;
+						count -= Max + 1;
 					}
 					else {
 						count -= 2 * (Max + 1);
