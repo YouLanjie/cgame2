@@ -69,12 +69,13 @@ void init(struct Chess *p) {
 
 void welcome() {
 	Clear
-	printf("\n                          \033[1;32m欢迎\033[0m\n\n\n");
+	printf("\n                        \033[1;32m游戏菜单\033[0m\n\n\n");
 	printf("\033[34m--------------------------------------------------------\n");
 	printf("\033[34m|                                                      |\n");
 	printf("\033[34m|                                                      |\033[0m\n");
 	printf("\033[34m|\033[1;33m         1.开始游戏                2.游戏记录         \033[0;34m|\033[0m\n");
-	printf("\033[34m|\033[1;33m         3.游戏帮助                0.退出游戏         \033[0;34m|\033[0m\n");
+	printf("\033[34m|\033[1;33m         3.游戏帮助                4.更多选项         \033[0;34m|\033[0m\n");
+	printf("\033[34m|\033[1;33m         0.退出游戏                                   \033[0;34m|\033[0m\n");
 	printf("\033[34m|\033[1;31m  请选择:\033[0m\033[45C\033[34m|\n");
 	printf("\033[34m|                                                      |\n");
 	printf("--------------------------------------------------------\033[0m\033[2A\033[45D");
@@ -82,9 +83,11 @@ void welcome() {
 }
 
 void game(struct Chess *p) {
+	char time[40];
 	p -> count += 1;
 
-	printf("第%d局：\n",p -> count);
+	gettime(time);
+	printf("%s：\n",time);
 	printboard(p);
 	input();
 	save(p);
@@ -95,6 +98,7 @@ void game(struct Chess *p) {
 void save(struct Chess *p) {
 	int count;
 	int count2;
+	char ctime[40];
 	FILE *fp;
 	FILE *fp2;
 
@@ -105,9 +109,10 @@ void save(struct Chess *p) {
 		input();
 		return;
 	}
+	gettime(ctime);
 	fprintf(fp2,"%d",p -> count);
-	fprintf(fp,"第%d局：\n",p -> count);
-	for (count = 0; count < Max + 1; count++) {    //打印棋盘到文件
+	fprintf(fp,"日期：%s\n",ctime);
+	for (count = 0; count < Max ; count++) {    //打印棋盘到文件
 		for (count2= 0; count2 < Max; count2++) {
 			if (p -> board[count][count2] == 0) {
 				fprintf(fp," + ");
@@ -143,10 +148,10 @@ void history(struct Chess *p) {
 		input();
 		return;
 	}
-	for (count = 0; count < p -> count * (Max + 1); count++) {
+	for (count = 0; count < 2 + p -> count * (Max + 1); count++) {
 		fgets(a[count],sizeof(a),fp);
-		if ((count + 1) % (Max + 1) == 0) {
-			printf("按下W查看上一局，按下S查看下一局，输入数字查看对应局数,0退出\n");
+		if (count != 0 && count % (Max + 1) == 0) {
+			printf("\033[1;31m按下W查看上一局，按下S查看下一局，输入数字查看对应局数,0退出\033[0m\n");
 			b = input();
 			switch (b) {
 				case 0x1B:
@@ -157,29 +162,35 @@ void history(struct Chess *p) {
 					break;
 				case 0x57:
 				case 0x77:
-					if (count + 1 - Max + 1 == 0) {
+					if (count == Max +1) {
 						Clear
-						printf("这已经是第一局了\n");
+						printf("\033[33m这已经是第一个记录了\n\033[1;31m按下任意键继续\033[0m\n");
 						count -= Max + 1;
+						input();
 					}
 					else {
 						count -= 2 * (Max + 1);
+						input();
 					}
+					Clear
 					break;
 				case 0x53:
 				case 0x73:
-					if (count + 1 == p -> count) {
+					if ((count + 1) / (Max + 1)== p -> count) {
 						Clear
-						printf("这已经是最后一局了\n");
+						printf("\033[33m这已经是最后一个记录了\033[1;31m\n按下任意键继续\033[0m\n");
 						count -= Max + 1;
+						input();
 					}
+					Clear
 					break;
 				default:
 					count -= Max + 1;
+					Clear
 					break;
 			}
 		}
-		printf("%s",a[count]);
+		printf("\033[1;33m%s\033[0m",a[count]);
 	}
 	
 	fclose(fp);
@@ -187,10 +198,10 @@ void history(struct Chess *p) {
 }
 
 void help() {
-	puts("\t\t\t       游戏帮助");
+	puts("\n\t\t\t\033[1;32m游戏帮助\033[33m");
 	puts("\t如果想要退出，0、q、Q、Esc都可以哦");
 	puts("\tW S A D控制上下左右，空格下子");
-	printf("按任意按键返回：");
+	printf("\033[1;31m按任意按键返回：\033[0m");
 	input();
 	return;
 }
