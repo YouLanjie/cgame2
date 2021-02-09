@@ -44,16 +44,26 @@ int main() {
 void init(struct Chess *p) {
 	FILE *fp;
 	int a = 0;
+	char b[5];
 
 	if (access("./.save",0) == EOF) {
 		fp = fopen("./.save","w");
+		fclose(fp);
 		p -> count = 0;
 		return;
 	}
-	else {
-		return;
+	if (access("./.data",0) == EOF) {
+		fp = fopen("./.data","w");
+		fprintf(fp,"%d\n",p -> count);
+		fclose(fp);
 	}
-	fclose(fp);
+	else {
+		fp = fopen("./.data","r");
+		fscanf(fp,"%s",b);
+		a = atoi(b);
+		p -> count = a;
+		fclose(fp);
+	}
 	return;
 }
 
@@ -86,15 +96,18 @@ void save(struct Chess *p) {
 	int count;
 	int count2;
 	FILE *fp;
+	FILE *fp2;
 
 	fp = fopen(".save","a");
-	if (!fp) {
+	fp2 = fopen(".data","w");
+	if (!fp && !fp2) {
 		printf("无法保存\n按任意按键返回\n");
 		input();
 		return;
 	}
+	fprintf(fp2,"%d",p -> count);
 	fprintf(fp,"第%d局：\n",p -> count);
-	for (count = 0; count < Max; count++) {    //打印棋盘到文件
+	for (count = 0; count < Max + 1; count++) {    //打印棋盘到文件
 		for (count2= 0; count2 < Max; count2++) {
 			if (p -> board[count][count2] == 0) {
 				fprintf(fp," + ");
@@ -108,6 +121,7 @@ void save(struct Chess *p) {
 		}
 		fprintf(fp,"\n");
 	}
+	fclose(fp2);
 	fclose(fp);
 	return;
 }
@@ -165,8 +179,7 @@ void history(struct Chess *p) {
 					break;
 			}
 		}
-		
-		puts(a[count]);
+		printf("%s",a[count]);
 	}
 	
 	fclose(fp);

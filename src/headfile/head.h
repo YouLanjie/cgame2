@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include "kbhit_input.h"
+#include "gettime.h"
 
 #define Clear system("clear");
 #define Max 15
