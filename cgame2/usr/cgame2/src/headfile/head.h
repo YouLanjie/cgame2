@@ -14,12 +14,6 @@
 
 #define Time "日期：%d-%d-%d 时间：%d:%d:%d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec
 
-struct Chess {
-	struct time t;
-	int board[Max][Max];
-	int count;
-};
-
 struct time {
 	int year;
 	int mon;
@@ -29,6 +23,11 @@ struct time {
 	int sec;
 };
 
+struct Chess {
+	struct time t;
+	int board[Max][Max];
+	int count;
+};
 
 void init(struct Chess *p);
 void welcome();
@@ -36,5 +35,6 @@ void game(struct Chess *p);
 void save(struct Chess *p);
 void history(struct Chess *p);
 void help();
+void other();
 void printboard(struct Chess *p);
 void gettime(struct Chess *p);

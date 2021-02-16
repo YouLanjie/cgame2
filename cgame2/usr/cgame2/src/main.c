@@ -28,6 +28,9 @@ int main() {
 			case 0x33:
 				help();
 				break;
+			case 0x34:
+				other();
+				break;
 			default:
 				puts("\n\t\t\t\t    错误！");
 				puts("\t\t\t       按任意按键返回");
@@ -47,18 +50,18 @@ void init(struct Chess *p) {
 	char b[5];
 
 	if (access(Save,0) == EOF) {
-		fp = fopen("Save","w");
+		fp = fopen(Save,"w");
 		fclose(fp);
 		p -> count = 0;
 		return;
 	}
 	if (access(Data,0) == EOF) {
-		fp = fopen("Data","w");
+		fp = fopen(Data,"w");
 		fprintf(fp,"%d\n",p -> count);
 		fclose(fp);
 	}
 	else {
-		fp = fopen("Data","r");
+		fp = fopen(Data,"r");
 		fscanf(fp,"%s",b);
 		a = atoi(b);
 		p -> count = a;
@@ -92,7 +95,6 @@ void game(struct Chess *p) {
 	while(count < 9) {
 		gettime(p);
 		printf(Time);
-		free(time);
 		printboard(p);
 		if (count % 2 != 0) {
 			printf("黑方下\n");
@@ -116,6 +118,7 @@ void game(struct Chess *p) {
 		count++;
 		Clear
 	}
+	getchar();
 	save(p);
 	Clear
 	return;
@@ -127,8 +130,8 @@ void save(struct Chess *p) {
 	FILE *fp;
 	FILE *fp2;
 
-	fp = fopen(".save","a");
-	fp2 = fopen(".data","w");
+	fp = fopen(Save,"a");
+	fp2 = fopen(Data,"w");
 	if (!fp && !fp2) {
 		printf("无法保存\n按任意按键返回\n");
 		input();
@@ -137,7 +140,6 @@ void save(struct Chess *p) {
 	gettime(p);
 	fprintf(fp2,"%d",p -> count);
 	fprintf(fp,Time);
-	free(ctime);
 	for (count = 0; count < Max ; count++) {    //打印棋盘到文件
 		for (count2= 0; count2 < Max; count2++) {
 			if (p -> board[count][count2] == 0) {
@@ -168,7 +170,7 @@ void history(struct Chess *p) {
 		input();
 		return;
 	}
-	fp = fopen("Save","r");
+	fp = fopen(Save,"r");
 	if (!fp) {
 		printf("无法打开存档，请自行确认存档文件是否存在！\n按任意按键返回\n");
 		input();
@@ -232,6 +234,43 @@ void help() {
 	return;
 }
 
+void other() {
+	FILE *fp,*fp2;
+	int a;
+
+	printf("\n                        \033[1;32m其他选项\033[0m\n\n\n");
+	printf("\033[34m--------------------------------------------------------\n");
+	printf("\033[34m|                                                      |\033[0m\n");
+	printf("\033[34m|\033[1;33m         1.清除存档                0.返回菜单         \033[0;34m|\033[0m\n");
+	printf("\033[34m|\033[1;31m  请选择:\033[0m\033[45C\033[34m|\n");
+	printf("\033[34m|                                                      |\n");
+	printf("--------------------------------------------------------\033[0m\033[2A\033[45D");
+	a = input();
+	if(a == 0x1B || a == 0x30 || a == 0x51 || a == 0x71) {
+		return;
+	}
+	else if(a == 0x31) {
+		fp = fopen(Data,"w");
+		fp2 = fopen(Save,"w");
+		if(!fp && !fp2) {
+			printf("\033[1;31m按任意按键返回：\033[0m");
+			input();
+			return;
+		}
+		else {
+			fprintf(fp,"0");
+			fclose(fp);
+			fclose(fp2);
+			printf("\033[1;31m按任意按键返回：\033[0m");
+			input();
+		}
+	}
+	else {
+		return;
+	}
+	return;
+}
+
 void printboard(struct Chess *p) {
 	int count;
 	int count2;
@@ -259,13 +298,15 @@ void printboard(struct Chess *p) {
 void gettime(struct Chess *p2) {
 	time_t timep;
 	struct tm *p;
+
 	time(&timep);
+	p=gmtime(&timep);
 
 	p2 -> t.year = 1900+p->tm_year;
 	p2 -> t.mon = 1+p->tm_mon;
 	p2 -> t.day = p->tm_mday;
-	p2 -> t.hour = p->tm_mday;
+	p2 -> t.hour = 8 + p->tm_hour;
 	p2 -> t.min = p->tm_min;
-	p2 -> t.sec = p->tm_min;
+	p2 -> t.sec = p->tm_sec;
 	return;
 }
