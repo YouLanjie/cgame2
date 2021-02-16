@@ -46,19 +46,19 @@ void init(struct Chess *p) {
 	int a = 0;
 	char b[5];
 
-	if (access("./.save",0) == EOF) {
-		fp = fopen("./.save","w");
+	if (access(Save,0) == EOF) {
+		fp = fopen("Save","w");
 		fclose(fp);
 		p -> count = 0;
 		return;
 	}
-	if (access("./.data",0) == EOF) {
-		fp = fopen("./.data","w");
+	if (access(Data,0) == EOF) {
+		fp = fopen("Data","w");
 		fprintf(fp,"%d\n",p -> count);
 		fclose(fp);
 	}
 	else {
-		fp = fopen("./.data","r");
+		fp = fopen("Data","r");
 		fscanf(fp,"%s",b);
 		a = atoi(b);
 		p -> count = a;
@@ -83,17 +83,15 @@ void welcome() {
 }
 
 void game(struct Chess *p) {
-	char *time;
 	p -> count += 1;
 	int count = 1;
 	int x,y;
 
-	time = gettime();
-	free(time);
+	gettime(p);
 
 	while(count < 9) {
-		time = gettime();
-		printf("\033[1;32m%s\033[0m\n",time);
+		gettime(p);
+		printf(Time);
 		free(time);
 		printboard(p);
 		if (count % 2 != 0) {
@@ -126,7 +124,6 @@ void game(struct Chess *p) {
 void save(struct Chess *p) {
 	int count;
 	int count2;
-	char *ctime;
 	FILE *fp;
 	FILE *fp2;
 
@@ -137,11 +134,9 @@ void save(struct Chess *p) {
 		input();
 		return;
 	}
-	ctime = gettime();
-	free(ctime);
-	ctime = gettime();
+	gettime(p);
 	fprintf(fp2,"%d",p -> count);
-	fprintf(fp,"%s\n",ctime);
+	fprintf(fp,Time);
 	free(ctime);
 	for (count = 0; count < Max ; count++) {    //打印棋盘到文件
 		for (count2= 0; count2 < Max; count2++) {
@@ -173,7 +168,7 @@ void history(struct Chess *p) {
 		input();
 		return;
 	}
-	fp = fopen("./.save","r");
+	fp = fopen("Save","r");
 	if (!fp) {
 		printf("无法打开存档，请自行确认存档文件是否存在！\n按任意按键返回\n");
 		input();
@@ -258,5 +253,19 @@ void printboard(struct Chess *p) {
 		printf("\033[1;33m|\n");
 	}
 	printf("-----------------------------------------------\033[0m\n");
+	return;
+}
+
+void gettime(struct Chess *p2) {
+	time_t timep;
+	struct tm *p;
+	time(&timep);
+
+	p2 -> t.year = 1900+p->tm_year;
+	p2 -> t.mon = 1+p->tm_mon;
+	p2 -> t.day = p->tm_mday;
+	p2 -> t.hour = p->tm_mday;
+	p2 -> t.min = p->tm_min;
+	p2 -> t.sec = p->tm_min;
 	return;
 }
