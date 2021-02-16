@@ -83,13 +83,41 @@ void welcome() {
 }
 
 void game(struct Chess *p) {
-	char time[40];
+	char *time;
 	p -> count += 1;
+	int count = 1;
+	int x,y;
 
-	gettime(time);
-	printf("%s：\n",time);
-	printboard(p);
-	input();
+	time = gettime();
+	free(time);
+
+	while(count < 9) {
+		time = gettime();
+		printf("\033[1;32m%s\033[0m\n",time);
+		free(time);
+		printboard(p);
+		if (count % 2 != 0) {
+			printf("黑方下\n");
+			printf("x：");
+			scanf("%d",&x);
+			printf("y：");
+			scanf("%d",&y);
+			p -> board[y - 1][x - 1] = 1;
+		}
+		else if (count % 2 == 0) {
+			printf("白方下\n");
+			printf("x：");
+			scanf("%d",&x);
+			printf("y：");
+			scanf("%d",&y);
+			p -> board[y - 1][x - 1] = 2;
+		}
+		else {
+			return;
+		}
+		count++;
+		Clear
+	}
 	save(p);
 	Clear
 	return;
@@ -98,7 +126,7 @@ void game(struct Chess *p) {
 void save(struct Chess *p) {
 	int count;
 	int count2;
-	char ctime[40];
+	char *ctime;
 	FILE *fp;
 	FILE *fp2;
 
@@ -109,9 +137,12 @@ void save(struct Chess *p) {
 		input();
 		return;
 	}
-	gettime(ctime);
+	ctime = gettime();
+	free(ctime);
+	ctime = gettime();
 	fprintf(fp2,"%d",p -> count);
-	fprintf(fp,"日期：%s\n",ctime);
+	fprintf(fp,"%s\n",ctime);
+	free(ctime);
 	for (count = 0; count < Max ; count++) {    //打印棋盘到文件
 		for (count2= 0; count2 < Max; count2++) {
 			if (p -> board[count][count2] == 0) {

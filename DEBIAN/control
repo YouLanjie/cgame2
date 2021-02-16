@@ -1,0 +1,8 @@
+Package: cgame2
+Version: 2021-02-16
+Maintainer: Youlanjie@github.com
+Description: This is a game
+Architecture: all
+Essential: no
+Source: cgame2
+

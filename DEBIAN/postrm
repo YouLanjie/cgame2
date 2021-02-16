@@ -1,0 +1,4 @@
+#!/bin/sh
+rm -rf /usr/cgame2
+rm -f /usr/bin/cgame2
+

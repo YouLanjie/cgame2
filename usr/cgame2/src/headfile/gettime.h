@@ -1,21 +1,29 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
-void gettime(char ch[40]) {
+char *gettime() {
 	time_t timep;
 	struct tm *p;
 	time(&timep);
+
+	char *ch;
 	char b[10];
+
 	p = gmtime(&timep);
-	sprintf(ch,"%d",1900+p->tm_year);
+	ch = (char *)malloc(sizeof(char) * 40);
+
+	strcpy(ch,"日期：");
+	sprintf(b,"%d",1900+p->tm_year);
+	strcat(ch,b);
 	strcat(ch,"年/");
 	sprintf(b,"%d",1+p->tm_mon);
 	strcat(ch,b);
 	strcat(ch,"月/");
 	sprintf(b,"%d",p->tm_mday);
 	strcat(ch,b);
-	strcat(ch,"日 ");
+	strcat(ch,"日 时间：");
 	sprintf(b,"%d",8+p->tm_hour);
 	strcat(ch,b);
 	strcat(ch,":");
@@ -24,7 +32,7 @@ void gettime(char ch[40]) {
 	strcat(ch,":");
 	sprintf(b,"%d",p->tm_sec);
 	strcat(ch,b);
-	return;
+	return ch;
 }
 
 void printtime() {
