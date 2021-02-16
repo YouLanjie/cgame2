@@ -253,7 +253,7 @@ void other() {
 		fp = fopen(Data,"w");
 		fp2 = fopen(Save,"w");
 		if(!fp && !fp2) {
-			printf("\033[1;31m按任意按键返回：\033[0m");
+			printf("\033[1;31m无法打开存档\n按任意按键返回：\033[0m");
 			input();
 			return;
 		}
@@ -261,7 +261,8 @@ void other() {
 			fprintf(fp,"0");
 			fclose(fp);
 			fclose(fp2);
-			printf("\033[1;31m按任意按键返回：\033[0m");
+			Clear
+			printf("\033[1;31m清除成功\n按任意按键返回：\033[0m");
 			input();
 		}
 	}
