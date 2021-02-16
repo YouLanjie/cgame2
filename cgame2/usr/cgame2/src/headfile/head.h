@@ -12,7 +12,8 @@
 #define Save "/usr/cgame2/build/save.txt"
 #define Data "/usr/cgame2/build/data.txt"
 
-#define Time "日期：%d-%d-%d 时间：%d:%d:%d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec
+#define Time "\033[1;31m日期：%d-%d-%d 时间：%d:%d:%d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec
+#define NowTime "\033[1;31m日期：%d-%d-%d 时间：%d:%d:%d\n",p -> nt.year,p -> nt.mon,p -> nt.day,p -> nt.hour,p -> nt.min,p -> nt.sec
 
 struct time {
 	int year;
@@ -24,10 +25,16 @@ struct time {
 };
 
 struct Chess {
-	struct time t;
-	int board[Max][Max];
-	int count;
+	struct time t;         //开局时间
+	struct time nt;        //现在时间
+	int board[Max][Max];   //棋盘
+	int count;             //一共有多少局
+	int who;               //下棋的一方，1黑，2白
+	int x;                 //新棋子的x轴
+	int y;                 //新棋子的y轴
 };
+
+int ifWin(struct Chess *p);
 
 void init(struct Chess *p);
 void welcome();
@@ -38,3 +45,4 @@ void help();
 void other();
 void printboard(struct Chess *p);
 void gettime(struct Chess *p);
+void getnowtime(struct Chess *p);
