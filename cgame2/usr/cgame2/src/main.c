@@ -184,44 +184,36 @@ void game(struct Chess *p) {
 			case 0x77:
 				if (y < 2) {
 					y = 15;
-					printf("\033[15B");
 				}
 				else {
 					y--;
-						printf("\033[1A");
 			}
 				break;
 			case 0x41:
 			case 0x61:
 				if (x < 2) {
 					x = 15;
-					printf("\033[15C");
 				}
 				else {
 					x--;
-					printf("\033[1D");
 				}
 				break;
 			case 0x53:
 			case 0x73:
 				if (y > 14) {
 					y = 1;
-					printf("\033[15A");
 				}
 				else {
 					y++;
-					printf("\033[1B");
 				}
 				break;
 			case 0x44:
 			case 0x64:
 				if (x > 14) {
 					x = 1;
-					printf("\033[15D");
 				}
 				else {
 					x++;
-					printf("\033[1C");
 				}
 				break;
 			case 0x0D:
@@ -746,44 +738,36 @@ extern void en_game(struct en_Chess *p) {
 			case 0x77:
 				if (y < 2) {
 					y = 15;
-					printf("\033[15B");
 				}
 				else {
 					y--;
-						printf("\033[1A");
 			}
 				break;
 			case 0x41:
 			case 0x61:
 				if (x < 2) {
 					x = 15;
-					printf("\033[15C");
 				}
 				else {
 					x--;
-					printf("\033[1D");
 				}
 				break;
 			case 0x53:
 			case 0x73:
 				if (y > 14) {
 					y = 1;
-					printf("\033[15A");
 				}
 				else {
 					y++;
-					printf("\033[1B");
 				}
 				break;
 			case 0x44:
 			case 0x64:
 				if (x > 14) {
 					x = 1;
-					printf("\033[15D");
 				}
 				else {
 					x++;
-					printf("\033[1C");
 				}
 				break;
 			case 0x0D:
