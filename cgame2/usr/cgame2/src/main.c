@@ -134,6 +134,8 @@ void welcome() {
 void game(struct Chess *p) {
 	int count,count2;      //用于计数
 
+	int error = 0;         //记录错误
+
 	int x = 1,y = 1;       //当前坐标
 	int way;               //光标移动方向
 	int win  = 0;          //赢家，1黑，2白
@@ -150,6 +152,10 @@ void game(struct Chess *p) {
 		}
 		else if (who == 2) {
 			printf("白方下\n");
+		}
+		if (error == 1) {
+			printf("\033[1;33m\033[20;1H你不能下在非空的格子!\033[0m\n");
+			error = 0;
 		}
 		printf("\033[%d;%dH\033[31m",y + 2,x * 3);
 		way = input();
@@ -220,24 +226,31 @@ void game(struct Chess *p) {
 				break;
 			case 0x0D:
 			case 0x20:
-				p -> board[y - 1][x - 1] = who;
-				p -> who = who;
-				p -> x = x;
-				p -> y = y;
-				win = ifWin(p);
-				if (win == who) {
-					Clear
-					printf("\033[33m游戏结束，");
-					if (who == 1) {
-						printf("黑方");
-					}
-					else if (who == 2) {
-						printf("白方");
-					}
-					printf("胜利！\n\033[31m按Enter返回\n\033[0m");
-					input();
+				if (p -> board[y -1][x - 1] == 1 || p -> board[y -1][x - 1] == 2) {
+					error = 1;
+					break;
 				}
-				who = 3 - who;
+				else if (p -> board[y -1][x - 1] == 0) {
+					p -> board[y - 1][x - 1] = who;
+					p -> who = who;
+					p -> x = x;
+					p -> y = y;
+					win = ifWin(p);
+					if (win == who) {
+						Clear
+						printf("\033[33m游戏结束，");
+						if (who == 1) {
+							printf("黑方");
+						}
+						else if (who == 2) {
+							printf("白方");
+						}
+						printf("胜利！\n\033[31m按Enter返回\n\033[0m");
+						input();
+					}
+					who = 3 - who;
+					break;
+				}
 				break;
 			default:
 				Clear
@@ -775,24 +788,30 @@ extern void en_game(struct en_Chess *p) {
 				break;
 			case 0x0D:
 			case 0x20:
-				p -> board[y - 1][x - 1] = who;
-				p -> who = who;
-				p -> x = x;
-				p -> y = y;
-				win = en_ifWin(p);
-				if (win == who) {
-					Clear
-					printf("\033[33mThe game is over and the ");
-					if (who == 1) {
-						printf("Blacks");
-					}
-					else if (who == 2) {
-						printf("White");
-					}
-					printf("wins！\n\033[31mPress enter to return:\n\033[0m");
-					input();
+				if (p -> board[y -1][x - 1] == 1 || p -> board[y -1][x - 1] == 2) {
+					break;
 				}
-				who = 3 - who;
+				else if (p -> board[y -1][x - 1] == 0) {
+					p -> board[y - 1][x - 1] = who;
+					p -> who = who;
+					p -> x = x;
+					p -> y = y;
+					win = en_ifWin(p);
+					if (win == who) {
+						Clear
+						printf("\033[33mThe game is over and the ");
+						if (who == 1) {
+							printf("Blacks");
+						}
+						else if (who == 2) {
+							printf("White");
+						}
+						printf(" wins！\n\033[31mPress enter to return:\n\033[0m");
+						input();
+					}
+					who = 3 - who;
+					break;
+				}
 				break;
 			default:
 				Clear
