@@ -1,10 +1,9 @@
 Package: cgame2
-Version: 2021-02-19
+Version: 1.0.1
+Description: This is a game
+Source: cgame2
 Maintainer: Youlanjie@github.com
+Architecture: all
+Installed-Size: 2MB
 Depends: gcc
 Pre-Depends: gcc
-Description: This is a game
-Architecture: all
-Essential: no
-Source: cgame2
-

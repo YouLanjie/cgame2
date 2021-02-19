@@ -1,4 +1,3 @@
 #!/bin/sh
-rm -r /usr/cgame2
 rm -f /usr/bin/cgame2
 

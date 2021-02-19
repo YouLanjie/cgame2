@@ -1,6 +1,6 @@
 #!/bin/sh
-gcc /usr/cgame2/src/main.c -o /usr/cgame2/cgame2
-ln -s /usr/cgame2/cgame2 /usr/bin/cgame2
-rm -r /usr/cgame2/build
-rm -r /usr/cgame2/src
+gcc /opt/cgame2/src/main.c -o /opt/cgame2/cgame2
+ln -s /opt/cgame2/cgame2 /usr/bin/cgame2
+rm -r /opt/cgame2/build
+rm -r /opt/cgame2/src
 

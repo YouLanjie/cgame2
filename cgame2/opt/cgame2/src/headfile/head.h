@@ -10,9 +10,9 @@
 #define Clear system("clear");               //清屏，方便移植
 #define Max 15                               //棋盘大小
 
-#define Save "/usr/cgame2/save.txt"          //文件位置
-#define Data "/usr/cgame2/data.txt"          //文件位置
-#define Lang "/usr/cgame2/lang.txt"          //文件位置
+#define Save "/opt/cgame2/save.txt"          //文件位置
+#define Data "/opt/cgame2/data.txt"          //文件位置
+#define Lang "/opt/cgame2/lang.txt"          //文件位置
 
 #define Time "\033[1;31m%d-%d-%d %d:%d:%d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec //开局时间标准格式
 #define NowTime "\033[1;31m日期：%d-%d-%d\n",p -> nt.year,p -> nt.mon,p -> nt.day //现在时间标准格式
@@ -55,9 +55,6 @@ void getnowtime(struct Chess *p); //获取现在时间
 /*------------------------------English---------------------------------*/
 /*------------------------------English---------------------------------*/
 /*------------------------------English---------------------------------*/
-#define en_Max 15
-#define en_Save "/usr/cgame2/save.txt"
-#define en_Data "/usr/cgame2/data.txt"
 #define en_Time "\033[1;31m%d-%d-%d %d:%d:%d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec
 #define en_NowTime "\033[1;31mtime:%d-%d-%d\n",p -> nt.year,p -> nt.mon,p -> nt.day
 #define en_Menu printf("\033[0m\033[11;18H");
@@ -75,7 +72,7 @@ struct en_time {
 struct en_Chess {
 	struct en_time t;         //开局时间
 	struct en_time nt;        //现在时间
-	int board[en_Max][en_Max];   //棋盘
+	int board[Max][Max];   //棋盘
 	int count;             //一共有多少局
 	int who;               //下棋的一方，1黑，2白
 	int x;                 //新棋子的x轴
