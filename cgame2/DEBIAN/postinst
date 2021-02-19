@@ -1,4 +1,8 @@
 #!/bin/sh
-rm /usr/cgame2/build/*
-gcc /usr/cgame2/src/main.c -o /usr/cgame2/build/cgame2
-ln -s /usr/cgame2/build/cgame2 /usr/bin/cgame2
+gcc /usr/cgame2/src/main.c -o /usr/cgame2/cgame2
+ln -s /usr/cgame2/cgame2 /usr/bin/cgame2
+mkdir /usr/cgame2/en
+chmod o=rwx /usr/cgame2/en
+rm -r /usr/cgame2/build
+rm -r /usr/cgame2/src
+
