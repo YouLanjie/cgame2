@@ -397,7 +397,7 @@ void save(struct Chess *p) {
 void history(struct Chess *p) {
 	int count;              //数数
 	int b;                  //选择
-	char a[3192];   //棋盘信息
+	char a[3192];           //棋盘信息
 	FILE *fp;               //文件指针
 
 	if(p -> count == 0) {
@@ -412,7 +412,7 @@ void history(struct Chess *p) {
 		return;
 	}
 	for (count = 0; count < p -> count; count++) {
-		fread(a,3191,1,fp);
+		fread(a,3190,1,fp);
 		printf("\033[1;33m%s\033[0m",a);
 		printf("\033[0;1;31m按下W查看上一局，按下S查看下一局,0退出\033[0m\n");
 		b = input();
@@ -428,12 +428,12 @@ void history(struct Chess *p) {
 				if (count == 0) {
 					Clear
 					printf("\033[33m这已经是第一个记录了\n\033[1;31m按下任意键继续\033[0m\n");
-					fseek(fp,-3191L,1);
+					fseek(fp,-3190L,1);
 					count--;
 					input();
 				}
 				else {
-					fseek(fp,-6382L,1);
+					fseek(fp,-6380L,1);
 					count -= 2;
 				}
 				Clear
@@ -443,14 +443,14 @@ void history(struct Chess *p) {
 				if (count == p -> count - 1) {
 					Clear
 					printf("\033[33m这已经是最后一个记录了\033[1;31m\n按下任意键继续\033[0m\n");
-					fseek(fp,-3191L,2);
+					fseek(fp,-3190L,2);
 					count--;
 					input();
 				}
 				Clear
 				break;
 			default:
-				fseek(fp,-3191L,1);
+				fseek(fp,-3190L,1);
 				count--;
 				Clear
 				break;
@@ -982,12 +982,12 @@ extern void en_history(struct en_Chess *p) {
 				if (count == 0) {
 					Clear
 					printf("\033[33mThis is the first record.\n\033[1;31mPress enter to return:\033[0m\n");
-					fseek(fp,-3191L,1);
+					fseek(fp,-3190L,1);
 					count--;
 					input();
 				}
 				else {
-					fseek(fp,-6382L,1);
+					fseek(fp,-6380L,1);
 					count -= 2;
 				}
 				Clear
@@ -997,14 +997,14 @@ extern void en_history(struct en_Chess *p) {
 				if (count == p -> count - 1) {
 					Clear
 					printf("\033[33mThis is the last record.\033[1;31m\nPress enter to return:\033[0m\n");
-					fseek(fp,-3191L,2);
+					fseek(fp,-3190L,2);
 					count--;
 					input();
 				}
 				Clear
 				break;
 			default:
-				fseek(fp,-3191L,1);
+				fseek(fp,-3190L,1);
 				count--;
 				Clear
 				break;
