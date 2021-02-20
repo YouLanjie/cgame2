@@ -14,8 +14,8 @@
 #define Data "/opt/cgame2/data.txt"          //文件位置
 #define Lang "/opt/cgame2/lang.txt"          //文件位置
 
-#define Time "\033[1;31m%d-%d-%d %d:%d:%d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec //开局时间标准格式
-#define NowTime "\033[1;31m日期：%d-%d-%d\n",p -> nt.year,p -> nt.mon,p -> nt.day //现在时间标准格式
+#define Time "\033[1;31m%4d-%2d-%2d %d2:%2d:%2d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec //开局时间标准格式
+#define NowTime "\033[1;31m日期：%4d-%2d-%2d\n",p -> nt.year,p -> nt.mon,p -> nt.day //现在时间标准格式
 
 struct time {                                //存储时间信息
 	int year;      //年

@@ -412,7 +412,7 @@ void history(struct Chess *p) {
 		return;
 	}
 	for (count = 0; count < p -> count; count++) {
-		fread(a,3190,1,fp);
+		fread(a,3192,1,fp);
 		printf("\033[1;33m%s\033[0m",a);
 		printf("\033[0;1;31m按下W查看上一局，按下S查看下一局,0退出\033[0m\n");
 		b = input();
@@ -428,12 +428,12 @@ void history(struct Chess *p) {
 				if (count == 0) {
 					Clear
 					printf("\033[33m这已经是第一个记录了\n\033[1;31m按下任意键继续\033[0m\n");
-					fseek(fp,-3190L,1);
+					fseek(fp,0L,0);
 					count--;
 					input();
 				}
 				else {
-					fseek(fp,-6380L,1);
+					fseek(fp,-6384L,1);
 					count -= 2;
 				}
 				Clear
@@ -443,14 +443,14 @@ void history(struct Chess *p) {
 				if (count == p -> count - 1) {
 					Clear
 					printf("\033[33m这已经是最后一个记录了\033[1;31m\n按下任意键继续\033[0m\n");
-					fseek(fp,-3190L,2);
+					fseek(fp,-3192L,3);
 					count--;
 					input();
 				}
 				Clear
 				break;
 			default:
-				fseek(fp,-3190L,1);
+				fseek(fp,-3192L,1);
 				count--;
 				Clear
 				break;
