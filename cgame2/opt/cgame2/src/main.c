@@ -3,6 +3,7 @@
 int main() {
 	int a;
 	int b;
+	int c;
 	struct Chess *p;
 	
 	p = (struct Chess *)malloc(sizeof(struct Chess));
@@ -45,9 +46,6 @@ int main() {
 				other();
 				break;
 			default:
-				printf("\033[2;25H\033[1;32m错误！\n");
-				printf("\033[4;2H\033[1;31m  按任意按键返回：\033[0m\033[4;19H");
-				input();
 				break;
 		}
 		Clear
@@ -335,7 +333,7 @@ int ifWin(struct Chess *p) {
 		if (y + count < 15 && (x - (count - 1)) > 0 && p -> board[y + count][x - count] == p -> who) {
 			have++;
 		}
-		else if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y + 1][x] == p -> who) {
+		else if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - 1][x + 1] == p -> who) {
 			for (count = 1; count < 6; count++) {
 				if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
 					have++;
@@ -889,7 +887,7 @@ extern int en_ifWin(struct en_Chess *p) {
 		if (y + count < 15 && (x - (count - 1)) > 0 && p -> board[y + count][x - count] == p -> who) {
 			have++;
 		}
-		else if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y + 1][x] == p -> who) {
+		else if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - 1][x + 1] == p -> who) {
 			for (count = 1; count < 6; count++) {
 				if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
 					have++;
