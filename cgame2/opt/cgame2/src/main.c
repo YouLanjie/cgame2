@@ -3,7 +3,7 @@
 int main() {
 	int a;
 	int b;
-	int c;
+	int c = 0,d = 0;
 	struct Chess *p;
 	
 	p = (struct Chess *)malloc(sizeof(struct Chess));
@@ -21,6 +21,20 @@ int main() {
 			Clear
 			return 0;
 		}
+		if (c == 9) {
+			Clear
+			if (d == 1) {
+				d = 0;
+			}
+			printf("确定要进入开发者模式吗？（Y/n）\n");
+			d = input();
+			if (d == 0x59 || d == 0x79) {
+				d = 1;
+				Clear
+			}
+			Clear
+			c = 0;
+		}
 		welcome();
 		a = input();
 		printf("\n\n\n");
@@ -35,17 +49,25 @@ int main() {
 				break;
 			case 0x31:
 				game(p);
+				c = 0;
 				break;
 			case 0x32:
 				history(p);
+				c = 0;
 				break;
 			case 0x33:
 				help();
+				c = 0;
 				break;
 			case 0x34:
-				other();
+				other(d);
+				c = 0;
+				break;
+			case 0x39:
+				c++;
 				break;
 			default:
+				c = 0;
 				break;
 		}
 		Clear
@@ -468,13 +490,19 @@ void help() {
 	return;
 }
 
-void other() {
+void other(int b) {
 	FILE *fp,*fp2;
 	int a;
+	char c[10] = "nano";
 
 	menu("其他选项");
 	printf("\033[8;11H\033[1;33m1.清除存档\033[8;37H2.设置语言\033[9;33H(Set the language)");
-	printf("\033[9;2H\033[1;33m         0.返回菜单");
+	if (b == 1) {
+		printf("\033[9;11H\033[1;33m3.手动编辑存档\033[10;11H0.返回菜单");
+	}
+	else {
+		printf("\033[9;11H\033[1;33m0.返回菜单");
+	}
 	Menu
 	a = input();
 	if(a == 0x1B || a == 0x30 || a == 0x51 || a == 0x71) {
@@ -489,17 +517,33 @@ void other() {
 			return;
 		}
 		else {
-			fprintf(fp,"0");
-			fclose(fp);
-			fclose(fp2);
+			printf("\033[1;33m请确认退出！本次游戏将不会记录！（Y/n）\n");
+			a = input();
+			if (a == 0x59 || a == 0x79) {
+				fprintf(fp,"0");
+				fclose(fp);
+				fclose(fp2);
+				Clear
+				printf("\033[1;33m清除成功\n\033[1;31m按任意按键返回：\033[0m");
+				input();
+			}
 			Clear
-			printf("\033[1;33m清除成功\n\033[1;31m按任意按键返回：\033[0m");
-			input();
 		}
 	}
 	else if (a == 0x32) {
 		fp = fopen(Lang,"w");
 		fclose(fp);
+	}
+	else if (a == 0x33) {
+		Clear
+		if (b == 1) {
+			printf("请输入已安装的编辑器名：\n");
+			scanf("%s",c);
+			strcat(c," ");
+			strcat(c,Save);
+			system(c);
+		}
+		Clear
 	}
 	else {
 		return;
