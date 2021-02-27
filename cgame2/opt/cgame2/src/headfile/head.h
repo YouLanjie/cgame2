@@ -41,6 +41,7 @@ int ifWin(struct Chess *p);    //是否胜利，返回1黑方胜，返回2白方
 int init(struct Chess *p);    //初始化：创建文件、选择语言
 void welcome();                //开始界面
 void game(struct Chess *p);    //游戏主体
+void AI(struct Chess *p);      //AI下棋
 void save(struct Chess *p);    //保存棋盘信息
 void history(struct Chess *p); //查看历史局数信息
 void help();                   //帮助信息

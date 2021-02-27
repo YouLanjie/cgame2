@@ -161,6 +161,19 @@ void game(struct Chess *p) {
 	int win  = 0;          //赢家，1黑，2白
 	int who = 1;           //现在下子的玩家
 
+	int a = 0;
+
+	Clear
+	printf("是否和AI下棋？（Y/n）\n");
+	a = input();
+	if (way != 0x59 || way != 0x79) {
+		a = 1;
+	}
+	else {
+		a = 0;
+	}
+	Clear
+
 	gettime(p);
 
 	while(win != 1 && win != 2) {
@@ -260,7 +273,12 @@ void game(struct Chess *p) {
 						printf("胜利！\n\033[31m按Enter返回\n\033[0m");
 						input();
 					}
-					who = 3 - who;
+					if (a == 1) {
+						AI(p);
+					}
+					else {
+						who = 3 - who;
+					}
 					break;
 				}
 				break;
@@ -276,6 +294,154 @@ void game(struct Chess *p) {
 	Clear
 	return;
 }
+
+void AI(struct Chess *p) {
+	int x = 1,y = 1;
+	int have = 1;
+	int count = 1;
+	int down = 0;
+
+	x = p -> x - 1;
+	y = p -> y - 1;
+
+	for (count = 1; count < 4; count++) {         //x轴
+		if ((x - (count - 1)) > 0 && p -> board[y][x - count] == p -> who) {
+			have++;
+		}
+		else if (x + 1 < 15 && p -> board[y][x + 1] == p -> who) {
+			for (count = 1; count < 4; count++) {
+				if (x + count < 15 && p -> board[y][x + count] == p -> who) {
+					have++;
+				}
+				if (have == 3) {
+					if (p -> board[y][x + count + 1] == 0 ) {
+						if (down == 0) {
+							p -> board[y][x + count + 1] = 3 - p -> who;
+							down++;
+						}
+					}
+					if(p -> board[y][x - 1] == 0) {
+						if (down == 0) {
+							p -> board[y][x - 1] = 3 - p -> who;
+							down++;
+						}
+					}
+					return;
+				}
+			}
+		}
+		else {
+			break;
+		}
+		if (have == 3) {
+			return;
+		}
+	}
+	have = 1;
+	for (count = 1; count < 6; count++) {         //y轴
+		if ((y - (count - 1)) > 0 && p -> board[y - count][x] == p -> who) {
+			have++;
+		}
+		else if (y + 1 < 15 && p -> board[y + 1][x] == p -> who) {
+			for (count = 1; count < 6; count++) {
+				if (y + count < 15 && p -> board[y + count][x] == p -> who) {
+					have++;
+				}
+				if (have == 3) {
+					if (p -> board[y + count + 1][x] == 0 ) {
+						if (down == 0) {
+							p -> board[y + count + 1][x] = 3 - p -> who;
+							down++;
+						}
+					}
+					if(p -> board[y - 1][x] == 0) {
+						if (down == 0) {
+							p -> board[y - 1][x] = 3 - p -> who;
+							down++;
+						}
+					}
+					return;
+				}
+			}
+		}
+		else {
+			break;
+		}
+		if (have == 3) {
+			return;
+		}
+	}
+	have = 1;
+	for (count = 1; count < 6; count++) {         //左上右下
+		if ((y - (count - 1)) > 0 && (x - (count - 1)) > 0 && p -> board[y - count][x - count] == p -> who) {
+			have++;
+		}
+		else if (y + 1 < 15 && x + 1 < 15 && p -> board[y + 1][x + 1] == p -> who) {
+			for (count = 1; count < 6; count++) {
+				if (y + count < 15 && x + count < 15 && p -> board[y + count][x + count] == p -> who) {
+					have++;
+				}
+				if (have == 3) {
+					if (p -> board[y + count + 1][x + count + 1] == 0 ) {
+						if (down == 0) {
+							p -> board[y + count + 1][x + count + 1] = 3 - p -> who;
+							down++;
+						}
+					}
+					if(p -> board[y - 1][x - 1] == 0) {
+						if (down == 0) {
+							p -> board[y - 1][x - 1] = 3 - p -> who;
+							down++;
+						}
+					}
+					return;
+				}
+			}
+		}
+		else {
+			break;
+		}
+		if (have == 3) {
+			return;
+		}
+	}
+	have = 1;
+	for (count = 1; count < 6; count++) {         //左下右上
+		if (y + count < 15 && (x - (count - 1)) > 0 && p -> board[y + count][x - count] == p -> who) {
+			have++;
+		}
+		else if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - 1][x + 1] == p -> who) {
+			for (count = 1; count < 6; count++) {
+				if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
+					have++;
+				}
+				if (have == 3) {
+					if (p -> board[y - 1][x + count + 1] == 0 ) {
+						if (down == 0) {
+							p -> board[y - 1][x + count + 1] = 3 - p -> who;
+							down++;
+						}
+					}
+					if(p -> board[y + count + 1][x - 1] == 0) {
+						if (down == 0) {
+							p -> board[y + count + 1][x - 1] = 3 - p -> who;
+							down++;
+						}
+					}
+					return;
+				}
+			}
+		}
+		else {
+			break;
+		}
+		if (have == 3) {
+			return;
+		}
+	}
+	return;
+}
+
 
 int ifWin(struct Chess *p) {
 	int x = 1,y = 1;
