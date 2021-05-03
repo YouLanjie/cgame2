@@ -171,7 +171,6 @@ void game(struct Chess *p) {
 		printf("\033[%d;%dH\033[31m",y + 2,x * 3);
 		way = input();
 		switch (way) {
-			case 0x1B:
 			case 0x30:
 			case 0x51:
 			case 0x71:
@@ -191,14 +190,50 @@ void game(struct Chess *p) {
 					way = 0x00;
 				}
 				break;
-			case 0x57:
+			case 0x1B:
+			case 0xE0:
+				getchar();
+				way = getchar();
+				if (way == 0x41) {
+					if (y < 2) {
+						y = 15;
+					}
+					else {
+						y--;
+					}
+				}
+				else if (way == 0x44) {
+					if (x < 2) {
+						x = 15;
+					}
+					else {
+						x--;
+					}
+				}
+				else if (way == 0x42) {
+					if (y > 14) {
+						y = 1;
+					}
+					else {
+						y++;
+					}
+				}
+				else if (way == 0x43) {
+					if (x > 14) {
+						x = 1;
+					}
+					else {
+						x++;
+					}
+				}
+				break;
 			case 0x77:
 				if (y < 2) {
 					y = 15;
 				}
 				else {
 					y--;
-			}
+				}
 				break;
 			case 0x41:
 			case 0x61:

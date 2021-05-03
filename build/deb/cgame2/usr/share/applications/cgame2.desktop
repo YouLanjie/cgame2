@@ -2,7 +2,7 @@
 Name=五子棋
 Name[zh_CN]=五子棋
 Name[en_US]=Chess
-Exec=/opt/cgame2/cgame2
+Exec=/usr/local/cgame2/cgame2
 Icon=/usr/share/icons/cgame2.svg
 Comment=c语言小游戏
 Terminal=true
