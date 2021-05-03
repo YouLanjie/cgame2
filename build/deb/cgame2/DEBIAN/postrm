@@ -1,4 +1,3 @@
 #!/bin/sh
-rm -r /opt/cgame2
+rm -r /usr/local/cgame2
 rm /usr/bin/cgame2
-

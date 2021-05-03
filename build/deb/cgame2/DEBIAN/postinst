@@ -1,0 +1,3 @@
+#!/bin/sh
+gcc /usr/local/cgame2/src/main.c -o /usr/local/cgame2/cgame2
+ln -s /usr/local/cgame2/cgame2 /usr/bin/cgame2

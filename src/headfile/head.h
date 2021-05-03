@@ -10,9 +10,9 @@
 #define Clear system("clear");               //清屏，方便移植
 #define Max 15                               //棋盘大小
 
-#define Save "/opt/cgame2/save.txt"          //文件位置
-#define Data "/opt/cgame2/data.txt"          //文件位置
-#define Lang "/opt/cgame2/lang.txt"          //文件位置
+#define Save "/usr/local/cgame2/save.txt"          //文件位置
+#define Data "/usr/local/cgame2/data.txt"          //文件位置
+#define Lang "/usr/local/cgame2/lang.txt"          //文件位置
 
 #define Time "\033[1;31m%4d-%2d-%2d %2d:%2d:%2d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec //开局时间标准格式
 #define NowTime "\033[1;31m日期：%4d-%2d-%2d\n",p -> nt.year,p -> nt.mon,p -> nt.day //现在时间标准格式
@@ -41,6 +41,7 @@ int ifWin(struct Chess *p);    //是否胜利，返回1黑方胜，返回2白方
 int init(struct Chess *p);    //初始化：创建文件、选择语言
 void welcome();                //开始界面
 void game(struct Chess *p);    //游戏主体
+void AI(struct Chess *p);      //AI下棋
 void save(struct Chess *p);    //保存棋盘信息
 void history(struct Chess *p); //查看历史局数信息
 void help();                   //帮助信息
