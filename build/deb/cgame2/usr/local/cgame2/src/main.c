@@ -1,9 +1,8 @@
 #include "headfile/head.h"                           //导入头文件
 
-int main() {
+int main(int argc,char * argv[]) {
 	int a;
 	int b;
-	int d = 0;
 	struct Chess *p;
 	
 	p = (struct Chess *)malloc(sizeof(struct Chess));
@@ -43,7 +42,7 @@ int main() {
 				help();
 				break;
 			case 0x34:
-				other(d);
+				other(argv);
 				break;
 			default:
 				break;
@@ -64,13 +63,13 @@ int init(struct Chess *p) {
 	char d[5];            //查看语言
 	char b[5];            //转换前的字符
 
-	if (access(Save,0) == EOF) {
+	if(access(Save,0) == EOF) {
 		fp = fopen(Save,"w");
 		fclose(fp);
 		p -> count = 0;
 		return 0;
 	}
-	if (access(Data,0) == EOF) {
+	if(access(Data,0) == EOF) {
 		fp = fopen(Data,"w");
 		fprintf(fp,"%d\n",p -> count);
 		fclose(fp);
@@ -82,7 +81,7 @@ int init(struct Chess *p) {
 		p -> count = a;
 		fclose(fp);
 	}
-	if (access(Lang,0) == EOF) {
+	if(access(Lang,0) == EOF) {
 		fp = fopen(Lang,"w");
 		fclose(fp);
 	}
@@ -660,31 +659,42 @@ void history(struct Chess *p) {
 }
 
 void help() {
+	FILE *fp;
+	int a = 0;
+	char b[1392];
+
 	menu2("游戏帮助");
-	printf("\033[7;4H如果想要退出，0、q、Q、Esc都可以哦");
-	printf("\033[8;4HW S A D控制上下左右，空格下子");
+	printf("\033[7;4H按下0,q,Q退出");
+	printf("\033[8;4HW S A D或者方向键控制上下左右，空格下子");
 	printf("\033[9;4H@为黑棋,O为白棋,+为空白");
 	Menu2
-	input();
+	a = input();
+	if(a == 0x1B) {
+		getchar();
+		a = getchar();
+		if(a == 0x42) {
+			Clear
+			fp = fopen(Help,"r");
+			for (a = 0;a < 4; a++){
+				fread(b,3192,1,fp);
+			}
+			fclose(fp);
+		}
+	}
 	return;
 }
 
-void other(int b) {
+void other(char * argv[]) {
 	FILE *fp,*fp2;
 	int a;
 	char c[10] = "nano";
 
 	menu("其他选项");
-	printf("\033[8;11H\033[1;33m1.清除存档\033[8;37H2.设置语言\033[9;33H(Set the language)");
-	if (b == 1) {
-		printf("\033[9;11H\033[1;33m3.手动编辑存档\033[10;11H0.返回菜单");
-	}
-	else {
-		printf("\033[9;11H\033[1;33m0.返回菜单");
-	}
+	printf("\033[8;11H\033[1;33m1.清除存档\033[8;33H2.语言(language)");
+	printf("\033[9;11H3.关于\033[9;33H\033[1;33m0.返回菜单");
 	Menu
 	a = input();
-	if(a == 0x1B || a == 0x30 || a == 0x51 || a == 0x71) {
+	if(a == 0x30 || a == 0x51 || a == 0x71) {
 		return;
 	}
 	else if(a == 0x31) {
@@ -712,20 +722,21 @@ void other(int b) {
 		fp = fopen(Lang,"w");
 		fclose(fp);
 	}
-	else if (a == 0x33) {
-		Clear
-		if (b == 1) {
-			printf("请输入已安装的编辑器名：\n");
-			scanf("%s",c);
-			strcat(c," ");
-			strcat(c,Save);
-			system(c);
-		}
-		Clear
+	else if(a == 0x33) {
+		about(argv);
 	}
 	else {
 		return;
 	}
+	return;
+}
+
+void about(char * argv[]) {
+	Clear
+	menu2("有关我们");
+	printf("\033[6;4H\033[1;33m程序位置:\033[7;4H\033[36m%s\n",argv[0]);
+	Menu2
+	input();
 	return;
 }
 
