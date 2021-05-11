@@ -4,20 +4,23 @@ int main(int argc,char * argv[]) {
 	int a;
 	int b;
 	struct Chess *p;
-	
+
+	printf("\033[?25l");
 	p = (struct Chess *)malloc(sizeof(struct Chess));
-	Clear
+	Clear2
 	b = init(p);
 	if (b == 1) {
 		free(p);
-		Clear
+		Clear2
+		printf("\033[?25h");
 		return 0;
 	}
 	while (a != 0x1B && 0x30 && 0x51 && 0x71) {
 		b = init(p);
 		if (b == 1) {
 			free(p);
-			Clear
+			Clear2
+			printf("\033[?25h");
 			return 0;
 		}
 		welcome();
@@ -30,6 +33,7 @@ int main(int argc,char * argv[]) {
 			case 0x51:
 			case 0x71:
 				free(p);
+				printf("\033[?25h");
 				return 0;
 				break;
 			case 0x31:
@@ -50,7 +54,8 @@ int main(int argc,char * argv[]) {
 		Clear
 	}
 	free(p);
-	Clear
+	Clear2
+	printf("\033[?25h");
 	return 0;
 }
 
@@ -167,8 +172,9 @@ void game(struct Chess *p) {
 			printf("\033[1;33m\033[20;1H你不能下在非空的格子!\033[0m\n");
 			error = 0;
 		}
-		printf("\033[%d;%dH\033[31m",y + 2,x * 3);
+		printf("\033[%d;%dH\033[1m^\033[0m",y + 3,x * 3);
 		way = input();
+		printf("\033[2m \033[0m");
 		switch (way) {
 			case 0x30:
 			case 0x51:
@@ -190,9 +196,14 @@ void game(struct Chess *p) {
 				}
 				break;
 			case 0x1B:
-			case 0xE0:
-				getchar();
-				way = getchar();
+				way = kbhit_if();
+				if (way == 0) {
+					way = 0x1B;
+				}
+				else {
+					getchar();
+					way = getchar();
+				}
 				if (way == 0x41) {
 					if (y < 2) {
 						y = 15;
@@ -224,6 +235,24 @@ void game(struct Chess *p) {
 					else {
 						x++;
 					}
+				}
+				else {
+					Clear
+					printf("\033[1;33m请确认退出！本次游戏将不会记录！（Y/n）\n");
+					way = input();
+					if (way == 0x59 || way == 0x79) {
+						for (count = 0; count < Max ; count++) {
+							for (count2= 0; count2 < Max; count2++) {
+								p -> board[count][count2] = 0;
+							}
+						}
+						Clear
+						return;
+					}
+					else {
+						way = 0x00;
+					}
+					break;
 				}
 				break;
 			case 0x77:
@@ -657,7 +686,7 @@ void printboard(struct Chess *p) {
 		printf("|\033[0m");
 		for (count2= 0; count2 < Max; count2++) {
 			if (p -> board[count][count2] == 0) {
-				printf("\033[37;40m + \033[0m");
+				printf("\033[37;40;2m + \033[0m");
 			}
 			else if (p -> board[count][count2] == 1) {
 				printf("\033[30;47m @ \033[0m");

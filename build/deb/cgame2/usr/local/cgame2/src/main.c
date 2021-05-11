@@ -42,7 +42,7 @@ int main(int argc,char * argv[]) {
 				help();
 				break;
 			case 0x34:
-				other(argv);
+				other();
 				break;
 			default:
 				break;
@@ -308,149 +308,109 @@ void game(struct Chess *p) {
 }
 
 void AI(struct Chess *p) {
-	int x = 1,y = 1;
+	int x,y;
 	int have = 1;
-	int count = 1;
-	int down = 0;
 
 	x = p -> x - 1;
 	y = p -> y - 1;
 
-	for (count = 1; count < 4; count++) {         //x轴
-		if ((x - (count - 1)) > 0 && p -> board[y][x - count] == p -> who) {
+	for (int count = 1; count < 4; count++) {         //x轴
+		if (x - count != 0 && p -> board[y][x - count] == p -> who) {
 			have++;
 		}
-		else if (x + 1 < 15 && p -> board[y][x + 1] == p -> who) {
-			for (count = 1; count < 4; count++) {
-				if (x + count < 15 && p -> board[y][x + count] == p -> who) {
-					have++;
-				}
-				if (have == 3) {
-					if (p -> board[y][x + count + 1] == 0 ) {
-						if (down == 0) {
-							p -> board[y][x + count + 1] = 3 - p -> who;
-							down++;
-						}
-					}
-					if(p -> board[y][x - 1] == 0) {
-						if (down == 0) {
-							p -> board[y][x - 1] = 3 - p -> who;
-							down++;
-						}
-					}
-					return;
-				}
-			}
+		if (x + count != 15 && p -> board[y][x + count] == p -> who) {
+			have++;
 		}
-		else {
-			break;
+		for (int count = 1; have > 2 && x + count != 15 && p -> board[y][x + count] == 0 && p -> board[y][x + count] != p -> who; count++) {
+			p -> board[y][x + count] = 3 - p -> who;
+			return;
 		}
-		if (have == 3) {
+		for (int count = 1; have > 2 && x - count != 0 && p -> board[y][x - count] == 0 && p -> board[y][x - count] != p -> who; count++) {
+			p -> board[y][x - count] = 3 - p -> who;
 			return;
 		}
 	}
 	have = 1;
-	for (count = 1; count < 6; count++) {         //y轴
+	for (int count = 1; count < 4; count++) {         //y轴
 		if ((y - (count - 1)) > 0 && p -> board[y - count][x] == p -> who) {
 			have++;
 		}
-		else if (y + 1 < 15 && p -> board[y + 1][x] == p -> who) {
-			for (count = 1; count < 6; count++) {
-				if (y + count < 15 && p -> board[y + count][x] == p -> who) {
-					have++;
-				}
-				if (have == 3) {
-					if (p -> board[y + count + 1][x] == 0 ) {
-						if (down == 0) {
-							p -> board[y + count + 1][x] = 3 - p -> who;
-							down++;
-						}
-					}
-					if(p -> board[y - 1][x] == 0) {
-						if (down == 0) {
-							p -> board[y - 1][x] = 3 - p -> who;
-							down++;
-						}
-					}
-					return;
-				}
-			}
+		if (y + count < 15 && p -> board[y + count][x] == p -> who) {
+			have++;
 		}
-		else {
-			break;
+		for (int count = 1; have > 2 && y + count != 15 && p -> board[y + count][x] == 0 && p -> board[y + count][x] != p -> who; count++) {
+			p -> board[y + count][x] = 3 - p -> who;
+			return;
 		}
-		if (have == 3) {
+		for (int count = 1; have > 2 && y - count != 0 && p -> board[y - count][x] == 0 && p -> board[y - count][x] != p -> who; count++) {
+			p -> board[y - 1][x] = 3 - p -> who;
 			return;
 		}
 	}
 	have = 1;
-	for (count = 1; count < 6; count++) {         //左上右下
+	for (int count = 1; count < 4; count++) {         //左上右下
 		if ((y - (count - 1)) > 0 && (x - (count - 1)) > 0 && p -> board[y - count][x - count] == p -> who) {
 			have++;
 		}
-		else if (y + 1 < 15 && x + 1 < 15 && p -> board[y + 1][x + 1] == p -> who) {
-			for (count = 1; count < 6; count++) {
-				if (y + count < 15 && x + count < 15 && p -> board[y + count][x + count] == p -> who) {
-					have++;
-				}
-				if (have == 3) {
-					if (p -> board[y + count + 1][x + count + 1] == 0 ) {
-						if (down == 0) {
-							p -> board[y + count + 1][x + count + 1] = 3 - p -> who;
-							down++;
-						}
-					}
-					if(p -> board[y - 1][x - 1] == 0) {
-						if (down == 0) {
-							p -> board[y - 1][x - 1] = 3 - p -> who;
-							down++;
-						}
-					}
-					return;
-				}
-			}
+		if (y + count < 15 && x + count < 15 && p -> board[y + count][x + count] == p -> who) {
+			have++;
 		}
-		else {
-			break;
+		for (int count = 1; have > 2 && y + count != 15 && x + count != 15 && p -> board[y + count][x + count] == 0; count++) {
+			p -> board[y + count + 1][x + count + 1] = 3 - p -> who;
+			return;
 		}
-		if (have == 3) {
+		for (int count = 1; have > 2 && y - count != 0 && x - count != 0 && p -> board[y - 1][x - 1] == 0; count++) {
+			p -> board[y - 1][x - 1] = 3 - p -> who;
 			return;
 		}
 	}
 	have = 1;
-	for (count = 1; count < 6; count++) {         //左下右上
+	for (int count = 1; count < 4; count++) {         //左下右上
 		if (y + count < 15 && (x - (count - 1)) > 0 && p -> board[y + count][x - count] == p -> who) {
 			have++;
 		}
-		else if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - 1][x + 1] == p -> who) {
-			for (count = 1; count < 6; count++) {
-				if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
-					have++;
-				}
-				if (have == 3) {
-					if (p -> board[y - 1][x + count + 1] == 0 ) {
-						if (down == 0) {
-							p -> board[y - 1][x + count + 1] = 3 - p -> who;
-							down++;
-						}
-					}
-					if(p -> board[y + count + 1][x - 1] == 0) {
-						if (down == 0) {
-							p -> board[y + count + 1][x - 1] = 3 - p -> who;
-							down++;
-						}
-					}
-					return;
-				}
-			}
+		if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
+			have++;
 		}
-		else {
-			break;
+		for(int count = 1; have > 2 && y - count != 0 && x + count != 15 && p -> board[y - count][x + count] == 0; count++) {
+			p -> board[y - 1][x + count] = 3 - p -> who;
+			return;
 		}
-		if (have == 3) {
+		for(int count = 1; have > 2 && y + count != 15 && x - count != 0 && p -> board[y + count][x - count] == 0; count++) {
+			p -> board[y + count][x - count] = 3 - p -> who;
 			return;
 		}
 	}
+	for(int count = 1;count < 3; count++) {
+		int i;
+		i = rand() % 5 + 1;
+		if (i == 1 && x > 0 && p -> board[y][x - 1] == 0) {
+			p -> board[y][x - 1] = 3 - p -> who;
+			return;
+		}
+		else if (i == 2 && x < 14 && p -> board[y][x + 1] == 0) {
+			p -> board[y][x + 1] = 3 - p -> who;
+			return;
+		}
+		else if (i == 3 && y < 14 && p -> board[y + 1][x] == 0) {
+			p -> board[y + 1][x] = 3 - p -> who;
+			return;
+		}
+		else if (i == 4 && y > 0 && p -> board[y - 1][x] == 0) {
+			p -> board[y - 1][x] = 3 - p -> who;
+			return;
+		}
+		else if (i == 5) {
+			for (int y = 0; y < 15; y++) {
+				for (int x = 0; x < 15; x++) {
+					if (p -> board[y][x] == 3 - p -> who) {
+						/* code */
+					}
+				}
+			}
+		}
+	}
+	
 	return;
 }
 
@@ -467,18 +427,8 @@ int ifWin(struct Chess *p) {
 		if ((x - (count - 1)) > 0 && p -> board[y][x - count] == p -> who) {
 			have++;
 		}
-		else if (x + 1 < 15 && p -> board[y][x + 1] == p -> who) {
-			for (count = 1; count < 6; count++) {
-				if (x + count < 15 && p -> board[y][x + count] == p -> who) {
-					have++;
-				}
-				if (have == 5) {
-					return p -> who;
-				}
-			}
-		}
-		else {
-			break;
+		if (x + count < 15 && p -> board[y][x + count] == p -> who) {
+			have++;
 		}
 		if (have == 5) {
 			return p -> who;
@@ -489,18 +439,8 @@ int ifWin(struct Chess *p) {
 		if ((y - (count - 1)) > 0 && p -> board[y - count][x] == p -> who) {
 			have++;
 		}
-		else if (y + 1 < 15 && p -> board[y + 1][x] == p -> who) {
-			for (count = 1; count < 6; count++) {
-				if (y + count < 15 && p -> board[y + count][x] == p -> who) {
-					have++;
-				}
-				if (have == 5) {
-					return p -> who;
-				}
-			}
-		}
-		else {
-			break;
+		if (y + count < 15 && p -> board[y + count][x] == p -> who) {
+			have++;
 		}
 		if (have == 5) {
 			return p -> who;
@@ -511,18 +451,8 @@ int ifWin(struct Chess *p) {
 		if ((y - (count - 1)) > 0 && (x - (count - 1)) > 0 && p -> board[y - count][x - count] == p -> who) {
 			have++;
 		}
-		else if (y + 1 < 15 && x + 1 < 15 && p -> board[y + 1][x + 1] == p -> who) {
-			for (count = 1; count < 6; count++) {
-				if (y + count < 15 && x + count < 15 && p -> board[y + count][x + count] == p -> who) {
-					have++;
-				}
-				if (have == 5) {
-					return p -> who;
-				}
-			}
-		}
-		else {
-			break;
+		if (y + count < 15 && x + count < 15 && p -> board[y + count][x + count] == p -> who) {
+			have++;
 		}
 		if (have == 5) {
 			return p -> who;
@@ -533,18 +463,8 @@ int ifWin(struct Chess *p) {
 		if (y + count < 15 && (x - (count - 1)) > 0 && p -> board[y + count][x - count] == p -> who) {
 			have++;
 		}
-		else if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - 1][x + 1] == p -> who) {
-			for (count = 1; count < 6; count++) {
-				if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
-					have++;
-				}
-				if (have == 5) {
-					return p -> who;
-				}
-			}
-		}
-		else {
-			break;
+		if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
+			have++;
 		}
 		if (have == 5) {
 			return p -> who;
@@ -684,14 +604,14 @@ void help() {
 	return;
 }
 
-void other(char * argv[]) {
+void other() {
 	FILE *fp,*fp2;
 	int a;
 	char c[10] = "nano";
 
 	menu("其他选项");
 	printf("\033[8;11H\033[1;33m1.清除存档\033[8;33H2.语言(language)");
-	printf("\033[9;11H3.关于\033[9;33H\033[1;33m0.返回菜单");
+	printf("\033[9;11H\033[1;33m0.返回菜单");
 	Menu
 	a = input();
 	if(a == 0x30 || a == 0x51 || a == 0x71) {
@@ -722,21 +642,9 @@ void other(char * argv[]) {
 		fp = fopen(Lang,"w");
 		fclose(fp);
 	}
-	else if(a == 0x33) {
-		about(argv);
-	}
 	else {
 		return;
 	}
-	return;
-}
-
-void about(char * argv[]) {
-	Clear
-	menu2("有关我们");
-	printf("\033[6;4H\033[1;33m程序位置:\033[7;4H\033[36m%s\n",argv[0]);
-	Menu2
-	input();
 	return;
 }
 
@@ -749,13 +657,13 @@ void printboard(struct Chess *p) {
 		printf("|\033[0m");
 		for (count2= 0; count2 < Max; count2++) {
 			if (p -> board[count][count2] == 0) {
-				printf("\033[37;40m + \033[0");
+				printf("\033[37;40m + \033[0m");
 			}
 			else if (p -> board[count][count2] == 1) {
-				printf("\033[30;47m @ \033[0");
+				printf("\033[30;47m @ \033[0m");
 			}
 			else if (p -> board[count][count2] == 2) {
-				printf("\033[37;40m O \033[0");
+				printf("\033[37;40m O \033[0m");
 			}
 		}
 		printf("\033[1;33m|\n");

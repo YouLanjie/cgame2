@@ -7,7 +7,8 @@
 #include "kbhit_input.h"                     //无延迟输入
 #include "menu.h"                            //菜单模板
 
-#define Clear system("clear");               //清屏，方便移植
+#define Clear printf("\033[2J\033[1;1H");               //清屏，方便移植
+#define Clear2 system("clear");               //清屏，方便移植
 #define Max 15                               //棋盘大小
 
 #define Save "/usr/local/cgame2/data/save.txt"          //文件位置
