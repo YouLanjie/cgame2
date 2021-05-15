@@ -7,7 +7,8 @@
 #include "kbhit_input.h"                     //无延迟输入
 #include "menu.h"                            //菜单模板
 
-#define Clear system("clear");               //清屏，方便移植
+#define Clear printf("\033[2J\033[1;1H");               //清屏，方便移植
+#define Clear2 system("clear");               //清屏，方便移植
 #define Max 15                               //棋盘大小
 
 #define Save "/usr/local/cgame2/data/save.txt"          //文件位置
@@ -46,7 +47,7 @@ void AI(struct Chess *p);      //AI下棋
 void save(struct Chess *p);    //保存棋盘信息
 void history(struct Chess *p); //查看历史局数信息
 void help();                   //帮助信息
-void other();     //其他选项
+void other();                  //其他选项
 void printboard(struct Chess *p); //打印棋盘
 void gettime(struct Chess *p);    //获取开局时间
 void getnowtime(struct Chess *p); //获取现在时间

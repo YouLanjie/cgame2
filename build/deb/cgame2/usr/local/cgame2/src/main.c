@@ -4,32 +4,36 @@ int main(int argc,char * argv[]) {
 	int a;
 	int b;
 	struct Chess *p;
-	
+
+	printf("\033[?25l");
 	p = (struct Chess *)malloc(sizeof(struct Chess));
-	Clear
+	Clear2
 	b = init(p);
 	if (b == 1) {
 		free(p);
-		Clear
+		Clear2
+		printf("\033[?25h");
 		return 0;
 	}
 	while (a != 0x1B && 0x30 && 0x51 && 0x71) {
 		b = init(p);
 		if (b == 1) {
 			free(p);
-			Clear
+			Clear2
+			printf("\033[?25h");
 			return 0;
 		}
 		welcome();
 		a = input();
-		printf("\n\n\n");
-		Clear
+		printf("\n\n\n\n");
+		Clear2
 		switch (a) {
 			case 0x1B:
 			case 0x30:
 			case 0x51:
 			case 0x71:
 				free(p);
+				printf("\033[?25h");
 				return 0;
 				break;
 			case 0x31:
@@ -47,10 +51,11 @@ int main(int argc,char * argv[]) {
 			default:
 				break;
 		}
-		Clear
+		Clear2
 	}
 	free(p);
-	Clear
+	Clear2
+	printf("\033[?25h");
 	return 0;
 }
 
@@ -167,8 +172,17 @@ void game(struct Chess *p) {
 			printf("\033[1;33m\033[20;1H你不能下在非空的格子!\033[0m\n");
 			error = 0;
 		}
-		printf("\033[%d;%dH\033[31m",y + 2,x * 3);
+		if (p -> board[y - 1][x - 1] == 1) {
+			printf("\033[%d;%dH\033[30;47m>\033[0m",y + 2,x * 3 - 1);
+		}
+		else if (p -> board[y - 1][x - 1] == 2) {
+			printf("\033[%d;%dH\033[1;37;40m>\033[0m",y + 2,x * 3 - 1);
+		}
+		else {
+			printf("\033[%d;%dH\033[1;37;40m>\033[0m",y + 2,x * 3 - 1);
+		}
 		way = input();
+		printf("\033[%d;%dH\033[2m \033[0m",y + 2,x * 3 - 1);
 		switch (way) {
 			case 0x30:
 			case 0x51:
@@ -190,9 +204,14 @@ void game(struct Chess *p) {
 				}
 				break;
 			case 0x1B:
-			case 0xE0:
-				getchar();
-				way = getchar();
+				way = kbhit_if();
+				if (way == 0) {
+					way = 0x1B;
+				}
+				else {
+					getchar();
+					way = getchar();
+				}
 				if (way == 0x41) {
 					if (y < 2) {
 						y = 15;
@@ -224,6 +243,24 @@ void game(struct Chess *p) {
 					else {
 						x++;
 					}
+				}
+				else {
+					Clear
+					printf("\033[1;33m请确认退出！本次游戏将不会记录！（Y/n）\n");
+					way = input();
+					if (way == 0x59 || way == 0x79) {
+						for (count = 0; count < Max ; count++) {
+							for (count2= 0; count2 < Max; count2++) {
+								p -> board[count][count2] = 0;
+							}
+						}
+						Clear
+						return;
+					}
+					else {
+						way = 0x00;
+					}
+					break;
 				}
 				break;
 			case 0x77:
@@ -263,11 +300,11 @@ void game(struct Chess *p) {
 				break;
 			case 0x0D:
 			case 0x20:
-				if (p -> board[y -1][x - 1] == 1 || p -> board[y -1][x - 1] == 2) {
+				if (p -> board[y - 1][x - 1] == 1 || p -> board[y - 1][x - 1] == 2) {
 					error = 1;
 					break;
 				}
-				else if (p -> board[y -1][x - 1] == 0) {
+				else if (p -> board[y - 1][x - 1] == 0) {
 					p -> board[y - 1][x - 1] = who;
 					p -> who = who;
 					p -> x = x;
@@ -315,68 +352,68 @@ void AI(struct Chess *p) {
 	y = p -> y - 1;
 
 	for (int count = 1; count < 4; count++) {         //x轴
-		if (x - count != 0 && p -> board[y][x - count] == p -> who) {
+		if (x - count > -1 && p -> board[y][x - count] == p -> who) {
 			have++;
 		}
-		if (x + count != 15 && p -> board[y][x + count] == p -> who) {
+		if (x + count < 15 && p -> board[y][x + count] == p -> who) {
 			have++;
 		}
-		for (int count = 1; have > 2 && x + count != 15 && p -> board[y][x + count] == 0 && p -> board[y][x + count] != p -> who; count++) {
+		for (int count = 1; have > 2 && x + count < 15 && p -> board[y][x + count] == 0 && p -> board[y][x + count] != p -> who; count++) {
 			p -> board[y][x + count] = 3 - p -> who;
 			return;
 		}
-		for (int count = 1; have > 2 && x - count != 0 && p -> board[y][x - count] == 0 && p -> board[y][x - count] != p -> who; count++) {
+		for (int count = 1; have > 2 && x - count > -1 && p -> board[y][x - count] == 0 && p -> board[y][x - count] != p -> who; count++) {
 			p -> board[y][x - count] = 3 - p -> who;
 			return;
 		}
 	}
 	have = 1;
 	for (int count = 1; count < 4; count++) {         //y轴
-		if ((y - (count - 1)) > 0 && p -> board[y - count][x] == p -> who) {
+		if ((y - count) > -1 && p -> board[y - count][x] == p -> who) {
 			have++;
 		}
 		if (y + count < 15 && p -> board[y + count][x] == p -> who) {
 			have++;
 		}
-		for (int count = 1; have > 2 && y + count != 15 && p -> board[y + count][x] == 0 && p -> board[y + count][x] != p -> who; count++) {
+		for (int count = 1; have > 2 && y + count < 15 && p -> board[y + count][x] == 0 && p -> board[y + count][x] != p -> who; count++) {
 			p -> board[y + count][x] = 3 - p -> who;
 			return;
 		}
-		for (int count = 1; have > 2 && y - count != 0 && p -> board[y - count][x] == 0 && p -> board[y - count][x] != p -> who; count++) {
-			p -> board[y - 1][x] = 3 - p -> who;
+		for (int count = 1; have > 2 && y - count > -1 && p -> board[y - count][x] == 0 && p -> board[y - count][x] != p -> who; count++) {
+			p -> board[y - count][x] = 3 - p -> who;
 			return;
 		}
 	}
 	have = 1;
 	for (int count = 1; count < 4; count++) {         //左上右下
-		if ((y - (count - 1)) > 0 && (x - (count - 1)) > 0 && p -> board[y - count][x - count] == p -> who) {
+		if (y - count > -1 && x - count > -1 && p -> board[y - count][x - count] == p -> who) {
 			have++;
 		}
 		if (y + count < 15 && x + count < 15 && p -> board[y + count][x + count] == p -> who) {
 			have++;
 		}
-		for (int count = 1; have > 2 && y + count != 15 && x + count != 15 && p -> board[y + count][x + count] == 0; count++) {
-			p -> board[y + count + 1][x + count + 1] = 3 - p -> who;
+		for (int count = 1; have > 2 && y + count < 15 && x + count < 15 && p -> board[y + count][x + count] == 0; count++) {
+			p -> board[y + count][x + count] = 3 - p -> who;
 			return;
 		}
-		for (int count = 1; have > 2 && y - count != 0 && x - count != 0 && p -> board[y - 1][x - 1] == 0; count++) {
-			p -> board[y - 1][x - 1] = 3 - p -> who;
+		for (int count = 1; have > 2 && y - count > -1 && x - count > -1 && p -> board[y - 1][x - 1] == 0; count++) {
+			p -> board[y - count][x - count] = 3 - p -> who;
 			return;
 		}
 	}
 	have = 1;
 	for (int count = 1; count < 4; count++) {         //左下右上
-		if (y + count < 15 && (x - (count - 1)) > 0 && p -> board[y + count][x - count] == p -> who) {
+		if (y + count < 15 && x - count > -1 && p -> board[y + count][x - count] == p -> who) {
 			have++;
 		}
-		if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
+		if (y - count > -1 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
 			have++;
 		}
-		for(int count = 1; have > 2 && y - count != 0 && x + count != 15 && p -> board[y - count][x + count] == 0; count++) {
-			p -> board[y - 1][x + count] = 3 - p -> who;
+		for(int count = 1; have > 2 && y - count > -1 && x + count < 15 && p -> board[y - count][x + count] == 0; count++) {
+			p -> board[y - count][x + count] = 3 - p -> who;
 			return;
 		}
-		for(int count = 1; have > 2 && y + count != 15 && x - count != 0 && p -> board[y + count][x - count] == 0; count++) {
+		for(int count = 1; have > 2 && y + count < 15 && x - count > -1 && p -> board[y + count][x - count] == 0; count++) {
 			p -> board[y + count][x - count] = 3 - p -> who;
 			return;
 		}
@@ -400,15 +437,6 @@ void AI(struct Chess *p) {
 			p -> board[y - 1][x] = 3 - p -> who;
 			return;
 		}
-		else if (i == 5) {
-			for (int y = 0; y < 15; y++) {
-				for (int x = 0; x < 15; x++) {
-					if (p -> board[y][x] == 3 - p -> who) {
-						/* code */
-					}
-				}
-			}
-		}
 	}
 	
 	return;
@@ -424,7 +452,7 @@ int ifWin(struct Chess *p) {
 	y = p -> y - 1;
 
 	for (count = 1; count < 6; count++) {         //x轴
-		if ((x - (count - 1)) > 0 && p -> board[y][x - count] == p -> who) {
+		if (x - count > -1 && p -> board[y][x - count] == p -> who) {
 			have++;
 		}
 		if (x + count < 15 && p -> board[y][x + count] == p -> who) {
@@ -436,7 +464,7 @@ int ifWin(struct Chess *p) {
 	}
 	have = 1;
 	for (count = 1; count < 6; count++) {         //y轴
-		if ((y - (count - 1)) > 0 && p -> board[y - count][x] == p -> who) {
+		if (y - count > -1 && p -> board[y - count][x] == p -> who) {
 			have++;
 		}
 		if (y + count < 15 && p -> board[y + count][x] == p -> who) {
@@ -448,7 +476,7 @@ int ifWin(struct Chess *p) {
 	}
 	have = 1;
 	for (count = 1; count < 6; count++) {         //左上右下
-		if ((y - (count - 1)) > 0 && (x - (count - 1)) > 0 && p -> board[y - count][x - count] == p -> who) {
+		if (y - count > -1 && x - count > -1 && p -> board[y - count][x - count] == p -> who) {
 			have++;
 		}
 		if (y + count < 15 && x + count < 15 && p -> board[y + count][x + count] == p -> who) {
@@ -460,10 +488,10 @@ int ifWin(struct Chess *p) {
 	}
 	have = 1;
 	for (count = 1; count < 6; count++) {         //左下右上
-		if (y + count < 15 && (x - (count - 1)) > 0 && p -> board[y + count][x - count] == p -> who) {
+		if (y + count < 15 && x - count > -1 && p -> board[y + count][x - count] == p -> who) {
 			have++;
 		}
-		if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
+		if (y - count > -1 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
 			have++;
 		}
 		if (have == 5) {
@@ -491,13 +519,13 @@ void save(struct Chess *p) {
 	for (count = 0; count < Max ; count++) {    //打印棋盘到文件
 		for (count2= 0; count2 < Max; count2++) {
 			if (p -> board[count][count2] == 0) {
-				fprintf(fp,"\033[37;40m + \033[0");
+				fprintf(fp,"\033[37;40m + \033[0m");
 			}
 			else if (p -> board[count][count2] == 1) {
-				fprintf(fp,"\033[30;47m @ \033[0");
+				fprintf(fp,"\033[30;47m @ \033[0m");
 			}
 			else if (p -> board[count][count2] == 2) {
-				fprintf(fp,"\033[37;40m O \033[0");
+				fprintf(fp,"\033[37;40m O \033[0m");
 			}
 		}
 		fprintf(fp,"\n");
@@ -515,7 +543,7 @@ void save(struct Chess *p) {
 void history(struct Chess *p) {
 	int count;              //数数
 	int b;                  //选择
-	char a[3192];           //棋盘信息
+	char a[3417];           //棋盘信息
 	FILE *fp;               //文件指针
 
 	if(p -> count == 0) {
@@ -530,9 +558,10 @@ void history(struct Chess *p) {
 		return;
 	}
 	for (count = 0; count < p -> count; count++) {
-		fread(a,3192,1,fp);
-		printf("\033[1;33m%s\033[0m",a);
-		printf("\033[0;1;31m按下W查看上一局，按下S查看下一局,0退出\033[0m\n");
+		fread(a,3417,1,fp);
+		printf("\033[1;1H");
+		puts(a);
+		printf("\033[17;1H\033[0;1;31m按下W查看上一局，按下S查看下一局,0退出\033[0m");
 		b = input();
 		switch (b) {
 			case 0x1B:
@@ -544,31 +573,29 @@ void history(struct Chess *p) {
 			case 0x57:
 			case 0x77:
 				if (count == 0) {
-					Clear
-					printf("\033[33m这已经是第一个记录了\n\033[1;31m按下任意键继续\033[0m\n");
+					printf("\033[18;1H\033[33m这已经是第一个记录了\033[0m\n");
 					fseek(fp,0L,0);
-					count--;
-					input();
+					count--;;
 				}
 				else {
-					fseek(fp,-6384L,1);
+					fseek(fp,-6834L,1);
 					count -= 2;
+					Clear
 				}
-				Clear
 				break;
 			case 0x53:
 			case 0x73:
 				if (count == p -> count - 1) {
-					Clear
-					printf("\033[33m这已经是最后一个记录了\033[1;31m\n按下任意键继续\033[0m\n");
-					fseek(fp,-3192L,3);
+					printf("\033[18;1H\033[33m这已经是最后一个记录了\033[0m\n");
+					fseek(fp,-3417L,3);
 					count--;
-					input();
 				}
-				Clear
+				else {
+					Clear
+				}
 				break;
 			default:
-				fseek(fp,-3192L,1);
+				fseek(fp,-3417L,1);
 				count--;
 				Clear
 				break;
@@ -580,7 +607,7 @@ void history(struct Chess *p) {
 
 void help() {
 	FILE *fp;
-	int a = 0;
+	int a = 0,count = 0;
 	char b[1392];
 
 	menu2("游戏帮助");
@@ -590,13 +617,53 @@ void help() {
 	Menu2
 	a = input();
 	if(a == 0x1B) {
-		getchar();
-		a = getchar();
+		if (kbhit_if() == 1) {
+			getchar();
+			a = getchar();
+		}
 		if(a == 0x42) {
 			Clear
 			fp = fopen(Help,"r");
-			for (a = 0;a < 4; a++){
-				fread(b,3192,1,fp);
+			for (count = 0;count < 5; count++){
+				fread(b,3417,1,fp);
+				puts(b);
+				printf("\033[17;1H\033[0;1;31mn下一步;N上一步,0退出\033[0m");
+				a = input();
+				switch (a) {
+					case 0x1B:
+					case 0x30:
+					case 0x51:
+					case 0x71:
+						return;
+						break;
+					case 0x57:
+					case 0x77:
+						if (count == 0) {
+							Clear
+							fseek(fp,0L,0);
+							count--;
+						}
+						else {
+							fseek(fp,-6834L,1);
+							count -= 2;
+						}
+						Clear
+						break;
+					case 0x53:
+					case 0x73:
+						if (count == 4) {
+							Clear
+							fseek(fp,-3417L,3);
+							count--;
+						}
+						Clear
+						break;
+					default:
+						fseek(fp,-3417L,1);
+						count--;
+						Clear
+						break;
+				}
 			}
 			fclose(fp);
 		}
@@ -611,22 +678,26 @@ void other() {
 
 	menu("其他选项");
 	printf("\033[8;11H\033[1;33m1.清除存档\033[8;33H2.语言(language)");
-	printf("\033[9;11H\033[1;33m0.返回菜单");
+	printf("\033[9;11H3.设置\033[9;33H0.返回菜单\033[0m");
 	Menu
 	a = input();
-	if(a == 0x30 || a == 0x51 || a == 0x71) {
-		return;
-	}
-	else if(a == 0x31) {
-		Clear
-		printf("\033[1;33m请确清除存档，您将失去您的所有记录！（Y/n）\n");
-		a = input();
-		if (a == 0x59 || a == 0x79) {
-			fp = fopen(Data,"w");
-			fp2 = fopen(Save,"w");
-			if(!fp && !fp2) {
-				printf("\033[1;31m无法打开存档\n按任意按键返回：\033[0m");
-				input();
+	switch(a) {
+		case 0x30:
+		case 0x51:
+		case 0x71:
+			return;
+			break;
+		case 0x31:
+			Clear
+			printf("\033[1;33m请确清除存档，您将失去您的所有记录！（Y/n）\n");
+			a = input();
+			if (a == 0x59 || a == 0x79) {
+				fp = fopen(Data,"w");
+				fp2 = fopen(Save,"w");
+				if(!fp && !fp2) {
+					printf("\033[1;31m无法打开存档\n按任意按键返回：\033[0m");
+					input();
+				}
 				return;
 			}
 			fprintf(fp,"0");
@@ -635,15 +706,18 @@ void other() {
 			Clear
 			printf("\033[1;33m清除成功\n\033[1;31m按任意按键返回：\033[0m");
 			input();
-		}
-		Clear
-	}
-	else if (a == 0x32) {
-		fp = fopen(Lang,"w");
-		fclose(fp);
-	}
-	else {
-		return;
+			Clear
+			break;
+		case 0x32:
+			fp = fopen(Lang,"w");
+			fclose(fp);
+			break;
+		case 0x33:
+			/* pass */
+			break;
+		default:
+			return;
+			break;
 	}
 	return;
 }
@@ -657,7 +731,7 @@ void printboard(struct Chess *p) {
 		printf("|\033[0m");
 		for (count2= 0; count2 < Max; count2++) {
 			if (p -> board[count][count2] == 0) {
-				printf("\033[37;40m + \033[0m");
+				printf("\033[37;40;2m + \033[0m");
 			}
 			else if (p -> board[count][count2] == 1) {
 				printf("\033[30;47m @ \033[0m");

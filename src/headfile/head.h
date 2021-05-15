@@ -47,7 +47,7 @@ void AI(struct Chess *p);      //AI下棋
 void save(struct Chess *p);    //保存棋盘信息
 void history(struct Chess *p); //查看历史局数信息
 void help();                   //帮助信息
-void other();     //其他选项
+void other();                  //其他选项
 void printboard(struct Chess *p); //打印棋盘
 void gettime(struct Chess *p);    //获取开局时间
 void getnowtime(struct Chess *p); //获取现在时间
