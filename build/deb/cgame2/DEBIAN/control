@@ -1,5 +1,9 @@
 Package: cgame2
+<<<<<<< HEAD:build/deb/cgame2/DEBIAN/control
 Version: 1.2.0
+=======
+Version: 1.0.3
+>>>>>>> 492d4cf7bc71597509e30549e4baae1de00a766b:cgame2/DEBIAN/control
 Description: This is a game
 Source: cgame2
 Maintainer: Youlanjie@github.com

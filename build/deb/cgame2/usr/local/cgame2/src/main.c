@@ -147,8 +147,13 @@ void game(struct Chess *p) {
 
 	Clear
 	printf("是否和AI下棋？（Y/n）\n");
+<<<<<<< HEAD:build/deb/cgame2/usr/local/cgame2/src/main.c
 	way = input();
 	if (way == 0x59 || way == 0x79) {
+=======
+	a = input();
+	if (way != 0x59 || way != 0x79) {
+>>>>>>> 492d4cf7bc71597509e30549e4baae1de00a766b:cgame2/opt/cgame2/src/main.c
 		a = 1;
 	}
 	else {
@@ -345,12 +350,20 @@ void game(struct Chess *p) {
 }
 
 void AI(struct Chess *p) {
+<<<<<<< HEAD:build/deb/cgame2/usr/local/cgame2/src/main.c
 	int x,y;
 	int have = 1;
+=======
+	int x = 1,y = 1;
+	int have = 1;
+	int count = 1;
+	int down = 0;
+>>>>>>> 492d4cf7bc71597509e30549e4baae1de00a766b:cgame2/opt/cgame2/src/main.c
 
 	x = p -> x - 1;
 	y = p -> y - 1;
 
+<<<<<<< HEAD:build/deb/cgame2/usr/local/cgame2/src/main.c
 	for (int count = 1; count < 4; count++) {         //x轴
 		if (x - count > -1 && p -> board[y][x - count] == p -> who) {
 			have++;
@@ -364,10 +377,43 @@ void AI(struct Chess *p) {
 		}
 		for (int count = 1; have > 2 && x - count > -1 && p -> board[y][x - count] == 0 && p -> board[y][x - count] != p -> who; count++) {
 			p -> board[y][x - count] = 3 - p -> who;
+=======
+	for (count = 1; count < 4; count++) {         //x轴
+		if ((x - (count - 1)) > 0 && p -> board[y][x - count] == p -> who) {
+			have++;
+		}
+		else if (x + 1 < 15 && p -> board[y][x + 1] == p -> who) {
+			for (count = 1; count < 4; count++) {
+				if (x + count < 15 && p -> board[y][x + count] == p -> who) {
+					have++;
+				}
+				if (have == 3) {
+					if (p -> board[y][x + count + 1] == 0 ) {
+						if (down == 0) {
+							p -> board[y][x + count + 1] = 3 - p -> who;
+							down++;
+						}
+					}
+					if(p -> board[y][x - 1] == 0) {
+						if (down == 0) {
+							p -> board[y][x - 1] = 3 - p -> who;
+							down++;
+						}
+					}
+					return;
+				}
+			}
+		}
+		else {
+			break;
+		}
+		if (have == 3) {
+>>>>>>> 492d4cf7bc71597509e30549e4baae1de00a766b:cgame2/opt/cgame2/src/main.c
 			return;
 		}
 	}
 	have = 1;
+<<<<<<< HEAD:build/deb/cgame2/usr/local/cgame2/src/main.c
 	for (int count = 1; count < 4; count++) {         //y轴
 		if ((y - count) > -1 && p -> board[y - count][x] == p -> who) {
 			have++;
@@ -381,10 +427,43 @@ void AI(struct Chess *p) {
 		}
 		for (int count = 1; have > 2 && y - count > -1 && p -> board[y - count][x] == 0 && p -> board[y - count][x] != p -> who; count++) {
 			p -> board[y - count][x] = 3 - p -> who;
+=======
+	for (count = 1; count < 6; count++) {         //y轴
+		if ((y - (count - 1)) > 0 && p -> board[y - count][x] == p -> who) {
+			have++;
+		}
+		else if (y + 1 < 15 && p -> board[y + 1][x] == p -> who) {
+			for (count = 1; count < 6; count++) {
+				if (y + count < 15 && p -> board[y + count][x] == p -> who) {
+					have++;
+				}
+				if (have == 3) {
+					if (p -> board[y + count + 1][x] == 0 ) {
+						if (down == 0) {
+							p -> board[y + count + 1][x] = 3 - p -> who;
+							down++;
+						}
+					}
+					if(p -> board[y - 1][x] == 0) {
+						if (down == 0) {
+							p -> board[y - 1][x] = 3 - p -> who;
+							down++;
+						}
+					}
+					return;
+				}
+			}
+		}
+		else {
+			break;
+		}
+		if (have == 3) {
+>>>>>>> 492d4cf7bc71597509e30549e4baae1de00a766b:cgame2/opt/cgame2/src/main.c
 			return;
 		}
 	}
 	have = 1;
+<<<<<<< HEAD:build/deb/cgame2/usr/local/cgame2/src/main.c
 	for (int count = 1; count < 4; count++) {         //左上右下
 		if (y - count > -1 && x - count > -1 && p -> board[y - count][x - count] == p -> who) {
 			have++;
@@ -398,10 +477,43 @@ void AI(struct Chess *p) {
 		}
 		for (int count = 1; have > 2 && y - count > -1 && x - count > -1 && p -> board[y - 1][x - 1] == 0; count++) {
 			p -> board[y - count][x - count] = 3 - p -> who;
+=======
+	for (count = 1; count < 6; count++) {         //左上右下
+		if ((y - (count - 1)) > 0 && (x - (count - 1)) > 0 && p -> board[y - count][x - count] == p -> who) {
+			have++;
+		}
+		else if (y + 1 < 15 && x + 1 < 15 && p -> board[y + 1][x + 1] == p -> who) {
+			for (count = 1; count < 6; count++) {
+				if (y + count < 15 && x + count < 15 && p -> board[y + count][x + count] == p -> who) {
+					have++;
+				}
+				if (have == 3) {
+					if (p -> board[y + count + 1][x + count + 1] == 0 ) {
+						if (down == 0) {
+							p -> board[y + count + 1][x + count + 1] = 3 - p -> who;
+							down++;
+						}
+					}
+					if(p -> board[y - 1][x - 1] == 0) {
+						if (down == 0) {
+							p -> board[y - 1][x - 1] = 3 - p -> who;
+							down++;
+						}
+					}
+					return;
+				}
+			}
+		}
+		else {
+			break;
+		}
+		if (have == 3) {
+>>>>>>> 492d4cf7bc71597509e30549e4baae1de00a766b:cgame2/opt/cgame2/src/main.c
 			return;
 		}
 	}
 	have = 1;
+<<<<<<< HEAD:build/deb/cgame2/usr/local/cgame2/src/main.c
 	for (int count = 1; count < 4; count++) {         //左下右上
 		if (y + count < 15 && x - count > -1 && p -> board[y + count][x - count] == p -> who) {
 			have++;
@@ -439,6 +551,41 @@ void AI(struct Chess *p) {
 		}
 	}
 	
+=======
+	for (count = 1; count < 6; count++) {         //左下右上
+		if (y + count < 15 && (x - (count - 1)) > 0 && p -> board[y + count][x - count] == p -> who) {
+			have++;
+		}
+		else if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - 1][x + 1] == p -> who) {
+			for (count = 1; count < 6; count++) {
+				if ((y - (count - 1)) > 0 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
+					have++;
+				}
+				if (have == 3) {
+					if (p -> board[y - 1][x + count + 1] == 0 ) {
+						if (down == 0) {
+							p -> board[y - 1][x + count + 1] = 3 - p -> who;
+							down++;
+						}
+					}
+					if(p -> board[y + count + 1][x - 1] == 0) {
+						if (down == 0) {
+							p -> board[y + count + 1][x - 1] = 3 - p -> who;
+							down++;
+						}
+					}
+					return;
+				}
+			}
+		}
+		else {
+			break;
+		}
+		if (have == 3) {
+			return;
+		}
+	}
+>>>>>>> 492d4cf7bc71597509e30549e4baae1de00a766b:cgame2/opt/cgame2/src/main.c
 	return;
 }
 

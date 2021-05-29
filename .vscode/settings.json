@@ -5,5 +5,9 @@
 	},
 	"editor.fontSize": 18,
 	"editor.tabSize": 8,
+<<<<<<< HEAD
 	"editor.fontFamily": "'JetBrains Mono', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'"
+=======
+	"editor.fontFamily": "'JetBrains Mono'. 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'"
+>>>>>>> 492d4cf7bc71597509e30549e4baae1de00a766b
 }
