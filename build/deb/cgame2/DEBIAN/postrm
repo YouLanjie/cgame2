@@ -1,3 +1,0 @@
-#!/bin/sh
-rm -r /usr/local/cgame2
-rm /usr/bin/cgame2

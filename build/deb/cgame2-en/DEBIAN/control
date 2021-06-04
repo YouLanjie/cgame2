@@ -1,8 +1,8 @@
-Package: cgame2
+Package: cgame2-en
 Version: 1.2.0
 Description: This is a game
-Source: cgame2
-Maintainer: Youlanjie@github.com
+Source: cgame2-en
+Maintainer: Lanjie@github.com
 Architecture: all
 Installed-Size: 2MB
 Depends: gcc

@@ -1,0 +1,3 @@
+#!/bin/sh
+rm -r /usr/local/cgame2-en
+rm /usr/bin/cgame2-en
