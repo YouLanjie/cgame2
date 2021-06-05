@@ -13,7 +13,6 @@
 
 #define Save "/usr/local/cgame2/data/save.txt"          //文件位置
 #define Data "/usr/local/cgame2/data/data.txt"          //文件位置
-#define Lang "/usr/local/cgame2/data/lang.txt"          //文件位置
 #define Help "/usr/local/cgame2/data/help.txt"          //文件位置
 
 #define Time "\033[1;31m%4d-%2d-%2d %2d:%2d:%2d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec //开局时间标准格式
@@ -40,7 +39,7 @@ struct Chess {            //游戏信息大杂烩
 
 int ifWin(struct Chess *p);    //是否胜利，返回1黑方胜，返回2白方胜
 
-int init(struct Chess *p);     //初始化：创建文件、选择语言
+void init(struct Chess *p);    //初始化：创建文件、选择语言
 void welcome();                //开始界面
 void game(struct Chess *p);    //游戏主体
 void AI(struct Chess *p);      //AI下棋
