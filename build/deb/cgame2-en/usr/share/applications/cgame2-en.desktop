@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Chess
+Name[en_US]=Chess
+Exec=/usr/local/cgame2-en/cgame2-en
+Icon=/usr/share/icons/cgame2-en.svg
+Comment=cgame
+Terminal=true
+Type=Application
+

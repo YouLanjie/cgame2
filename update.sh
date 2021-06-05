@@ -1,6 +1,6 @@
 #!/bin/sh
 clear
-if [ `dpkg --get-selections | grep cgame2 |wc -l` -eq 1 ]
+if [ `dpkg --get-selections | grep cgame2-en |wc -l` -eq 1 ]
 then
 	clear
 	sudo dpkg -r cgame2-en
