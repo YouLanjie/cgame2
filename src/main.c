@@ -1,8 +1,13 @@
 #include "headfile/head.h"                           //导入头文件
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 int main(int argc,char * argv[]) {
 	int a;
-	struct Chess *p;
+	int m = 1;
 
 	printf("\033[?25l");
 	p = (struct Chess *)malloc(sizeof(struct Chess));
@@ -10,18 +15,45 @@ int main(int argc,char * argv[]) {
 	init(p);
 	while (a != 0x1B && a != 0x30 && a != 0x51 && a != 0x71) {
 		init(p);
-		welcome();
+		welcome(m);
 		a = input();
 		printf("\n\n\n\n");
 		Clear2
 		switch (a) {
-			case 0x1B:
 			case 0x30:
 			case 0x51:
 			case 0x71:
 				free(p);
 				printf("\033[?25h");
 				return 0;
+				break;
+			case 0x1B:
+				if (kbhit_if() == 1) {
+					getchar();
+					a = getchar();
+					if (a == 0x41 || a == 0x44) {
+						if (m > 1) {
+							m--;
+						}
+						else {
+							printf("\a");
+						}
+					}
+					else if (a == 0x42 || a == 0x43) {
+						if (m < 2) {
+							m++;
+						}
+						else {
+							printf("\a");
+						}
+					}
+				}
+				else {
+					free(p);
+					printf("\033[?25h");
+					return 0;
+					break;
+				}
 				break;
 			case 0x31:
 				game(p);
@@ -33,7 +65,29 @@ int main(int argc,char * argv[]) {
 				help();
 				break;
 			case 0x34:
-				other();
+				Clear
+				printf("\033[1;33m请确清除存档，您将失去您的所有记录！（Y/n）\n");
+				a = input();
+				if (a == 0x59 || a == 0x79) {
+					fp = fopen(Data,"w");
+					if(!fp) {
+						perror("\033[1;31m[othor]: \033[0m");
+						input();
+					}
+					else {
+						fprintf(fp, "0");
+						fclose(fp);
+					}
+					fp = fopen(Save, "w");
+					if(!fp) {
+						perror("\033[1;31m[othor]: \033[0m");
+						input();
+					}
+					else {
+						fclose(fp);
+					}
+				}
+				Clear
 				break;
 			default:
 				break;
@@ -46,7 +100,7 @@ int main(int argc,char * argv[]) {
 	return 0;
 }
 
-void init(struct Chess *p) {
+void init() {
 	FILE *fp;
 	int a = 0;            //保存转换后的数字
 	int c = 0;            //语言选择的结果
@@ -55,18 +109,62 @@ void init(struct Chess *p) {
 	char d[5];            //查看语言
 	char b[5];            //转换前的字符
 
-	if(access(Save,0) == EOF) {
+
+	if (access("/usr/", 0) == EOF) {
+		perror("\033[1;31m[init]: 不存在/usr/文件夹！\033[0m");
+		printf("将使用当前目录作为软件数据存放目录\n");
+		mkdir("./cgame2/", 0777);
+		strcpy(Data, "./cgame2/data.txt");
+		strcpy(Save, "./cgame2/save.txt");
+		input();
+	}
+	else {
+		if (access("/usr/local", 0) == EOF) {
+			perror("\033[1;31m[init]: 不存在/usr/local/文件夹！\033[0m");
+			printf("将使用当前目录作为软件数据存放目录\n");
+			mkdir("./cgame2/", 0777);
+			strcpy(Data, "./cgame2/data.txt");
+			strcpy(Save, "./cgame2/save.txt");
+			input();
+		}
+		else {
+			if (access("/usr/local/cgame2", 0) == EOF) {
+				perror("\033[1;31m[init]: \033[0m");
+				strcpy(Data, "./cgame2/data.txt");
+				strcpy(Save, "./cgame2/save.txt");
+				if (access("./cgame2/", 0) == EOF) {
+					printf("您可能没有安装deb包,将使用当前目录作为软件数据存放目录\n");
+					mkdir("./cgame2/", 0777);
+					input();
+				}
+				else {
+					Clear
+				}
+			}
+		}
+	}
+	if(access(Save,0) == EOF) {       /*创建Save文件*/
 		fp = fopen(Save,"w");
+		if (!fp) {
+			perror("\033[1;31m[init](Save): fopen\033[0m");
+			input();
+			return;
+		}
 		fclose(fp);
 		p -> count = 0;
 		return;
 	}
-	if(access(Data,0) == EOF) {
+	if(access(Data,0) == EOF) {       /*创建Data文件*/
 		fp = fopen(Data,"w");
+		if (!fp) {
+			perror("\033[1;31m[init](Data): fopen\033[0m");
+			input();
+			return;
+		}
 		fprintf(fp,"%d\n",p -> count);
 		fclose(fp);
 	}
-	else {
+	else {                            /*读取Data文件*/
 		fp = fopen(Data,"r");
 		fscanf(fp,"%s",b);
 		a = atoi(b);
@@ -76,17 +174,22 @@ void init(struct Chess *p) {
 	return;
 }
 
-void welcome() {
+void welcome(int a) {
 	Clear
 	menu("游戏菜单");
-	printf("\033[8;11H\033[1;33m1.开始游戏\033[8;37H2.游戏记录");
-	printf("\033[9;11H3.游戏帮助\033[9;37H4.更多选项");
-	printf("\033[10;11H0.退出游戏");
+	if (a == 1){
+		printf("\033[8;11H\033[1;33m1.开始游戏\033[8;37H2.游戏记录");
+		printf("\033[9;11H3.游戏帮助\033[9;37H4.清除存档");		
+	}
+	else if (a == 2) {
+		printf("\033[8;11H\033[1;33m5.设置\033[8;33H0.退出游戏\033[0m");
+	}
+	printf("\033[2;32m\033[6;26H↑\033[10;26H↓\033[11;52H\033[2;32m%d/2\033[1;33m",a);
 	Menu
 	return;
 }
 
-void game(struct Chess *p) {
+void game() {
 	int count,count2;      //用于计数
 
 	int error = 0;         //记录错误
@@ -109,12 +212,12 @@ void game(struct Chess *p) {
 	}
 	Clear
 
-	gettime(p);
+	gettime();
 
 	while(win != 1 && win != 2) {
-		getnowtime(p);
+		getnowtime();
 		printf(NowTime);
-		printboard(p);
+		printboard();
 		if (who == 1) {
 			printf("黑方下\n");
 		}
@@ -262,7 +365,7 @@ void game(struct Chess *p) {
 					p -> who = who;
 					p -> x = x;
 					p -> y = y;
-					win = ifWin(p);
+					win = ifWin();
 					if (win == who) {
 						Clear
 						printf("\033[33m游戏结束，");
@@ -276,7 +379,7 @@ void game(struct Chess *p) {
 						input();
 					}
 					if (a == 1) {
-						AI(p);
+						AI();
 					}
 					else {
 						who = 3 - who;
@@ -292,12 +395,12 @@ void game(struct Chess *p) {
 		Clear
 	}
 	p -> count += 1;      //局数加一
-	save(p);
+	save();
 	Clear
 	return;
 }
 
-void AI(struct Chess *p) {
+void AI() {
 	int x,y;
 	int have = 1;
 
@@ -396,7 +499,7 @@ void AI(struct Chess *p) {
 }
 
 
-int ifWin(struct Chess *p) {
+int ifWin() {
 	int x = 1,y = 1;
 	int have = 1;
 	int count;
@@ -454,20 +557,16 @@ int ifWin(struct Chess *p) {
 	return 0;
 }
 
-void save(struct Chess *p) {
+void save() {
 	int count;
 	int count2;
-	FILE *fp;
-	FILE *fp2;
 
 	fp = fopen(Save,"a");
-	fp2 = fopen(Data,"w");
-	if (!fp && !fp2) {
-		printf("无法保存\n按任意按键返回\n");
+	if (!fp) {
+		perror("\033[1;31m[save]\033[0m");
 		input();
 		return;
 	}
-	fprintf(fp2,"%d",p -> count);
 	fprintf(fp,Time);
 	for (count = 0; count < Max ; count++) {    //打印棋盘到文件
 		for (count2= 0; count2 < Max; count2++) {
@@ -483,7 +582,14 @@ void save(struct Chess *p) {
 		}
 		fprintf(fp,"\n");
 	}
-	fclose(fp2);
+	fclose(fp);
+	fp = fopen(Data,"w");
+	if (!fp) {
+		perror("\033[1;31m[save]\033[0m");
+		input();
+		return;
+	}
+	fprintf(fp,"%d",p -> count);
 	fclose(fp);
 	for (count = 0; count < Max ; count++) {
 		for (count2= 0; count2 < Max; count2++) {
@@ -493,11 +599,10 @@ void save(struct Chess *p) {
 	return;
 }
 
-void history(struct Chess *p) {
+void history() {
 	int count;              //数数
 	int b;                  //选择
 	char a[3417];           //棋盘信息
-	FILE *fp;               //文件指针
 
 	if(p -> count == 0) {
 		printf("\033[1;33m你还没有游戏记录，赶紧去玩一下吧！\033[0m\n输入任意按键返回\n");
@@ -577,6 +682,11 @@ void help() {
 		if(a == 0x42) {
 			Clear
 			fp = fopen(Help,"r");
+			if(!fp) {
+				perror("\033[1;31m[help]: fopen\033[0m");
+				input();
+				return;
+			}
 			for (count = 0;count < 5; count++){
 				fread(b,3417,1,fp);
 				puts(b);
@@ -624,53 +734,7 @@ void help() {
 	return;
 }
 
-void other() {
-	FILE *fp,*fp2;
-	int a;
-	char c[10] = "nano";
-
-	menu("其他选项");
-	printf("\033[8;11H\033[1;33m1.清除存档\033[8;33H2.设置\033[9;11H0.返回菜单\033[0m");
-	Menu
-	a = input();
-	switch(a) {
-		case 0x30:
-		case 0x51:
-		case 0x71:
-			return;
-			break;
-		case 0x31:
-			Clear
-			printf("\033[1;33m请确清除存档，您将失去您的所有记录！（Y/n）\n");
-			a = input();
-			if (a == 0x59 || a == 0x79) {
-				fp = fopen(Data,"w");
-				fp2 = fopen(Save,"w");
-				if(!fp && !fp2) {
-					printf("\033[1;31m无法打开存档\n按任意按键返回：\033[0m");
-					input();
-				}
-				return;
-			}
-			fprintf(fp,"0");
-			fclose(fp);
-			fclose(fp2);
-			Clear
-			printf("\033[1;33m清除成功\n\033[1;31m按任意按键返回：\033[0m");
-			input();
-			Clear
-			break;
-		case 0x32:
-			/* pass */
-			break;
-		default:
-			return;
-			break;
-	}
-	return;
-}
-
-void printboard(struct Chess *p) {
+void printboard() {
 	int count;
 	int count2;
 
@@ -694,7 +758,7 @@ void printboard(struct Chess *p) {
 	return;
 }
 
-void gettime(struct Chess *p) {
+void gettime() {
 	time_t timep;
 	struct tm *tp;
 
@@ -710,7 +774,7 @@ void gettime(struct Chess *p) {
 	return;
 }
 
-void getnowtime(struct Chess *p) {
+void getnowtime() {
 	time_t timep;
 	struct tm *tp;
 
@@ -721,5 +785,11 @@ void getnowtime(struct Chess *p) {
 	p -> nt.mon = 1+tp->tm_mon;
 	p -> nt.day = tp->tm_mday;
 	return;
+}
+
+void stop() {
+	Clear2
+	printf("退出程序中...\n");
+	free(p);
 }
 
