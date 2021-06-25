@@ -1,8 +1,5 @@
 #include <stdio.h>
 
-#define Menu printf("\033[0m\033[11;11H");
-#define Menu2 printf("\033[0m\033[11;19H");
-
 void menu(char a[50]) {
 	printf("\033[2;25H\033[1;32m%s",a);
 	printf("\033[5;1H\033[34m--------------------------------------------------------");

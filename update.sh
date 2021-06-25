@@ -1,10 +1,13 @@
 #!/bin/bash
-clear
+
+cp -r ./src ./deb/cgame2/usr/local/cgame2/
+cp -r ./include ./deb/cgame2/usr/local/cgame2/
+dpkg -b ./deb/cgame2 ./deb/cgame2.deb
+
 if [ `dpkg --get-selections cgame2 |wc -l` -eq 1 ]
 then
-	clear
 	sudo dpkg -r cgame2
 fi
-sudo dpkg -i ./build/cgame2.deb
-rm ./build/cgame2.deb
+sudo dpkg -i ./deb/cgame2.deb
+rm ./deb/cgame2.deb
 

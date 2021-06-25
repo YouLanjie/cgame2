@@ -1,4 +1,4 @@
-#include "headfile/head.h"                           //导入头文件
+#include "../include/head.h"                           //导入头文件
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
