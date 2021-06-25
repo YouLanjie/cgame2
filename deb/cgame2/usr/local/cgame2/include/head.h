@@ -1,12 +1,6 @@
-#include <stdio.h>                           //标准库
-#include <stdlib.h>                          //system();srand();rand();malloc();free();
-#include <string.h>                          //strcmp();
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <time.h>
+#include "tool/include.h"                         //头文件
 
-#include "include.h"                         //动态库文件
+#include <time.h>
 
 #define Clear printf("\033[2J\033[1;1H");    //清屏，方便移植
 #define Clear2 system("clear");              //清屏x2，方便移植
