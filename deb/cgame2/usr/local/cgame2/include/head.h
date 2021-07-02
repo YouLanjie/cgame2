@@ -1,4 +1,4 @@
-#include "tool/include.h"                         //头文件
+#include "include.h"                         //头文件
 
 #include <time.h>
 
@@ -9,6 +9,7 @@
 #define Time "\033[1;31m%4d-%2d-%2d %2d:%2d:%2d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec //开局时间标准格式
 #define NowTime "\033[1;31m日期：%4d-%2d-%2d\n",p -> nt.year,p -> nt.mon,p -> nt.day //现在时间标准格式
 
+/* 定义结构体 */
 struct time {                                //存储时间信息
 	int year;      //年
 	int mon;       //月
@@ -26,18 +27,21 @@ struct Chess {            //游戏信息大杂烩
 	int who;               //下棋的一方，1黑，2白
 	int x;                 //新棋子的x轴
 	int y;                 //新棋子的y轴
-} *p;
+};
 
-/*文件位置*/
-char Save[] = "/usr/local/cgame2/data/save.txt";
-char Data[] = "/usr/local/cgame2/data/data.txt";
-char Help[] = "/usr/local/cgame2/data/help.txt";
-FILE * fp;
+/* 定义结构体变量 */
+extern struct Chess *p;
 
-int ifWin();                   //是否胜利，返回1黑方胜，返回2白方胜
+/* 文件位置 */
+extern char Save[];
+extern char Data[];
+extern char Help[];
+extern FILE * fp;
 
+/* 定义函数 */
+int ifWin(int c);              //是否胜利，返回1黑方胜，返回2白方胜
 void init();                   //初始化：创建文件、选择语言
-void welcome(int a);           //开始界面
+void welcome(short p,short a); //开始界面
 void game();                   //游戏主体
 void AI();                     //AI下棋
 void save();                   //保存棋盘信息

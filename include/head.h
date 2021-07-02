@@ -39,7 +39,7 @@ extern char Help[];
 extern FILE * fp;
 
 /* 定义函数 */
-int ifWin();                   //是否胜利，返回1黑方胜，返回2白方胜
+int ifWin(int c);              //是否胜利，返回1黑方胜，返回2白方胜
 void init();                   //初始化：创建文件、选择语言
 void welcome(short p,short a); //开始界面
 void game();                   //游戏主体
