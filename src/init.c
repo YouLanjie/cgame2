@@ -1,4 +1,7 @@
 #include "../include/head.h"
+#include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 void init() {
 	FILE *fp;
@@ -9,18 +12,9 @@ void init() {
 	char d[5];            //查看语言
 	char b[5];            //转换前的字符
 
-
-	if (access("/usr/", 0) == EOF) {
-		perror("\033[1;31m[init]: 不存在/usr/文件夹！\033[0m");
-		printf("将使用当前目录作为软件数据存放目录\n");
-		mkdir("./cgame2/", 0777);
-		strcpy(Data, "./cgame2/data.txt");
-		strcpy(Save, "./cgame2/save.txt");
-		input();
-	}
-	else {
-		if (access("/usr/local", 0) == EOF) {
-			perror("\033[1;31m[init]: 不存在/usr/local/文件夹！\033[0m");
+	if (strcmp(Save,"./cgame2/save.txt") != 0) {
+		if (access("/usr/", 0) == EOF) {
+			perror("\033[1;31m[init]: 不存在/usr/文件夹！\033[0m");
 			printf("将使用当前目录作为软件数据存放目录\n");
 			mkdir("./cgame2/", 0777);
 			strcpy(Data, "./cgame2/data.txt");
@@ -28,19 +22,43 @@ void init() {
 			input();
 		}
 		else {
-			if (access("/usr/local/cgame2", 0) == EOF) {
-				perror("\033[1;31m[init]: \033[0m");
+			if (access("/usr/local", 0) == EOF) {
+				perror("\033[1;31m[init]: 不存在/usr/local/文件夹！\033[0m");
+				printf("将使用当前目录作为软件数据存放目录\n");
+				mkdir("./cgame2/", 0777);
 				strcpy(Data, "./cgame2/data.txt");
 				strcpy(Save, "./cgame2/save.txt");
-				if (access("./cgame2/", 0) == EOF) {
-					printf("您可能没有安装deb包,将使用当前目录作为软件数据存放目录\n");
-					mkdir("./cgame2/", 0777);
-					input();
+				input();
+			}
+			else {
+				if (access("/usr/local/cgame2", 0) == EOF) {
+					perror("\033[1;31m[init]: \033[0m");
+					strcpy(Data, "./cgame2/data.txt");
+					strcpy(Save, "./cgame2/save.txt");
+					if (access("./cgame2/", 0) == EOF) {
+						printf("您可能没有安装deb包,将使用当前目录作为软件数据存放目录\n");
+						mkdir("./cgame2/", 0775);
+						input();
+					}
+					else {
+						Clear
+					}
 				}
-				else {
-					Clear
+				else if(access("/usr/local/cgame2/data",0) == EOF) {
+					mkdir("/usr/local/cgame2/data", 0777);
+					if(access("/usr/local/cgame2/data",0) == EOF) {
+						perror("\033[1;31m[init](Data Dir): fopen\033[0m");
+						input();
+					}
 				}
 			}
+		}
+	}
+	if (strcmp(Save,"./cgame2/save.txt") == 0) {
+		mkdir("cgame2", 0775);
+		if (strcmp(Save,"./cgame2/save.txt") == 0) {
+			perror("\033[1;31m[init](Data Dir): fopen\033[0m");
+			input();
 		}
 	}
 	if(access(Save,0) == EOF) {       /*创建Save文件*/
