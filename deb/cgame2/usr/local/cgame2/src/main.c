@@ -1,5 +1,6 @@
 #include "../include/head.h"                           //导入头文件
 #include <stdio.h>
+#include <stdlib.h>
 
 /* 定义结构体变量 */
 struct Chess *p;
@@ -72,7 +73,7 @@ int main(int argc,char * argv[]) {
 				Clear
 				printf("\033[1;33m请确清除存档，您将失去您的所有记录！（Y/n）\n");
 				a = input();
-				if (strcmp(Save,"./cgame2/data.txt") == 0) {
+				if (strcmp(Save,"/usr/local/cgame2/data/save.txt") != 0) {
 					printf("\n由于使用的是当前目录，所以会删除数据文件夹\n");
 				}
 				if (a == 0x59 || a == 0x79) {
@@ -94,11 +95,20 @@ int main(int argc,char * argv[]) {
 						fclose(fp);
 					}
 				}
-				Clear
-				if (strcmp(Save,"./cgame2/data.txt") == 0) {
-					printf("是否直接退出游戏?\n");
-					input();
+				if (strcmp(Save,"/usr/local/cgame2/data/save.txt") != 0) {
+					remove(Save);
+					remove(Data);
+					remove("cgame2-data");
+					printf("是否直接退出游戏?否则将重新创建目录!(默认退出)Y/n\n");
+					a = input();
+					if (a != 0x4E && a != 0x6E) {
+						free(p);
+						printf("\033[?25h\n");
+						Clear
+						return 0;
+					}
 				}
+				Clear
 				break;
 			default:
 				break;
