@@ -1,4 +1,4 @@
-#include "headfile/head.h"                           //导入头文件
+#include "../include/head.h"                           //导入头文件
 
 int main(int argc,char * argv[]) {
 	int a;
