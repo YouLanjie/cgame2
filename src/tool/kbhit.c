@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+/* 循环输入 */
 int kbhit() {
 	struct termios oldt, newt;
 	int ch;
@@ -25,6 +26,7 @@ int kbhit() {
 	return 0;
 }
 
+/* 去除kbhit后遗症 */
 int input() {
 	int a;
 	a = kbhit();
@@ -32,11 +34,7 @@ int input() {
 	return a;
 }
 
-void inputp(int *p) {
-	*p = kbhit();
-	getchar();
-}
-
+/* 判断有没有输入 */
 int kbhit_if() {
 	struct termios oldt, newt;
 	int ch;
@@ -57,6 +55,7 @@ int kbhit_if() {
 	return 0;
 }
 
+/* 不循环输入 */
 int kbhit2() {
 	struct termios oldt, newt;
 	int ch;
@@ -76,3 +75,11 @@ int kbhit2() {
 	}
 	return 0;
 }
+
+/*
+这个kbhit函数用于input输入
+在调用的时候将返回值赋值给一个int变量
+可用那个变量判断
+输入字符时毫无延迟
+*/
+
