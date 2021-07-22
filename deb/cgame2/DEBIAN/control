@@ -1,9 +1,9 @@
 Package: cgame2
-Version: 2021-07-09
-Description: This is a game.
-Source: cgame2
-Maintainer: Bill
+Version: 2021-07-22
+Description: 这是一个五子棋游戏
+Source: https://github.com/youlanjie/cgame2
+Maintainer: youlanjie@github
 Architecture: all
-Installed-Size: 2MB
+Installed-Size: 1MB
 Depends: gcc
 Pre-Depends: gcc
