@@ -1,6 +1,4 @@
 #include "../include/head.h"                           //导入头文件
-#include <stdio.h>
-#include <stdlib.h>
 
 /* 定义结构体变量 */
 struct Chess *p;
