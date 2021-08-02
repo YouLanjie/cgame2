@@ -6,9 +6,22 @@
                         "command": "/usr/bin/gcc",
                         "args": [
                                 "-g",
-                                "${file}",
+                                "${fileDirname}/main.c",
+                                "${fileDirname}/AI.c",
+                                "${fileDirname}/game.c",
+                                "${fileDirname}/gettime.c",
+                                "${fileDirname}/help.c",
+                                "${fileDirname}/history.c",
+                                "${fileDirname}/ifWin.c",
+                                "${fileDirname}/init.c",
+                                "${fileDirname}/printboard.c",
+                                "${fileDirname}/save.c",
+                                "${fileDirname}/settings.c",
+                                "${fileDirname}/welcome.c",
+                                "${fileDirname}/tool/kbhit.c",
+                                "${fileDirname}/tool/menu.c",
                                 "-o",
-                                "${fileDirname}/../bin/${fileBasenameNoExtension}"
+                                "${fileDirname}/../bin/main"
                         ],
                         "options": {
                                 "cwd": "${workspaceFolder}"

@@ -7,6 +7,7 @@ struct Chess *p;
 char Save[] = "/usr/local/cgame2/data/save.txt";
 char Data[] = "/usr/local/cgame2/data/data.txt";
 char Help[] = "/usr/local/cgame2/data/help.txt";
+char Config[] = "/usr/local/cgame2/data/config.txt";
 FILE * fp;
 
 int main(int argc,char * argv[]) {
@@ -107,6 +108,9 @@ int main(int argc,char * argv[]) {
 					}
 				}
 				Clear
+				break;
+			case 0x35:
+				settings();
 				break;
 			default:
 				break;

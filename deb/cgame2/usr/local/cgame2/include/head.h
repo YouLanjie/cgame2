@@ -36,6 +36,7 @@ extern struct Chess *p;
 extern char Save[];
 extern char Data[];
 extern char Help[];
+extern char Config[];
 extern FILE * fp;
 
 /* 定义函数 */
@@ -47,6 +48,7 @@ void AI();                     //AI下棋
 void save();                   //保存棋盘信息
 void history();                //查看历史局数信息
 void help();                   //帮助信息
+void settings();
 void printboard();             //打印棋盘
 void gettime();                //获取开局时间
 void getnowtime();             //获取现在时间
