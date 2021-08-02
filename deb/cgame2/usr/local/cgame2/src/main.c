@@ -1,4 +1,5 @@
 #include "../include/head.h"                           //导入头文件
+#include <stdio.h>
 
 /* 定义结构体变量 */
 struct Chess *p;
@@ -78,7 +79,7 @@ int main(int argc,char * argv[]) {
 				if (a == 0x59 || a == 0x79) {
 					fp = fopen(Data,"w");
 					if(!fp) {
-						perror("\033[1;31m[othor]: \033[0m");
+						perror("\033[1;31m[main](remove Data): \033[0m");
 						input();
 					}
 					else {
@@ -87,16 +88,26 @@ int main(int argc,char * argv[]) {
 					}
 					fp = fopen(Save, "w");
 					if(!fp) {
-						perror("\033[1;31m[othor]: \033[0m");
+						perror("\033[1;31m[main](remove Save): \033[0m");
 						input();
 					}
 					else {
+						fclose(fp);
+					}
+					fp = fopen(Config,"w");
+					if(!fp) {
+						perror("\033[1;31m[main](remove Config): \033[0m");
+						input();
+					}
+					else {
+						fprintf(fp, "0");
 						fclose(fp);
 					}
 				}
 				if (strcmp(Save,"/usr/local/cgame2/data/save.txt") != 0) {
 					remove(Save);
 					remove(Data);
+					remove(Config);
 					remove("cgame2-data");
 					printf("是否直接退出游戏?否则将重新创建目录!(默认退出)Y/n\n");
 					a = input();

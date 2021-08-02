@@ -1,8 +1,4 @@
 #include "../include/head.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 
 void init() {
 	unsigned short err = 0;
@@ -76,6 +72,18 @@ void init() {
 		fp = fopen(Data,"r");
 		fscanf(fp,"%d",&(p -> count));
 		fclose(fp);
+	}
+	if(access(Config,0) == EOF) {       /* 创建Config文件 */
+		fp = fopen(Config,"w");
+		if (!fp) {
+			perror("\033[1;31m[init](Config): fopen\033[0m");
+			input();
+			exit(1);
+		}
+		fprintf(fp, "1 0");
+		fclose(fp);
+		p -> count = 0;
+		return;
 	}
 	return;
 }

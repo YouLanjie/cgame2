@@ -12,17 +12,10 @@ void game() {
 
 	int a = 0;
 
+	fp = fopen(Config, "r");
+	fscanf(fp, "%d", &a);
+	fclose(fp);
 	Clear
-	printf("是否和AI下棋？（Y/n）\n");
-	way = input();
-	if (way == 0x59 || way == 0x79) {
-		a = 1;
-	}
-	else {
-		a = 0;
-	}
-	Clear
-
 	gettime();
 
 	while(win != 1 && win != 2) {
