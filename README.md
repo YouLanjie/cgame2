@@ -1,36 +1,50 @@
 # cgame2
 
-### 简介
-- 这是一个c语言实战程序。
-- 一个小游戏
-- 内容是五子棋
-- 开发平台:Debian Linux
+## 简介
+
+- 这是一个c语言实战程序，一个小游戏——五子
+- 开发平台:Ubuntu Linux
 - 这是中文版本，英文版本在English分支中
+- 英文版本的开发有很大的滞后，因为开发者只有我一个，还是个英文渣渣
 
-### 使用
+## 使用
+
 - 通过源代码
-	- 必要的软件:`gcc`
+  - 必要的软件:***gcc***
+    - 如果没有，Debian Linux or Ubuntu Linux使用以下命令安装gcc
 
-	- 下载源代码到本地
-		- 使用git克隆此仓库到本地：
-		```
-		git clone https://github.com/youlanjie/cgame2.git
-		```
-		- 或者从[这里](https://github.com/YouLanjie/cgame2/archive/refs/heads/main.zip)下载压缩包并解压
-		- 再或者直接复制源代码，如果这样注意一定要复制hedfile里的文件
+      ``` sh
+      sudo apt install gcc
+      ```
 
-	- 编译
-		- 使用dpkg安装：
+  - 下载源代码到本地
+    - 使用git克隆此仓库到本地：
 
-		进入cgame2/文件夹，执行
+      ``` sh
+      git clone https://github.com/youlanjie/cgame2.git
+      ```
 
-		`./build.sh`
+    - 或者从[这里](https://github.com/YouLanjie/cgame2/archive/refs/heads/main.zip)下载压缩包并解压
+    - 再或者直接复制源代码，如果这样注意一定要复制include里的文件
+  - 编译
+    - 使用dpkg安装：
 
-		没有报错则执行
+      进入cgame2/文件夹，执行以下命令编译并安装(必须要用bash)
 
-		`./update.sh`
+      ``` sh
+      ./update.sh
+      ```
 
-		- 或者进入cgame2/src/目录，使用gcc编译main.c文件：
+    - 或者 **进入cgame2/src/** 目录，使用gcc编译所有c文件：
 
-		```gcc main.c -o file```或者```gcc -o file main.c```
+      ``` sh
+      gcc *.c */*.c -o main
+      ```
+
+      编译好的文件(main)可以直接执行，程序做过兼容性的加强
+
+## 无聊的东西
+
+<iframe height=600 width=800 src="//player.bilibili.com/player.html?aid=842548588&bvid=BV1Q54y167gJ&cid=249105218&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+</iframe>
 

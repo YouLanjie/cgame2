@@ -26,6 +26,9 @@ void getnowtime() {
 	p -> nt.year = 1900+tp->tm_year;
 	p -> nt.mon = 1+tp->tm_mon;
 	p -> nt.day = tp->tm_mday;
+	p -> nt.hour = 8 + tp->tm_hour;
+	p -> nt.min = tp->tm_min;
+	p -> nt.sec = tp->tm_sec;
 	return;
 }
 

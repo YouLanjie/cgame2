@@ -1,4 +1,7 @@
 #include "../include/head.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/wait.h>
 
 void game() {
 	int count,count2;      //用于计数
@@ -12,15 +15,32 @@ void game() {
 
 	int a = 0;
 
+	pid_t pid = 1;
+
 	fp = fopen(Config, "r");
 	fscanf(fp, "%d", &a);
 	fclose(fp);
 	Clear
 	gettime();
+	getnowtime();
+	printf(NowTime);
 
 	while(win != 1 && win != 2) {
-		getnowtime();
-		printf(NowTime);
+		if (pid == 1) {
+			pid = fork();
+			if (pid != 0) {
+				system("sleep 0.05");
+			}
+		}
+		while (pid == 0) {
+			printf("\033[s\033[1;1H");
+			kbhit2();
+			getnowtime();
+			printf(NowTime);
+			printf("\033[u");
+			kbhit2();
+			sleep(1);
+		}
 		printboard();
 		if (who == 1) {
 			printf("黑方下\n");
@@ -47,6 +67,8 @@ void game() {
 			case 0x30:
 			case 0x51:
 			case 0x71:
+				kill(pid,1);
+				pid = 1;
 				Clear
 				printf("\033[1;33m请确认退出！本次游戏将不会记录！（Y/n）\n");
 				way = input();
@@ -57,10 +79,12 @@ void game() {
 						}
 					}
 					Clear
+					kill(pid,1);
 					return;
 				}
 				else {
 					way = 0x00;
+					Clear
 				}
 				break;
 			case 0x1B:
@@ -105,6 +129,8 @@ void game() {
 					}
 				}
 				else {
+					kill(pid,1);
+					pid = 1;
 					Clear
 					printf("\033[1;33m请确认退出！本次游戏将不会记录！（Y/n）\n");
 					way = input();
@@ -115,10 +141,12 @@ void game() {
 							}
 						}
 						Clear
+						kill(pid,1);
 						return;
 					}
 					else {
 						way = 0x00;
+						Clear
 					}
 					break;
 				}
@@ -171,6 +199,7 @@ void game() {
 					p -> y = y;
 					win = ifWin(5);
 					if (win == who) {
+						kill(pid,1);
 						Clear
 						printf("\033[33m游戏结束，");
 						if (who == 1) {
@@ -196,12 +225,10 @@ void game() {
 				break;
 		}
 		printf("\n");
-		Clear
 	}
 	p -> count += 1;      //局数加一
 	save();
 	Clear
 	return;
 }
-
 

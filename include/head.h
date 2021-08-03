@@ -6,8 +6,8 @@
 #define Clear2 system("clear");              //清屏x2，方便移植
 #define Max 15                               //棋盘大小
 
-#define Time "\033[1;31m%4d-%2d-%2d %2d:%2d:%2d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec //开局时间标准格式
-#define NowTime "\033[1;31m日期：%4d-%2d-%2d\n",p -> nt.year,p -> nt.mon,p -> nt.day //现在时间标准格式
+#define Time "\033[1;31m%04d-%02d-%02d %02d:%02d:%02d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec //开局时间标准格式
+#define NowTime "\033[1;31m%04d-%02d-%02d %02d:%02d:%02d\n",p -> nt.year,p -> nt.mon,p -> nt.day,p -> nt.hour,p -> nt.min,p -> nt.sec //现在时间标准格式
 
 /* 定义结构体 */
 struct time {                                //存储时间信息
