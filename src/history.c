@@ -7,13 +7,13 @@ void history() {
 	char a[3417];           //棋盘信息
 
 	if(p -> count == 0) {
-		printf("\033[1;33m你还没有游戏记录，赶紧去玩一下吧！\033[0m\n输入任意按键返回\n");
+		printf("%s",LANG[21]);
 		input();
 		return;
 	}
 	fp = fopen(Save,"rb");
 	if (!fp) {
-		printf("无法打开存档，请自行确认存档文件是否存在！\n按任意按键返回\n");
+		printf("%s",LANG[22]);
 		input();
 		return;
 	}
@@ -21,7 +21,7 @@ void history() {
 		fread(a,3417,1,fp);
 		printf("\033[1;1H");
 		puts(a);
-		printf("\033[17;1H\033[0;1;31m按下L查看上一局，按下N查看下一局,0退出\033[0m");
+		printf("%s",LANG[23]);
 		b = input();
 		Clear2
 		if (b == 0x1B) {
@@ -48,7 +48,7 @@ void history() {
 			case 0x4C:
 			case 0x6C:
 				if (count == 0) {
-					printf("\033[18;1H\033[33m这已经是第一个记录了\033[0m\n");
+					printf("%s",LANG[24]);
 					fseek(fp,0L,0);
 					count--;;
 				}
@@ -60,7 +60,7 @@ void history() {
 			case 0x4E:
 			case 0x6E:
 				if (count == p -> count - 1) {
-					printf("\033[18;1H\033[33m这已经是最后一个记录了\033[0m\n");
+					printf("%s",LANG[25]);
 					fseek(fp,-3417L,3);
 					count--;
 				}

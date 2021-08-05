@@ -2,9 +2,8 @@
 
 #include <time.h>
 
-#define Clear printf("\033[2J\033[1;1H");    //清屏，方便移植
-#define Clear2 system("clear");              //清屏x2，方便移植
 #define Max 15                               //棋盘大小
+#define LANGFILELINE 36
 
 #define Time "\033[1;31m%04d-%02d-%02d %02d:%02d:%02d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec //开局时间标准格式
 #define NowTime "\033[1;31m%04d-%02d-%02d %02d:%02d:%02d\n",p -> nt.year,p -> nt.mon,p -> nt.day,p -> nt.hour,p -> nt.min,p -> nt.sec //现在时间标准格式
@@ -37,7 +36,10 @@ extern char Save[];
 extern char Data[];
 extern char Help[];
 extern char Config[];
+extern char LANGFILE[];
 extern FILE * fp;
+
+extern char LANG[LANGFILELINE][100];
 
 /* 定义函数 */
 int ifWin(int c);              //是否胜利，返回1黑方胜，返回2白方胜

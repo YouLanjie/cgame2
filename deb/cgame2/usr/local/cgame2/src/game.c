@@ -1,7 +1,4 @@
 #include "../include/head.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/wait.h>
 
 void game() {
 	int count,count2;      //用于计数
@@ -43,13 +40,13 @@ void game() {
 		}
 		printboard();
 		if (who == 1) {
-			printf("黑方下\n");
+			printf("%s",LANG[13]);
 		}
 		else if (who == 2) {
-			printf("白方下\n");
+			printf("%s",LANG[14]);
 		}
 		if (error == 1) {
-			printf("\033[1;33m\033[20;1H你不能下在非空的格子!\033[0m\n");
+			printf("%s",LANG[15]);
 			error = 0;
 		}
 		if (p -> board[y - 1][x - 1] == 1) {
@@ -70,7 +67,7 @@ void game() {
 				kill(pid,1);
 				pid = 1;
 				Clear
-				printf("\033[1;33m请确认退出！本次游戏将不会记录！（Y/n）\n");
+				printf("%s",LANG[16]);
 				way = input();
 				if (way == 0x59 || way == 0x79) {
 					for (count = 0; count < Max ; count++) {
@@ -132,7 +129,7 @@ void game() {
 					kill(pid,1);
 					pid = 1;
 					Clear
-					printf("\033[1;33m请确认退出！本次游戏将不会记录！（Y/n）\n");
+					printf("%s",LANG[16]);
 					way = input();
 					if (way == 0x59 || way == 0x79) {
 						for (count = 0; count < Max ; count++) {
@@ -201,14 +198,14 @@ void game() {
 					if (win == who) {
 						kill(pid,1);
 						Clear
-						printf("\033[33m游戏结束，");
+						printf("%s",LANG[17]);
 						if (who == 1) {
-							printf("黑方");
+							printf("%s",LANG[18]);
 						}
 						else if (who == 2) {
-							printf("白方");
+							printf("%s",LANG[19]);
 						}
-						printf("胜利！\n\033[31m按Enter返回\n\033[0m");
+						printf("%s",LANG[20]);
 						input();
 					}
 					if (a == 1) {

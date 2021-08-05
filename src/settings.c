@@ -1,5 +1,4 @@
 #include "../include/head.h"
-#include <stdio.h>
 
 void settings() {
 	FILE * fp;
@@ -10,8 +9,9 @@ void settings() {
 	fp = fopen(Config, "r");
 	fscanf(fp, "%d%d", &config[0], &config[1]);
 	fclose(fp);
-	printf("\033[?25h\033[2;25H\033[1;32m游戏设置\n\033[33mq键退出，退出保存\033[0m\n");
-	printf("游戏时是否启用AI\033[4;24H( )\033[1;31m\033[4;27H|\033[0m使用英语\033[4;48H( )\n");
+	printf("%s",LANG[34]);
+	printf("%s",LANG[35]);
+	kbhit2();
 	for (int i = 1; i <= 2; i++) {
 		iy = i / 2 + 3;
 		if (i % 2 != 0) {
@@ -35,8 +35,9 @@ void settings() {
 			config[2 * (y - 1) + x - 1] = 1 - config[2 * (y - 1) + x - 1];
 		}
 		Clear
-		printf("\033[?25h\033[2;25H\033[1;32m游戏设置\n\033[33mq键退出，退出保存\033[0m\n");
-		printf("游戏时是否启用AI\033[4;24H( )\033[1;31m\033[4;27H|\033[0m使用英语\033[4;48H( )\n");
+		printf("%s",LANG[34]);
+		printf("%s",LANG[35]);
+		kbhit2();
 		if (config[0] == 1) {
 			printf("\033[1;31m\033[4;25H*\033[0m");
 		}
