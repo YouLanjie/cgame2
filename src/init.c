@@ -1,5 +1,4 @@
 #include "../include/head.h"
-#include <string.h>
 
 void init() {
 	unsigned short err = 0;
