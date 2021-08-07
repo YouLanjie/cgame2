@@ -1,38 +1,56 @@
 #include "../include/head.h"
 
 void settings() {
-	FILE * fp;
-	unsigned short x = 1,y = 1,iy = 1;
-	int config[2];
-	int a = 0;
+	unsigned short x = 1,y = 1,iy = 1,ix = 1;  //x轴坐标 y轴坐标 计算y轴位置的坐标
+	int config[3] = {0, 0, 0};    //存储选项
+	int Input = 0;    //输入
 
 	fp = fopen(Config, "r");
-	fscanf(fp, "%d%d", &config[0], &config[1]);
+	fscanf(fp, "%d%d%d", &config[0], &config[1], &config[2]);
 	fclose(fp);
 	printf("%s",LANG[34]);
 	printf("%s",LANG[35]);
 	kbhit2();
-	for (int i = 1; i <= 2; i++) {
+	for (int i = 1; i <= 3; i++) {  //i为循环中的临时变量
 		iy = i / 2 + 3;
 		if (i % 2 != 0) {
 			iy = (i + 1) / 2 + 3;
+			ix = 25;
+		}
+		else {
+			ix = 49;
 		}
 		if (config[i - 1] == 1) {
-			printf("\033[1;31m\033[%d;%dH*\033[0m",iy,i * 24 + 1);
+			printf("\033[1;31m\033[%d;%dH*\033[0m",iy,ix);
 		}
 	}
 	printf("\033[%d;%dH",y + 3,x * 24 + 1);
 	kbhit2();
-	while (a != 'q' && a != 'Q') {
-		a = input();
-		if (a == 'D' && x > 1) {
+	while (Input != 'q' && Input != 'Q' && Input != 'w' && Input != 'W' && Input != 0x1B) {
+		Input = input();
+		if (Input == 0x1B) {
+			if (kbhit_if() == 1) {
+				kbhit2();
+				Input = getchar();
+			}
+		}
+		if (Input == 'D' && x > 1) {
 			x--;
 		}
-		else if (a == 'C' && x < 2) {
+		else if (Input == 'C' && x < 2) {
 			x++;
 		}
-		else if (a == 0x0A || a == 0x20) {
+		else if (Input == 'A' && y > 1) {
+			y--;
+		}
+		else if (Input == 'B' && y < 2) {
+			y++;
+		}
+		else if (Input == 0x0A || Input == 0x20) {
 			config[2 * (y - 1) + x - 1] = 1 - config[2 * (y - 1) + x - 1];
+		}
+		if (x == 2 && y ==2) {
+			x = 1;
 		}
 		Clear
 		printf("%s",LANG[34]);
@@ -44,17 +62,20 @@ void settings() {
 		if (config[1] == 1) {
 			printf("\033[1;31m\033[4;25H*\033[0m");
 		}
-		for (int i = 1; i <= 2; i++) {
+		for (int i = 1; i <= 3; i++) {
 			iy = i / 2 + 3;
 			if (i % 2 != 0) {
 				iy = (i + 1) / 2 + 3;
-			}
-			
-			if (config[i - 1] == 1) {
-				printf("\033[1;31m\033[%d;%dH*\033[0m",iy,i * 24 + 1);
+				ix = 25;
 			}
 			else {
-				printf("\033[0m\033[%d;%dH ",iy,i * 24 + 1);
+				ix = 49;
+			}
+			if (config[i - 1] == 1) {
+				printf("\033[1;31m\033[%d;%dH*\033[0m",iy,ix);
+			}
+			else {
+				printf("\033[0m\033[%d;%dH ",iy,ix);
 			}
 			kbhit2();
 		}
@@ -62,7 +83,7 @@ void settings() {
 		kbhit2();
 	}
 	fp = fopen(Config, "w");
-	fprintf(fp,"%d %d",config[0],config[1]);
+	fprintf(fp,"%d %d %d",config[0],config[1],config[2]);
 	fclose(fp);
 	printf("\033[?25l");
 	return;

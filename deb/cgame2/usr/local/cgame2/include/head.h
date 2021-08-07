@@ -36,10 +36,9 @@ extern char Save[];
 extern char Data[];
 extern char Help[];
 extern char Config[];
-extern char LANGFILE[];
 extern FILE * fp;
 
-extern char LANG[LANGFILELINE][100];
+extern char LANG[LANGFILELINE][200];
 
 /* 定义函数 */
 int ifWin(int c);              //是否胜利，返回1黑方胜，返回2白方胜

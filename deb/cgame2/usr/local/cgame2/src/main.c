@@ -8,25 +8,24 @@ char Save[] = "/usr/local/cgame2/data/save.txt";
 char Data[] = "/usr/local/cgame2/data/data.txt";
 char Help[] = "/usr/local/cgame2/data/help.txt";
 char Config[] = "/usr/local/cgame2/data/config.txt";
-char LANGFILE[] = "/usr/local/cgame2/doc/LANG_ch";
 FILE * fp;
 
-char LANG[LANGFILELINE][100];
+char LANG[LANGFILELINE][200];
 
-int main(int argc,char * argv[]) {
-	int a;
+int main() {
+	int Input = 0;
 	int m = 1;
 
 	printf("\033[?25l");
 	p = (struct Chess *)malloc(sizeof(struct Chess));
 	Clear2
-	while (a != 0x1B && a != 0x30 && a != 0x51 && a != 0x71) {
+	while (Input != 0x1B && Input != 0x30 && Input != 0x51 && Input != 0x71) {
 		init(p);
 		welcome(m,2);
-		a = input();
+		Input = input();
 		printf("\n\n\n\n");
 		Clear2
-		switch (a) {
+		switch (Input) {
 			case 0x30:
 			case 0x51:
 			case 0x71:
@@ -37,8 +36,8 @@ int main(int argc,char * argv[]) {
 			case 0x1B:
 				if (kbhit_if() == 1) {
 					getchar();
-					a = getchar();
-					if (a == 0x41 || a == 0x44) {
+					Input = getchar();
+					if (Input == 0x41 || Input == 0x44) {
 						if (m > 1) {
 							m--;
 						}
@@ -46,7 +45,7 @@ int main(int argc,char * argv[]) {
 							printf("\a");
 						}
 					}
-					else if (a == 0x42 || a == 0x43) {
+					else if (Input == 0x42 || Input == 0x43) {
 						if (m < 2) {
 							m++;
 						}
@@ -74,11 +73,11 @@ int main(int argc,char * argv[]) {
 			case 0x34:
 				Clear
 				printf("%s",LANG[28]);
-				a = input();
+				Input = input();
 				if (strcmp(Save,"/usr/local/cgame2/data/save.txt") != 0) {
 					printf("%s",LANG[29]);
 				}
-				if (a == 0x59 || a == 0x79) {
+				if (Input == 0x59 || Input == 0x79) {
 					fp = fopen(Data,"w");
 					if(!fp) {
 						perror(LANG[30]);
@@ -112,8 +111,8 @@ int main(int argc,char * argv[]) {
 					remove(Config);
 					remove("cgame2-data");
 					printf("%s",LANG[33]);
-					a = input();
-					if (a != 0x4E && a != 0x6E) {
+					Input = input();
+					if (Input != 0x4E && Input != 0x6E) {
 						free(p);
 						printf("\033[?25h\n");
 						Clear
