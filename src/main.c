@@ -141,6 +141,9 @@ int main() {
 void stop() {
 	Clear2
 	printf("程序退出\n");
+	if (fp) {
+		fclose(fp);
+	}
 	Clear2
 	free(p);
 	exit(0);
