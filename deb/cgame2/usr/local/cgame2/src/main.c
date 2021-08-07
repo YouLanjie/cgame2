@@ -1,4 +1,6 @@
 #include "../include/head.h"                           //导入头文件
+#include <signal.h>
+#include <stdlib.h>
 
 /* 定义结构体变量 */
 struct Chess *p;
@@ -16,6 +18,7 @@ int main() {
 	int Input = 0;
 	int m = 1;
 
+	signal(SIGINT, stop);
 	printf("\033[?25l");
 	p = (struct Chess *)malloc(sizeof(struct Chess));
 	Clear2
@@ -137,7 +140,8 @@ int main() {
 
 void stop() {
 	Clear2
-	printf("退出程序中...\n");
+	printf("程序退出\n");
+	Clear2
 	free(p);
+	exit(0);
 }
-
