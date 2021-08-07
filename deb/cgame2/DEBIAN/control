@@ -1,9 +1,9 @@
 Package: cgame2
-Version: 2021-08-04
+Version: 2021-08-07
 Description: 这是一个五子棋游戏
-Source: https://github.com/youlanjie/cgame2
+Source: https://github.com/youlanjie/cgame2.git
 Maintainer: youlanjie@github
 Architecture: all
-Installed-Size: 3MB
+Installed-Size: 4MB
 Depends: gcc
 Pre-Depends: gcc
