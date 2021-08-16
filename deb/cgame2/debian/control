@@ -1,9 +1,0 @@
-Package: cgame2
-Version: 0.2.3
-Description: 这是一个五子棋游戏
-Source: https://github.com/youlanjie/cgame2.git
-Maintainer: ylj18926385312@163.com
-Architecture: all
-Installed-Size: 4MB
-Depends: gcc
-Pre-Depends: gcc

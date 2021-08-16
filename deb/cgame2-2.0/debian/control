@@ -1,0 +1,16 @@
+Source: cgame2
+Section: games
+Priority: optional
+Standards-Version: 2.0
+Maintainer: LanjieYou <ylj18926385312@163.com>
+Homepage: https://github.com/Youlanjie/cgame2
+
+Package: cgame2
+Architecture: any
+Depends: gcc
+Pre-Depends: gcc
+Description: 这是一个c语言编写的实战游戏。
+ 游戏是五子棋。它只有TUI字符界面，可能没有
+ 那么美观，但是挺好玩的。此程序已开源，你
+ 可以在https://github.com/Youlanjie/cgame2
+ 上找到它
