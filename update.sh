@@ -1,14 +1,7 @@
 #!/bin/bash
 
-rm -r ./deb/cgame2/usr/local/cgame2/*
-cp -r ./src ./deb/cgame2/usr/local/cgame2/
-cp -r ./include ./deb/cgame2/usr/local/cgame2/
-dpkg -b ./deb/cgame2 ./deb/cgame2.deb
-
-if [ `dpkg --get-selections cgame2 |wc -l` -eq 1 ]
-then
-	sudo dpkg -r cgame2
-fi
-sudo dpkg -i ./deb/cgame2.deb
-rm ./deb/cgame2.deb
+cd deb/cgame2-*/
+debuild -S -kED52A1E7B5D34474
+cd ../
+dput ppa:youlanjie/cgame2 cgame2_*_source.changes
 

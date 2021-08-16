@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Sat, 7 Aug 2021 20:45:12  +0800
+Source: cgame2
+Built-For-Profiles: noudeb
+Architecture: source
+Version: 2.0-1
+Distribution: Ubuntu
+Urgency: medium
+Maintainer: Lanjie You <ylj18926385312@163.com>
+Changed-By: LanjieYou <ylj18926385312@163.com>
+Changes:
+ cgame2 (2.0-1) Ubuntu; urgency=medium
+ .
+   * 重新加入英文版本
+   * 在settings中增加英文的选项，init函数增加改成英文的功能，配合settings函数
+   * 修复SIGINT信号(Ctrl + c)捕捉失败的问题
+Checksums-Sha1:
+ 40ceaabfdb525de5d821059c8085d32cf98ef2b8 1355 cgame2_2.0-1.dsc
+ 0a6e717aa40372db161449b1549f2a11626d6d2b 12616 cgame2_2.0-1.tar.gz
+ f498a460a647f9a6c679c97469f20e8abe3b4b5b 7364 cgame2_2.0-1_source.buildinfo
+Checksums-Sha256:
+ c5e44c02313da2ede8157804a326018dbadc558aca560f2d8ec03b6421f9fa09 1355 cgame2_2.0-1.dsc
+ 9e482bb33748fbffd1311940bccd2efe8e0acf2ff94ac75799575763b69e69b9 12616 cgame2_2.0-1.tar.gz
+ 5ae27ee3c4a5f9bbdb2ddc65f17ec3cb9c99c6724580277ff1993222027456fe 7364 cgame2_2.0-1_source.buildinfo
+Files:
+ 2c73526f2d725c0478453247fb2dacea 1355 games optional cgame2_2.0-1.dsc
+ 9578dd0bf408df2713f6bd7736904ae8 12616 games optional cgame2_2.0-1.tar.gz
+ 44ce9e15ff3aa4a012874826e5629a35 7364 games optional cgame2_2.0-1_source.buildinfo
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEEY3xeQdWlazHb2uKi7VKh57XTRHQFAmEacG4ACgkQ7VKh57XT
+RHTDzwv/dZuy3dV2IULd0omJFvdE8h7YALGOCsIIRaAAQpua/j3N63Xl1R9pEZY3
+fxef5aW8zwmNdb2LkgAGjwO13sVQ605G+k+z/rnR8XyPyd6FoUFzmy7k3frakrm2
+BNK62qa+2gwR4B2DJnawQDm3aqOhmrbtQ5QwZRbQHomKhqTYwDRjm/9a1AzUAvLK
+Jq3CZKg79m+c0DNX+C4xdob297Oa+F0/9/0Fi8mnRgK/RH9rhDfEYZbxQmf5CFky
+/WYJEvM2MYs480bx/1Y5iAAzWyBYeiMbO0gsIZNF6vCclos1EL2swEuaQg4aScRv
+3jt0lFh5zcTWodlwYXAnTJVfrqY/Rr+TjuhB9tRdp/KmYFMzR1Mktc5cZK8R9qRc
+AAEfxFL3vrULVwaihCt1IBCUIMCNrlT/s4T3crdJaqeUgsNhH4dqIR6LbB6jhrwE
+bI4a0yqpbrmG4gi9YZ4+4RoCxxlYwIkZNLyJMi07Uj3t1+Gv0k9mLFsenONPnfmc
+Ri+zAgo6
+=yuH0
+-----END PGP SIGNATURE-----
