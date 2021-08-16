@@ -3,14 +3,14 @@ Source: cgame2
 Architecture: source
 Version: 2.0-0
 Checksums-Md5:
- 9a6d83b0819a32a06dc99f2213981a25 502 cgame2_2.0-0.dsc
+ 9a69436ed3a89405b0de8612be46e796 502 cgame2_2.0-0.dsc
 Checksums-Sha1:
- b330a49f8cb0dc6ca9aab74f966768b5d367694f 502 cgame2_2.0-0.dsc
+ 50c55a19091b25f58cb041b15521ae659c73d0f9 502 cgame2_2.0-0.dsc
 Checksums-Sha256:
- b1c425f6212277f25382fd27a15beafc71c8fafa15665cb3b1ee6681cabd3f17 502 cgame2_2.0-0.dsc
+ b3014cd82b365f6a9fb7a67a0529bb9953364cae479fff6f620c734720edba5d 502 cgame2_2.0-0.dsc
 Build-Origin: Ubuntu
 Build-Architecture: amd64
-Build-Date: Mon, 16 Aug 2021 13:52:08 +0800
+Build-Date: Mon, 16 Aug 2021 20:08:14 +0800
 Build-Tainted-By:
  merged-usr-via-aliased-dirs
  usr-local-has-libraries

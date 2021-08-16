@@ -15,14 +15,14 @@ Changes:
    * 在settings中增加英文的选项，init函数增加改成英文的功能，配合settings函数
    * 修复SIGINT信号(Ctrl + c)捕捉失败的问题
 Checksums-Sha1:
- b330a49f8cb0dc6ca9aab74f966768b5d367694f 502 cgame2_2.0-0.dsc
- fc38e54bec1e09af5772ee89f27d4bbff859d9b9 11658 cgame2_2.0-0.tar.gz
- a5578f974fd567ccbc9c4309663dcc1d0e98aa94 4909 cgame2_2.0-0_amd64.buildinfo
+ 52f50eac9b18b9b686c825d0630e57c6940f6d59 502 cgame2_2.0-0.dsc
+ 9b14d35528004d42a04e922b3aaab65e061a8005 15374 cgame2_2.0-0.tar.gz
+ 8374d9e27cb1174ff372c725fd052970cc827edf 4909 cgame2_2.0-0_amd64.buildinfo
 Checksums-Sha256:
- b1c425f6212277f25382fd27a15beafc71c8fafa15665cb3b1ee6681cabd3f17 502 cgame2_2.0-0.dsc
- 40d2aeac2405be533d2154b4d9214e09b0b73cf56126cc82d852c6c59f6a9db2 11658 cgame2_2.0-0.tar.gz
- d71bd864303063c8e9b3341445c35dbc9568ccdf5a0761a30d11cdd28aab7ecc 4909 cgame2_2.0-0_amd64.buildinfo
+ 578df9fdfd545b00318c6d460e9e0080243a288b38650e7c76f74a8663e06aef 502 cgame2_2.0-0.dsc
+ e5eb55b483e9243aa16af340bc9e82068642e5d27c14094b61d4751e054c737a 15374 cgame2_2.0-0.tar.gz
+ f3c5da4c6a27a14754be1ff998294da2724475177cb11492e15d2ad0696c0e06 4909 cgame2_2.0-0_amd64.buildinfo
 Files:
- 9a6d83b0819a32a06dc99f2213981a25 502 games optional cgame2_2.0-0.dsc
- 4b1419f5179e069b24ed19ba9553df6f 11658 games optional cgame2_2.0-0.tar.gz
- 49aeabfc54cf20c8e3464adbc6eec842 4909 games optional cgame2_2.0-0_amd64.buildinfo
+ 80fcdf8c30a0c4072e57bcc45d126367 502 games optional cgame2_2.0-0.dsc
+ af65c77a96ad6fc0e635ade6ea75f883 15374 games optional cgame2_2.0-0.tar.gz
+ f98f77e8785451e29e51bef134c7302a 4909 games optional cgame2_2.0-0_amd64.buildinfo

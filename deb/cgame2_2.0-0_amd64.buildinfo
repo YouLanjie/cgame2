@@ -1,16 +1,19 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
 Format: 1.0
 Source: cgame2
 Architecture: source
 Version: 2.0-0
 Checksums-Md5:
- 9a6d83b0819a32a06dc99f2213981a25 502 cgame2_2.0-0.dsc
+ b0bace4e13f5a7ccaf8444a28ce449ec 1211 cgame2_2.0-0.dsc
 Checksums-Sha1:
- b330a49f8cb0dc6ca9aab74f966768b5d367694f 502 cgame2_2.0-0.dsc
+ 165d9a1a16a8c4373e0e8de006ca10cd0fc6803c 1211 cgame2_2.0-0.dsc
 Checksums-Sha256:
- b1c425f6212277f25382fd27a15beafc71c8fafa15665cb3b1ee6681cabd3f17 502 cgame2_2.0-0.dsc
+ 8de81cf5475c01b100337c3869662b3268aeec09a28a8f6844d4f48428f221e1 1211 cgame2_2.0-0.dsc
 Build-Origin: Ubuntu
 Build-Architecture: amd64
-Build-Date: Mon, 16 Aug 2021 13:43:49 +0800
+Build-Date: Mon, 16 Aug 2021 19:56:48 +0800
 Build-Tainted-By:
  merged-usr-via-aliased-dirs
  usr-local-has-libraries
@@ -153,3 +156,18 @@ Environment:
  LC_TELEPHONE="zh_CN.UTF-8"
  LC_TIME="zh_CN.UTF-8"
  SOURCE_DATE_EPOCH="1628340312"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEEY3xeQdWlazHb2uKi7VKh57XTRHQFAmEaUpEACgkQ7VKh57XT
+RHQAOgv/elWE6HfanRMA7d5MbhazgPUgdWDYClEInKvJL37tNbTDtWX2xeqpM9LQ
+fXV453DspLF1khm07mu208qhdmyEYCKcvA54M2ME2rMQwoqsITpkpDOrLHIdrmhF
+RmCKKrq/GbxFRQzAQBcHApVrIk+cKUYWw8/wTn0rV9QR93ZuhsRHy/OGKFY2QEzg
+lcYBlQLh61x3JRwpjIVplp5Hoo+bA4hxUM8NGuevNe9tPavCZbMTmhrVhiJ0oQO0
+iLHpciRQWynUzEJ+ncOFf27wNEOrAT/hhBEKOeypkioyZv06ZBA9YJ3UR5O1sWxz
+ezXeEZDwid1YBlKPYntSKrLNbmjZypbSfUuzdxUmrFXxzjr3e8WF1lAaCzdTFO2b
+bysIJYUgeT42KLJn3ij76Ff6DSg2VCPqz6jPK43KSnVx4FSFmOPDl5zW0tUrdngw
+p2GNzmPTrjijJFrtvqpeSaH8g7wj6m3Dy26lvsecBxabm+tsL4TAsqpqx0gFWnkW
+wOpfvLu6
+=eqlT
+-----END PGP SIGNATURE-----

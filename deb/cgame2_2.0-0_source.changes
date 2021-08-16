@@ -1,3 +1,8 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Hash: SHA512
+
 Format: 1.8
 Date: Sat, 7 Aug 2021 20:45:12  +0800
 Source: cgame2
@@ -15,17 +20,32 @@ Changes:
    * 在settings中增加英文的选项，init函数增加改成英文的功能，配合settings函数
    * 修复SIGINT信号(Ctrl + c)捕捉失败的问题
 Checksums-Sha1:
- b330a49f8cb0dc6ca9aab74f966768b5d367694f 502 cgame2_2.0-0.dsc
- fc38e54bec1e09af5772ee89f27d4bbff859d9b9 11658 cgame2_2.0-0.tar.gz
- a5578f974fd567ccbc9c4309663dcc1d0e98aa94 4909 cgame2_2.0-0_amd64.buildinfo
- ba6d19466080bb603d5fcb039f1d1064cb421493 4909 cgame2_2.0-0_source.buildinfo
+ be06b37d90345decd3f049af0272d71bc9a6123f 1210 cgame2_2.0-0.dsc
+ bc9085d5a609d9c6f4783c7bcd227e8a48f53f39 11474 cgame2_2.0-0.tar.gz
+ 46ec1cdb3baaccb511feb4e17dccd7cb4040beaf 5621 cgame2_2.0-0_amd64.buildinfo
+ ef92a0f807f01caf3acc3960d74bc4446f5680de 4909 cgame2_2.0-0_source.buildinfo
 Checksums-Sha256:
- b1c425f6212277f25382fd27a15beafc71c8fafa15665cb3b1ee6681cabd3f17 502 cgame2_2.0-0.dsc
- 40d2aeac2405be533d2154b4d9214e09b0b73cf56126cc82d852c6c59f6a9db2 11658 cgame2_2.0-0.tar.gz
- d71bd864303063c8e9b3341445c35dbc9568ccdf5a0761a30d11cdd28aab7ecc 4909 cgame2_2.0-0_amd64.buildinfo
- 1f2dc7a2872680dde01d18f06d419ab5507c5389e60693ee88a81d5071e963d2 4909 cgame2_2.0-0_source.buildinfo
+ f38a072dbd5756f9f394e6cd084b36b217f3255792936cd398a7476094d1a2bc 1210 cgame2_2.0-0.dsc
+ 12a81aa7caa4c4ddc122c5e429e158cd99a3896fba9ddd3b32d9dd5db94811fa 11474 cgame2_2.0-0.tar.gz
+ 5acdb55e241868ba5c379e4c2d79fd216e20a5e66e81b0ac8d7c93bad54ffea5 5621 cgame2_2.0-0_amd64.buildinfo
+ 7f6ad9475628e6cb063673f50074245bddb41de4966b21fffb0b0328e451337c 4909 cgame2_2.0-0_source.buildinfo
 Files:
- 9a6d83b0819a32a06dc99f2213981a25 502 games optional cgame2_2.0-0.dsc
- 4b1419f5179e069b24ed19ba9553df6f 11658 games optional cgame2_2.0-0.tar.gz
- 49aeabfc54cf20c8e3464adbc6eec842 4909 games optional cgame2_2.0-0_amd64.buildinfo
- feceb6309424635ffdc46b8b36caa3c5 4909 games optional cgame2_2.0-0_source.buildinfo
+ 178254fad677ae919c3cd78348465017 1210 games optional cgame2_2.0-0.dsc
+ fd170f9cb7a028e7f5fa15e10b6c3daf 11474 games optional cgame2_2.0-0.tar.gz
+ b2143d3f20846b568ef388ccbe9752ce 5621 games optional cgame2_2.0-0_amd64.buildinfo
+ 5ea73dbd7c3e119a886f82735c99e2af 4909 games optional cgame2_2.0-0_source.buildinfo
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEEY3xeQdWlazHb2uKi7VKh57XTRHQFAmEaVt0ACgkQ7VKh57XT
+RHSTrQv+LFIeg+MXsZR9NkceYQ7t4LGrHkYvFs8hL4Cow0Z0cXqH1OhHa3FzUsr4
+hIWLN7d51NrOJPecPfWlvSjZ9EaGXlotn9OlIrrIvbxVLtvd79muoM2hGU8XmiMW
+U8oNSTCi8GdOzcTRDTPCn/QvNHQUv6L0KEYw8dIcT1j5PK2QF98qLaqcC9KIuYMp
+d++TM2vatvdBJLEShZxvqmpcF1z2nnuK0yUWQjFRGciobimIJ/i/ori/5hf4PT0E
++VMumeC8swgCNOf3nwbSLxH7EiUhT3hC1mD39QYwx9uLYV/WEmu88QArQucYNKLD
+kuEUoL3ksLxY6pnEvMTFrVLZLegdPiBu/NBuVA1/N0JsJ4lLfG3G3FxmwdLzmEVR
+hczPiwUgCN7OyxI4AmfrEqGVQmu09SeAnNLernqUfrurh4aGej+jZlEXeTUGFIyB
+TaASzYncAKtBhxKjDfg1meB0evOcLIaomrZKihmuUX0nBVacPCon04dUJyIDJd7W
+lXFgIe7E
+=phW2
+-----END PGP SIGNATURE-----
