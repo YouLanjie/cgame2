@@ -1,7 +1,7 @@
  dpkg-buildpackage -us -uc -ui -S -sd
 dpkg-buildpackage: info: 源码包 cgame2
 dpkg-buildpackage: info: 源码版本 2.0-1
-dpkg-buildpackage: info: source distribution Ubuntu
+dpkg-buildpackage: info: source distribution unstable
 dpkg-buildpackage: info: 源码修改者 LanjieYou <ylj18926385312@163.com>
  dpkg-source --before-build .
  debian/rules clean
@@ -20,7 +20,7 @@ dpkg-genchanges: info: 上传数据中包含完整的原始代码
  dpkg-source --after-build .
 dpkg-buildpackage: info: source-only upload: Debian-native package
 Now running lintian cgame2_2.0-1_source.changes ...
-E: cgame2 changes: bad-distribution-in-changes-file Ubuntu
+E: cgame2 changes: bad-distribution-in-changes-file unstable
 E: cgame2 source: debian-rules-is-dh_make-template
 E: cgame2 source: malformed-debian-changelog-version 2.0-1 (for native)
 W: cgame2 source: missing-debian-source-format

@@ -1,4 +1,4 @@
-cgame2 (2.0-1) Ubuntu; urgency=medium
+cgame2 (2.0-1) unstable; urgency=medium
 
   * 重新加入英文版本
   * 在settings中增加英文的选项，init函数增加改成英文的功能，配合settings函数

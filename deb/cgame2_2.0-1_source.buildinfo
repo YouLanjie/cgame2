@@ -6,14 +6,14 @@ Source: cgame2
 Architecture: source
 Version: 2.0-1
 Checksums-Md5:
- 2c73526f2d725c0478453247fb2dacea 1355 cgame2_2.0-1.dsc
+ fe311bf2be9791555617048339369c9a 1355 cgame2_2.0-1.dsc
 Checksums-Sha1:
- 40ceaabfdb525de5d821059c8085d32cf98ef2b8 1355 cgame2_2.0-1.dsc
+ 3f90f83d806e17eed5e950e65bdba99871d33ad2 1355 cgame2_2.0-1.dsc
 Checksums-Sha256:
- c5e44c02313da2ede8157804a326018dbadc558aca560f2d8ec03b6421f9fa09 1355 cgame2_2.0-1.dsc
+ d1f02644bb52ff020e688384c33fe013ce2af62f4c2ebfef7e097f8f513fc335 1355 cgame2_2.0-1.dsc
 Build-Origin: Ubuntu
 Build-Architecture: amd64
-Build-Date: Mon, 16 Aug 2021 22:04:26 +0800
+Build-Date: Mon, 16 Aug 2021 22:58:42 +0800
 Build-Tainted-By:
  merged-usr-via-aliased-dirs
  usr-local-has-libraries
@@ -214,15 +214,15 @@ Environment:
 
 -----BEGIN PGP SIGNATURE-----
 
-iQGzBAEBCgAdFiEEY3xeQdWlazHb2uKi7VKh57XTRHQFAmEacG0ACgkQ7VKh57XT
-RHTHIAwAqEfliOnUhF4efPv0GjPeEbpfDYnZCvhr2qKYRDSy1QB64/afeEzNOZt6
-uDITB27HcsISRiOVEwgSlAXiQnPfk4raAlVFV4WnSJJ/KiP8z06oxLPMvqB15tF/
-de21MlZDCId7VVlHo4JjQAs665JfJK8fDvO7xpewyou8C0dIMFYaFeTNX2t0o66X
-UUU+ilXmzTCq90URpDkzWNyhvPYsurX+IGRo9w1ndpUsWONTaxHGRvoF5YiCAcvC
-s3ISNWSN8QM3K90ZAceDgxMjX5QiWRi2SAbMmsxWr/MCgjduRPZyzmbJA4BJj+hc
-ox58POZl0UiGybvRE7h5TbJ68EVvew/flio71DDvGUyIsqhprdc4ojBSi5p8Lvx1
-zf0tWwwJwdnZVfhmTbMwskq8nlrAyPkkDYbJAgHGZfblUcg++aPjWYmjRomp/sEA
-x0pAnvg5O1M6bgxaWmDUtuz1iRS5aMs3kYIHENdVJ+zaqrS4jjFxiq/3eysYGkxo
-A5RGMsbB
-=u4e3
+iQGzBAEBCgAdFiEEY3xeQdWlazHb2uKi7VKh57XTRHQFAmEafSUACgkQ7VKh57XT
+RHRKYgv/XB71/kge46nu2dk5XGEpSXHOIfXixYjhmrA3M16A1Y1BOB26924dmqK0
+EDmyZKqlPnP9oTsKztwE19x9sRk5lqss5sD8hts2qjE6ninaWYU/X462jTiniv/2
+dmGiW4fXEqSSxJcN+Q4EHMybwviGFCwAiKSeQKEzaXrGSK56EVh5xM8ysn+tNxq6
+stoZJ46P4DZENLGO2fxXZN5QxQCqCgK86OxC3vb37h4TQnzMShBcehTTxLtJ39Nr
+MCNQyaY4uP3JM7NrotYNglWakPZ79/V77pW8h5VlwXxLs39FTOe7IuW/tMs2ZWwf
+PkTXY/fe5R+UomiPkEMbzz93vCnhPbpXHVcXK9/5rQEFDfxgUUpWPsW8eoxR7Xnc
+0vpY9bzgPtn2NKfHyXmzCntD8PYyjV2Pj5w+ydKVQaDG9NrD3jQpUyAnpxT1k6sO
+EZ+2elp4O1Cngy3ndztzOF1o2B3CstGARjlnkAC3vaS8szZ9UkCxtXcrRPrzTsGO
+SvI2l21P
+=KFqp
 -----END PGP SIGNATURE-----
