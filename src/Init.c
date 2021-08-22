@@ -127,6 +127,12 @@ void Init() {
 		}
 	}
 	if (error == 1 || config[2] == 1) {  /* 更改数据存放地址 */
+		mkdir("./cgame2-data/", 0777);
+		if (access("cgame2-data", 0) == EOF) {
+			perror(LANG[4]);
+			Input();
+			exit(1);
+		}
 		fp = fopen("./cgame2-data/config.txt","w");
 		if (!fp) {
 			return;
@@ -135,18 +141,12 @@ void Init() {
 			fprintf(fp, "%d %d %d %d", config[0], config[1], config[2], Max);
 			fclose(fp);
 		}
-		mkdir("./cgame2-data/", 0777);
-		if (access("cgame2-data", 0) == EOF) {
-			perror(LANG[4]);
-			Input();
-			exit(1);
-		}
 		strcpy(Data, "./cgame2-data/data.txt");
 		strcpy(Save, "./cgame2-data/save.txt");
 		strcpy(Config, "./cgame2-data/config.txt");
 		config[2] = 1;
 	}
-	if (config[2] == 0) {  /* 更改数据存放地址 */
+	else if (config[2] == 0) {  /* 更改数据存放地址 */
 		fp = fopen("/usr/local/cgame2/data/config.txt","w");
 		if (!fp) {
 			return;
