@@ -92,7 +92,7 @@ void Game() {
 				}
 				if (way == 0x41) {
 					if (y < 2) {
-						y = 15;
+						y = Max;
 					}
 					else {
 						y--;
@@ -100,14 +100,14 @@ void Game() {
 				}
 				else if (way == 0x44) {
 					if (x < 2) {
-						x = 15;
+						x = Max;
 					}
 					else {
 						x--;
 					}
 				}
 				else if (way == 0x42) {
-					if (y > 14) {
+					if (y > Max - 1) {
 						y = 1;
 					}
 					else {
@@ -115,7 +115,7 @@ void Game() {
 					}
 				}
 				else if (way == 0x43) {
-					if (x > 14) {
+					if (x > Max - 1) {
 						x = 1;
 					}
 					else {
@@ -147,7 +147,7 @@ void Game() {
 				break;
 			case 0x77:
 				if (y < 2) {
-					y = 15;
+					y = Max;
 				}
 				else {
 					y--;
@@ -156,7 +156,7 @@ void Game() {
 			case 0x41:
 			case 0x61:
 				if (x < 2) {
-					x = 15;
+					x = Max;
 				}
 				else {
 					x--;
@@ -164,7 +164,7 @@ void Game() {
 				break;
 			case 0x53:
 			case 0x73:
-				if (y > 14) {
+				if (y > Max - 1) {
 					y = 1;
 				}
 				else {
@@ -173,7 +173,7 @@ void Game() {
 				break;
 			case 0x44:
 			case 0x64:
-				if (x > 14) {
+				if (x > Max - 1) {
 					x = 1;
 				}
 				else {
@@ -220,7 +220,6 @@ void Game() {
 		}
 		printf("\n");
 	}
-	p -> count += 1;      //局数加一
 	fp = fopen(Save,"a");
 	if (!fp) {
 		perror("\033[1;31m[save]\033[0m");
@@ -230,27 +229,13 @@ void Game() {
 	fprintf(fp,Time);
 	for (count = 0; count < Max ; count++) {    //打印棋盘到文件
 		for (count2= 0; count2 < Max; count2++) {
-			if (p -> board[count][count2] == 0) {
-				fprintf(fp,"\033[37;40m + \033[0m");
-			}
-			else if (p -> board[count][count2] == 1) {
-				fprintf(fp,"\033[30;47m @ \033[0m");
-			}
-			else if (p -> board[count][count2] == 2) {
-				fprintf(fp,"\033[37;40m O \033[0m");
-			}
+			fprintf(fp,"%d", p -> board[count][count2]);
 		}
 		fprintf(fp,"\n");
 	}
+	fprintf(fp,"\n");
 	fclose(fp);
-	fp = fopen(Data,"w");
-	if (!fp) {
-		perror("\033[1;31m[save]\033[0m");
-		Input();
-		return;
-	}
-	fprintf(fp,"%d",p -> count);
-	fclose(fp);
+	/* 清存 */
 	for (count = 0; count < Max ; count++) {
 		for (count2= 0; count2 < Max; count2++) {
 			p -> board[count][count2] = 0;

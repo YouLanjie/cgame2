@@ -8,8 +8,8 @@ void Settings() {
 	fp = fopen(Config, "r");
 	fscanf(fp, "%d%d%d%d", &config[0], &config[1], &config[2], &config[3]);
 	fclose(fp);
-	printf("%s",LANG[34]);
-	printf("%s",LANG[35]);
+	printf("%s",LANG[3]);
+	printf("%s",LANG[6]);
 	KbhitNoTime();
 	for (int i = 1; i <= 3; i++) {  //i为循环中的临时变量
 		iy = i / 2 + 3;
@@ -53,8 +53,8 @@ void Settings() {
 			x = 1;
 		}
 		Clear
-		printf("%s",LANG[34]);
-		printf("%s",LANG[35]);
+		printf("%s",LANG[3]);
+		printf("%s",LANG[6]);
 		KbhitNoTime();
 		if (config[0] == 1) {
 			printf("\033[1;31m\033[4;25H*\033[0m");

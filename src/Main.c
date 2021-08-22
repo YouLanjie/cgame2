@@ -5,8 +5,6 @@ struct Chess *p;
 
 /* 文件位置 */
 char Save[] = "/usr/local/cgame2/data/save.txt";
-char Data[] = "/usr/local/cgame2/data/data.txt";
-char Help[] = "/usr/local/cgame2/data/help.txt";
 char Config[] = "/usr/local/cgame2/data/config.txt";
 int Max = 15;
 FILE * fp;
@@ -16,7 +14,6 @@ char LANG[LANGFILELINE][200];
 int main() {
 	int inputContent = 0; /* 输入的内容 */
 	int currentPage = 1; /* 但前所处主菜单页面 */
-	int Max = 15;
 
 	signal(SIGINT, stop);
 	printf("\033[?25l");
@@ -92,15 +89,6 @@ int main() {
 					printf("%s",LANG[29]);
 				}
 				if (inputContent == 0x59 || inputContent == 0x79) {
-					fp = fopen(Data,"w");
-					if(!fp) {
-						perror(LANG[30]);
-						Input();
-					}
-					else {
-						fprintf(fp, "0");
-						fclose(fp);
-					}
 					fp = fopen(Save, "w");
 					if(!fp) {
 						perror(LANG[31]);
@@ -115,16 +103,15 @@ int main() {
 						Input();
 					}
 					else {
-						fprintf(fp, "1 0");
+						fprintf(fp, "1 0 0 15");
 						fclose(fp);
 					}
 				}
 				if (strcmp(Save,"/usr/local/cgame2/data/save.txt") != 0) {
 					remove(Save);
-					remove(Data);
 					remove(Config);
 					remove("cgame2-data");
-					printf("%s",LANG[33]);
+					printf("%s",LANG[30]);
 					inputContent = Input();
 					if (inputContent != 0x4E && inputContent != 0x6E) {
 						free(p);

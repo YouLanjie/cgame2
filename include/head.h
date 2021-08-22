@@ -1,10 +1,10 @@
 #include "include.h"                         //头文件
 #include <time.h>
 
-#define LANGFILELINE 36
+#define LANGFILELINE 33
 
-#define Time "\033[1;31m%04d-%02d-%02d %02d:%02d:%02d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec //开局时间标准格式
-#define NowTime "\033[1;31m%04d-%02d-%02d %02d:%02d:%02d\n",p -> nt.year,p -> nt.mon,p -> nt.day,p -> nt.hour,p -> nt.min,p -> nt.sec //现在时间标准格式
+#define Time "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec,Max,Max //开局时间标准格式
+#define NowTime "\033[1;31m%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d\n",p -> nt.year,p -> nt.mon,p -> nt.day,p -> nt.hour,p -> nt.min,p -> nt.sec,Max,Max //现在时间标准格式
 
 /* 定义结构体 */
 struct time {                                //存储时间信息
@@ -19,7 +19,7 @@ struct time {                                //存储时间信息
 struct Chess {            //游戏信息大杂烩
 	struct time t;         //开局时间，精确到秒
 	struct time nt;        //现在时间，精确到分
-	int board[30][30];   //棋盘信息
+	int board[50][50];     //棋盘信息
 	int count;             //总局数
 	int who;               //下棋的一方，1黑，2白
 	int x;                 //新棋子的x轴
@@ -31,8 +31,6 @@ extern struct Chess *p;
 
 /* 文件位置 */
 extern char Save[];
-extern char Data[];
-extern char Help[];
 extern char Config[];
 extern FILE * fp;
 
