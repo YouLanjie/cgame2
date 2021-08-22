@@ -2,7 +2,7 @@
 
 void Init() {
 	unsigned short error = 0;
-	int config[3] = {0, 0, 0};    //是否使用英语
+	int config[3] = {1, 0, 0};    //是否使用英语
 
 	Clear
 	fp = fopen(Config, "r"); //打开配置文件
@@ -10,11 +10,10 @@ void Init() {
 		config[0] = 1;
 		config[1] = 0;
 		config[2] = 0;
+		Max = 15;
 	}
 	else {
-		fscanf(fp, "%d", &config[0]);  //读取文件
-		fscanf(fp, "%d", &config[1]);
-		fscanf(fp, "%d", &config[2]);
+		fscanf(fp, "%d%d%d%d", &config[0], &config[1], &config[2], &Max);  //读取文件
 		fclose(fp);
 	}
 	if (!config[1]) {
@@ -133,7 +132,7 @@ void Init() {
 			return;
 		}
 		else {
-			fprintf(fp, "%d %d %d", config[0], config[1], config[2]);
+			fprintf(fp, "%d %d %d %d", config[0], config[1], config[2], Max);
 			fclose(fp);
 		}
 		mkdir("./cgame2-data/", 0777);
@@ -153,7 +152,7 @@ void Init() {
 			return;
 		}
 		else {
-			fprintf(fp, "%d %d %d", config[0], config[1], config[2]);
+			fprintf(fp, "%d %d %d %d", config[0], config[1], config[2], Max);
 			fclose(fp);
 		}
 		strcpy(Data, "/usr/local/cgame2/data/data.txt");
@@ -193,10 +192,10 @@ void Init() {
 			exit(1);
 		}
 		if (!config[2]) {
-			fprintf(fp, "1 0 0");
+			fprintf(fp, "1 0 0 15");
 		}
 		else {
-			fprintf(fp, "1 0 1");
+			fprintf(fp, "1 0 1 15");
 		}
 		fclose(fp);
 		p -> count = 0;

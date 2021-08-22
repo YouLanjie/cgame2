@@ -1,9 +1,9 @@
 #include "../include/head.h"
 
 int IfWin(int c) {
-	int x = 1,y = 1;
-	int have = 1;
-	int count;
+	int x = 1,y = 1; /* 坐标 */
+	int have = 1;    /* 连成一线的棋子的数量 */
+	int count;       /* 循环计数用 */
 
 	x = p -> x - 1;
 	y = p -> y - 1;
@@ -12,7 +12,7 @@ int IfWin(int c) {
 		if (x - count > -1 && p -> board[y][x - count] == p -> who) {
 			have++;
 		}
-		if (x + count < 15 && p -> board[y][x + count] == p -> who) {
+		if (x + count < Max && p -> board[y][x + count] == p -> who) {
 			have++;
 		}
 		if (have == c) {
@@ -24,7 +24,7 @@ int IfWin(int c) {
 		if (y - count > -1 && p -> board[y - count][x] == p -> who) {
 			have++;
 		}
-		if (y + count < 15 && p -> board[y + count][x] == p -> who) {
+		if (y + count < Max && p -> board[y + count][x] == p -> who) {
 			have++;
 		}
 		if (have == c) {
@@ -36,7 +36,7 @@ int IfWin(int c) {
 		if (y - count > -1 && x - count > -1 && p -> board[y - count][x - count] == p -> who) {
 			have++;
 		}
-		if (y + count < 15 && x + count < 15 && p -> board[y + count][x + count] == p -> who) {
+		if (y + count < Max && x + count < Max && p -> board[y + count][x + count] == p -> who) {
 			have++;
 		}
 		if (have == c) {
@@ -45,10 +45,10 @@ int IfWin(int c) {
 	}
 	have = 1;
 	for (count = 1; count < c; count++) {         //左下右上
-		if (y + count < 15 && x - count > -1 && p -> board[y + count][x - count] == p -> who) {
+		if (y + count < Max && x - count > -1 && p -> board[y + count][x - count] == p -> who) {
 			have++;
 		}
-		if (y - count > -1 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
+		if (y - count > -1 && x + 1 < Max && p -> board[y - count][x + count] == p -> who) {
 			have++;
 		}
 		if (have == c) {

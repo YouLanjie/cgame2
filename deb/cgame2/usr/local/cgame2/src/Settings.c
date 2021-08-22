@@ -2,11 +2,11 @@
 
 void Settings() {
 	unsigned short x = 1,y = 1,iy = 1,ix = 1;  //x轴坐标 y轴坐标 计算y轴位置的坐标
-	int config[3] = {0, 0, 0};    //存储选项
+	int config[4] = {0, 0, 0};    //存储选项
 	int inputContent = 0;    //输入
 
 	fp = fopen(Config, "r");
-	fscanf(fp, "%d%d%d", &config[0], &config[1], &config[2]);
+	fscanf(fp, "%d%d%d%d", &config[0], &config[1], &config[2], &config[3]);
 	fclose(fp);
 	printf("%s",LANG[34]);
 	printf("%s",LANG[35]);
@@ -83,7 +83,7 @@ void Settings() {
 		KbhitNoTime();
 	}
 	fp = fopen(Config, "w");
-	fprintf(fp,"%d %d %d",config[0],config[1],config[2]);
+	fprintf(fp,"%d %d %d %d", config[0], config[1], config[2], config[3]);
 	fclose(fp);
 	printf("\033[?25l");
 	return;

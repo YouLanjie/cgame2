@@ -1,8 +1,8 @@
 #include "../include/head.h"
 
 void AI() {
-	int x,y;
-	int have = 1;
+	int x,y; /* 坐标 */
+	int have = 1; /* 连成一线的棋子数量 */
 
 	x = p -> x - 1;
 	y = p -> y - 1;
@@ -11,10 +11,10 @@ void AI() {
 		if (x - count > -1 && p -> board[y][x - count] == p -> who) {
 			have++;
 		}
-		if (x + count < 15 && p -> board[y][x + count] == p -> who) {
+		if (x + count < Max && p -> board[y][x + count] == p -> who) {
 			have++;
 		}
-		for (int count = 1; have > 2 && x + count < 15 ; count++) {
+		for (int count = 1; have > 2 && x + count < Max ; count++) {
 			if (p -> board[y][x + count] == 0) {
 				p -> board[y][x + count] = 3 - p -> who;
 				return;
@@ -32,10 +32,10 @@ void AI() {
 		if ((y - count) > -1 && p -> board[y - count][x] == p -> who) {
 			have++;
 		}
-		if (y + count < 15 && p -> board[y + count][x] == p -> who) {
+		if (y + count < Max && p -> board[y + count][x] == p -> who) {
 			have++;
 		}
-		for (int count = 1; have > 2 && y + count < 15 ; count++) {
+		for (int count = 1; have > 2 && y + count < Max ; count++) {
 			if (p -> board[y + count][x] == 0) {
 				p -> board[y + count][x] = 3 - p -> who;
 				return;
@@ -53,10 +53,10 @@ void AI() {
 		if (y - count > -1 && x - count > -1 && p -> board[y - count][x - count] == p -> who) {
 			have++;
 		}
-		if (y + count < 15 && x + count < 15 && p -> board[y + count][x + count] == p -> who) {
+		if (y + count < Max && x + count < 15 && p -> board[y + count][x + count] == p -> who) {
 			have++;
 		}
-		for (int count = 1; have > 2 && y + count < 15 && x + count < 15 ; count++) {
+		for (int count = 1; have > 2 && y + count < Max && x + count < 15 ; count++) {
 			if (p -> board[y + count][x + count] == 0) {
 				p -> board[y + count][x + count] = 3 - p -> who;
 				return;
@@ -71,19 +71,19 @@ void AI() {
 	}
 	have = 1;
 	for (int count = 1; count < 3; count++) {         //左下右上
-		if (y + count < 15 && x - count > -1 && p -> board[y + count][x - count] == p -> who) {
+		if (y + count < Max && x - count > -1 && p -> board[y + count][x - count] == p -> who) {
 			have++;
 		}
-		if (y - count > -1 && x + 1 < 15 && p -> board[y - count][x + count] == p -> who) {
+		if (y - count > -1 && x + 1 < Max && p -> board[y - count][x + count] == p -> who) {
 			have++;
 		}
-		for(int count = 1; have > 2 && y - count > -1 && x + count < 15 ; count++) {
+		for(int count = 1; have > 2 && y - count > -1 && x + count < Max ; count++) {
 			if (p -> board[y - count][x + count] == 0) {
 				p -> board[y - count][x + count] = 3 - p -> who;
 				return;
 			}
 		}
-		for(int count = 1; have > 2 && y + count < 15 && x - count > -1 ; count++) {
+		for(int count = 1; have > 2 && y + count < Max && x - count > -1 ; count++) {
 			if (p -> board[y + count][x - count] == 0) {
 				p -> board[y + count][x - count] = 3 - p -> who;
 				return;

@@ -7,7 +7,7 @@ void Game() {
 	int way;               //光标移动方向
 	int win  = 0;          //赢家，1黑，2白
 	int who = 1;           //现在下子的玩家
-	int a = 0;
+	int a = 0;             //是否要使用AI下棋
 
 	pid_t pid = 1;
 

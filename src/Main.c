@@ -8,6 +8,7 @@ char Save[] = "/usr/local/cgame2/data/save.txt";
 char Data[] = "/usr/local/cgame2/data/data.txt";
 char Help[] = "/usr/local/cgame2/data/help.txt";
 char Config[] = "/usr/local/cgame2/data/config.txt";
+int Max = 15;
 FILE * fp;
 
 char LANG[LANGFILELINE][200];
@@ -15,6 +16,7 @@ char LANG[LANGFILELINE][200];
 int main() {
 	int inputContent = 0; /* 输入的内容 */
 	int currentPage = 1; /* 但前所处主菜单页面 */
+	int Max = 15;
 
 	signal(SIGINT, stop);
 	printf("\033[?25l");

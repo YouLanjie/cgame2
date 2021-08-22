@@ -1,8 +1,6 @@
 #include "include.h"                         //头文件
-
 #include <time.h>
 
-#define Max 15                               //棋盘大小
 #define LANGFILELINE 36
 
 #define Time "\033[1;31m%04d-%02d-%02d %02d:%02d:%02d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec //开局时间标准格式
@@ -21,7 +19,7 @@ struct time {                                //存储时间信息
 struct Chess {            //游戏信息大杂烩
 	struct time t;         //开局时间，精确到秒
 	struct time nt;        //现在时间，精确到分
-	int board[Max][Max];   //棋盘信息
+	int board[30][30];   //棋盘信息
 	int count;             //总局数
 	int who;               //下棋的一方，1黑，2白
 	int x;                 //新棋子的x轴
@@ -38,6 +36,7 @@ extern char Help[];
 extern char Config[];
 extern FILE * fp;
 
+extern int Max;//棋盘大小
 extern char LANG[LANGFILELINE][200];
 
 /* 定义函数 */
