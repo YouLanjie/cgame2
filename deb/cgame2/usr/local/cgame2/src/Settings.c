@@ -1,16 +1,16 @@
 #include "../include/head.h"
 
-void settings() {
+void Settings() {
 	unsigned short x = 1,y = 1,iy = 1,ix = 1;  //x轴坐标 y轴坐标 计算y轴位置的坐标
 	int config[3] = {0, 0, 0};    //存储选项
-	int Input = 0;    //输入
+	int inputContent = 0;    //输入
 
 	fp = fopen(Config, "r");
 	fscanf(fp, "%d%d%d", &config[0], &config[1], &config[2]);
 	fclose(fp);
 	printf("%s",LANG[34]);
 	printf("%s",LANG[35]);
-	kbhit2();
+	KbhitNoTime();
 	for (int i = 1; i <= 3; i++) {  //i为循环中的临时变量
 		iy = i / 2 + 3;
 		if (i % 2 != 0) {
@@ -25,28 +25,28 @@ void settings() {
 		}
 	}
 	printf("\033[%d;%dH",y + 3,x * 24 + 1);
-	kbhit2();
-	while (Input != 'q' && Input != 'Q' && Input != 'w' && Input != 'W' && Input != 0x1B) {
-		Input = input();
-		if (Input == 0x1B) {
-			if (kbhit_if() == 1) {
-				kbhit2();
-				Input = getchar();
+	KbhitNoTime();
+	while (inputContent != 'q' && inputContent != 'Q' && inputContent != 'w' && inputContent != 'W' && inputContent != 0x1B) {
+		inputContent = Input();
+		if (inputContent == 0x1B) {
+			if (KbhitHas() == 1) {
+				KbhitNoTime();
+				inputContent = getchar();
 			}
 		}
-		if (Input == 'D' && x > 1) {
+		if (inputContent == 'D' && x > 1) {
 			x--;
 		}
-		else if (Input == 'C' && x < 2) {
+		else if (inputContent == 'C' && x < 2) {
 			x++;
 		}
-		else if (Input == 'A' && y > 1) {
+		else if (inputContent == 'A' && y > 1) {
 			y--;
 		}
-		else if (Input == 'B' && y < 2) {
+		else if (inputContent == 'B' && y < 2) {
 			y++;
 		}
-		else if (Input == 0x0A || Input == 0x20) {
+		else if (inputContent == 0x0A || inputContent == 0x20) {
 			config[2 * (y - 1) + x - 1] = 1 - config[2 * (y - 1) + x - 1];
 		}
 		if (x == 2 && y ==2) {
@@ -55,7 +55,7 @@ void settings() {
 		Clear
 		printf("%s",LANG[34]);
 		printf("%s",LANG[35]);
-		kbhit2();
+		KbhitNoTime();
 		if (config[0] == 1) {
 			printf("\033[1;31m\033[4;25H*\033[0m");
 		}
@@ -77,10 +77,10 @@ void settings() {
 			else {
 				printf("\033[0m\033[%d;%dH ",iy,ix);
 			}
-			kbhit2();
+			KbhitNoTime();
 		}
 		printf("\033[%d;%dH",y + 3,x * 24 + 1);
-		kbhit2();
+		KbhitNoTime();
 	}
 	fp = fopen(Config, "w");
 	fprintf(fp,"%d %d %d",config[0],config[1],config[2]);

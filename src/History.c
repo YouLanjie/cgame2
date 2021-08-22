@@ -1,20 +1,19 @@
 #include "../include/head.h"
-#include <stdio.h>
 
-void history() {
+void History() {
 	int count;              //数数
 	int b;                  //选择
 	char a[3417];           //棋盘信息
 
 	if(p -> count == 0) {
 		printf("%s",LANG[21]);
-		input();
+		Input();
 		return;
 	}
 	fp = fopen(Save,"rb");
 	if (!fp) {
 		printf("%s",LANG[22]);
-		input();
+		Input();
 		return;
 	}
 	for (count = 0; count < p -> count; count++) {
@@ -22,12 +21,12 @@ void history() {
 		printf("\033[1;1H");
 		puts(a);
 		printf("%s",LANG[23]);
-		b = input();
+		b = Input();
 		Clear2
 		if (b == 0x1B) {
-			if (kbhit_if() == 1) {
+			if (KbhitHas() == 1) {
 				getchar();
-				b = input();
+				b = Input();
 				if (b == 0x41 || b == 0x44) {
 					b = 0x4C;
 				}

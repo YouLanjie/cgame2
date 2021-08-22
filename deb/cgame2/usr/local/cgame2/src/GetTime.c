@@ -1,6 +1,6 @@
 #include "../include/head.h"
 
-void gettime() {
+void GetTime() {
 	time_t timep;
 	struct tm *tp;
 
@@ -16,7 +16,7 @@ void gettime() {
 	return;
 }
 
-void getnowtime() {
+void GetNowTime() {
 	time_t timep;
 	struct tm *tp;
 

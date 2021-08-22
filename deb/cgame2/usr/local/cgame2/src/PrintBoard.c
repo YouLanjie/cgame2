@@ -1,6 +1,6 @@
 #include "../include/head.h"
 
-void printboard() {
+void PrintBoard() {
 	int count;
 	int count2;
 

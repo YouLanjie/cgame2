@@ -41,17 +41,14 @@ extern FILE * fp;
 extern char LANG[LANGFILELINE][200];
 
 /* 定义函数 */
-int ifWin(int c);              //是否胜利，返回1黑方胜，返回2白方胜
-void init();                   //初始化：创建文件、选择语言
-void welcome(short p,short a); //开始界面
-void game();                   //游戏主体
-void AI();                     //AI下棋
-void save();                   //保存棋盘信息
-void history();                //查看历史局数信息
-void help();                   //帮助信息
-void settings();
-void printboard();             //打印棋盘
-void gettime();                //获取开局时间
-void getnowtime();             //获取现在时间
-void stop();                   //退出程序执行的
+int IfWin(int c);//是否胜利，返回1黑方胜，返回2白方胜
+void Init();//初始化：创建文件、选择语言
+void Game();//游戏主体
+void AI();//AI下棋
+void History();//查看历史局数信息
+void Settings();//设置
+void PrintBoard();//打印棋盘
+void GetTime();//获取开局时间
+void GetNowTime();//获取现在时间
+void stop();//退出程序执行的
 

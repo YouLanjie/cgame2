@@ -1,15 +1,12 @@
 #include "../include/head.h"
 
-void game() {
+void Game() {
 	int count,count2;      //用于计数
-
 	int error = 0;         //记录错误
-
 	int x = 1,y = 1;       //当前坐标
 	int way;               //光标移动方向
 	int win  = 0;          //赢家，1黑，2白
 	int who = 1;           //现在下子的玩家
-
 	int a = 0;
 
 	pid_t pid = 1;
@@ -18,8 +15,8 @@ void game() {
 	fscanf(fp, "%d", &a);
 	fclose(fp);
 	Clear
-	gettime();
-	getnowtime();
+	GetTime();
+	GetNowTime();
 	printf(NowTime);
 
 	while(win != 1 && win != 2) {
@@ -31,14 +28,14 @@ void game() {
 		}
 		while (pid == 0) {
 			printf("\033[s\033[1;1H");
-			kbhit2();
-			getnowtime();
+			KbhitNoTime();
+			GetNowTime();
 			printf(NowTime);
 			printf("\033[u");
-			kbhit2();
+			KbhitNoTime();
 			sleep(1);
 		}
-		printboard();
+		PrintBoard();
 		if (who == 1) {
 			printf("%s",LANG[13]);
 		}
@@ -58,7 +55,7 @@ void game() {
 		else {
 			printf("\033[%d;%dH\033[1;37;40m>\033[0m",y + 2,x * 3 - 1);
 		}
-		way = input();
+		way = Input();
 		printf("\033[%d;%dH\033[2m \033[0m",y + 2,x * 3 - 1);
 		switch (way) {
 			case 0x30:
@@ -68,7 +65,7 @@ void game() {
 				pid = 1;
 				Clear
 				printf("%s",LANG[16]);
-				way = input();
+				way = Input();
 				if (way == 0x59 || way == 0x79) {
 					for (count = 0; count < Max ; count++) {
 						for (count2= 0; count2 < Max; count2++) {
@@ -85,7 +82,7 @@ void game() {
 				}
 				break;
 			case 0x1B:
-				way = kbhit_if();
+				way = KbhitHas();
 				if (way == 0) {
 					way = 0x1B;
 				}
@@ -130,7 +127,7 @@ void game() {
 					pid = 1;
 					Clear
 					printf("%s",LANG[16]);
-					way = input();
+					way = Input();
 					if (way == 0x59 || way == 0x79) {
 						for (count = 0; count < Max ; count++) {
 							for (count2= 0; count2 < Max; count2++) {
@@ -194,7 +191,7 @@ void game() {
 					p -> who = who;
 					p -> x = x;
 					p -> y = y;
-					win = ifWin(5);
+					win = IfWin(5);
 					if (win == who) {
 						kill(pid,1);
 						Clear
@@ -206,7 +203,7 @@ void game() {
 							printf("%s",LANG[19]);
 						}
 						printf("%s",LANG[20]);
-						input();
+						Input();
 					}
 					if (a == 1) {
 						AI();
@@ -224,7 +221,41 @@ void game() {
 		printf("\n");
 	}
 	p -> count += 1;      //局数加一
-	save();
+	fp = fopen(Save,"a");
+	if (!fp) {
+		perror("\033[1;31m[save]\033[0m");
+		Input();
+		return;
+	}
+	fprintf(fp,Time);
+	for (count = 0; count < Max ; count++) {    //打印棋盘到文件
+		for (count2= 0; count2 < Max; count2++) {
+			if (p -> board[count][count2] == 0) {
+				fprintf(fp,"\033[37;40m + \033[0m");
+			}
+			else if (p -> board[count][count2] == 1) {
+				fprintf(fp,"\033[30;47m @ \033[0m");
+			}
+			else if (p -> board[count][count2] == 2) {
+				fprintf(fp,"\033[37;40m O \033[0m");
+			}
+		}
+		fprintf(fp,"\n");
+	}
+	fclose(fp);
+	fp = fopen(Data,"w");
+	if (!fp) {
+		perror("\033[1;31m[save]\033[0m");
+		Input();
+		return;
+	}
+	fprintf(fp,"%d",p -> count);
+	fclose(fp);
+	for (count = 0; count < Max ; count++) {
+		for (count2= 0; count2 < Max; count2++) {
+			p -> board[count][count2] = 0;
+		}
+	}
 	Clear
 	return;
 }

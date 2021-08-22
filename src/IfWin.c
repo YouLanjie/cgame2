@@ -1,6 +1,6 @@
 #include "../include/head.h"
 
-int ifWin(int c) {
+int IfWin(int c) {
 	int x = 1,y = 1;
 	int have = 1;
 	int count;

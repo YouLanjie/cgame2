@@ -1,6 +1,6 @@
 #include "../include/head.h"
 
-void init() {
+void Init() {
 	unsigned short error = 0;
 	int config[3] = {0, 0, 0};    //是否使用英语
 
@@ -119,7 +119,7 @@ void init() {
 					mkdir("/usr/local/cgame2/data", 0777);
 					if(access("/usr/local/cgame2/data",0) == EOF) {
 						perror(LANG[3]);
-						input();
+						Input();
 						Clear2
 						exit(1);
 					}
@@ -139,7 +139,7 @@ void init() {
 		mkdir("./cgame2-data/", 0777);
 		if (access("cgame2-data", 0) == EOF) {
 			perror(LANG[4]);
-			input();
+			Input();
 			exit(1);
 		}
 		strcpy(Data, "./cgame2-data/data.txt");
@@ -164,7 +164,7 @@ void init() {
 		fp = fopen(Save,"w");
 		if (!fp) {
 			perror(LANG[5]);
-			input();
+			Input();
 			exit(1);
 		}
 		fclose(fp);
@@ -174,7 +174,7 @@ void init() {
 		fp = fopen(Data,"w");
 		if (!fp) {
 			perror(LANG[6]);
-			input();
+			Input();
 			exit(1);
 		}
 		fprintf(fp,"%d\n",p -> count);
@@ -189,7 +189,7 @@ void init() {
 		fp = fopen(Config,"w");
 		if (!fp) {
 			perror(LANG[7]);
-			input();
+			Input();
 			exit(1);
 		}
 		if (!config[2]) {

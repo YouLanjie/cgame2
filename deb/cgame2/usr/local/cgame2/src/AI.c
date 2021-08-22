@@ -1,5 +1,4 @@
 #include "../include/head.h"
-#include <stdlib.h>
 
 void AI() {
 	int x,y;
