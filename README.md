@@ -4,9 +4,9 @@
 
 - 这是一个c语言实战程序，一个小游戏——五子棋
 - 开发平台:
-  - [ ]Ubuntu Linux
-  - [ ]Debian Linux
-  - [x]Deepin Linux
+  - [ ] Ubuntu Linux
+  - [ ] Debian Linux
+  - [x] Deepin Linux
 - 支持两种语言： 汉语、英语
 
 ## 使用
@@ -46,17 +46,3 @@
       编译好的文件(main)可以直接执行，程序做过兼容性的加强
 
 - 其实在仓库的母文件夹下的bin目录就存放着已经编译好了的ELF文件，只要你的CPU架构是x86\_64的，就可以直接执行
-
-## 无聊的东西
-
-<iframe
-height=600
-width=800
-src="//player.bilibili.com/player.html?aid=842548588&bvid=BV1Q54y167gJ&cid=249105218&page=1"
-scrolling="no"
-border="0"
-frameborder="no"
-framespacing="0"
-allowfullscreen="true">
-</iframe>
-
