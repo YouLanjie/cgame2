@@ -3,7 +3,10 @@
 ## 简介
 
 - 这是一个c语言实战程序，一个小游戏——五子棋
-- 开发平台:Ubuntu Linux
+- 开发平台:
+  - [ ]Ubuntu Linux
+  - [ ]Debian Linux
+  - [x]Deepin Linux
 - 支持两种语言： 汉语、英语
 
 ## 使用
