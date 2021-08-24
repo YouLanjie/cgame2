@@ -14,6 +14,7 @@ char LANG[LANGFILELINE][200];
 int main() {
 	int inputContent = 0; /* 输入的内容 */
 	int currentPage = 1; /* 但前所处主菜单页面 */
+	int config[3] = {1, 0, 0};    //配置选项
 
 	signal(SIGINT, stop);
 	printf("\033[?25l");
@@ -77,21 +78,21 @@ int main() {
 				History(p);
 				break;
 			case 0x33:
-				printf("%s",LANG[26]);
-				Menu2(LANG[27]);
+				printf("%s",LANG[29]);
+				Menu2(LANG[7]);
 				Input();
 				break;
 			case 0x34:
 				Clear
-				printf("%s",LANG[28]);
+				printf("%s",LANG[5]);
 				inputContent = Input();
 				if (strcmp(Save,"/usr/local/cgame2/data/save.txt") != 0) {
-					printf("%s",LANG[29]);
+					printf("%s",LANG[4]);
 				}
 				if (inputContent == 0x59 || inputContent == 0x79) {
 					fp = fopen(Save, "w");
 					if(!fp) {
-						perror(LANG[31]);
+						perror(LANG[1]);
 						Input();
 					}
 					else {
@@ -99,7 +100,7 @@ int main() {
 					}
 					fp = fopen(Config,"w");
 					if(!fp) {
-						perror(LANG[32]);
+						perror(LANG[0]);
 						Input();
 					}
 					else {
@@ -107,17 +108,39 @@ int main() {
 						fclose(fp);
 					}
 				}
-				if (strcmp(Save,"/usr/local/cgame2/data/save.txt") != 0) {
+				if ((inputContent == 0x59 || inputContent == 0x79) && strcmp(Save,"/usr/local/cgame2/data/save.txt") != 0) {
 					remove(Save);
 					remove(Config);
 					remove("cgame2-data");
-					printf("%s",LANG[30]);
+					printf("%s",LANG[2]);
 					inputContent = Input();
 					if (inputContent != 0x4E && inputContent != 0x6E) {
 						free(p);
 						printf("\033[?25h\n");
 						Clear
 						return 0;
+					}
+					strcpy(Save, "/usr/local/cgame2/data/save.txt");
+					strcpy(Config, "/usr/local/cgame2/data/config.txt");
+					if (access(Config,0) == EOF) {
+						fp = fopen(Config,"w");
+						config[0] = 1;
+						config[1] = 0;
+						config[2] = 0;
+						Max = 15;
+						if (!fp) {
+							perror("\033[1;31m[init](Config): fopen\033[0m");
+							Input();
+							exit(1);
+						}
+						fprintf(fp, "%d %d %d %d", config[0], config[1], config[2], Max);
+						fclose(fp);
+					}
+					else {
+						fp = fopen(Config,"w");
+						config[2] = 0;
+						fprintf(fp, "%d %d %d %d", config[0], config[1], config[2], Max);
+						fclose(fp);
 					}
 				}
 				Clear

@@ -20,7 +20,6 @@ struct Chess {            //游戏信息大杂烩
 	struct time t;         //开局时间，精确到秒
 	struct time nt;        //现在时间，精确到分
 	int board[50][50];     //棋盘信息
-	int count;             //总局数
 	int who;               //下棋的一方，1黑，2白
 	int x;                 //新棋子的x轴
 	int y;                 //新棋子的y轴
