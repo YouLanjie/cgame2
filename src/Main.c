@@ -1,4 +1,6 @@
 #include "../include/head.h"                           //导入头文件
+#include <stdio.h>
+#include <unistd.h>
 
 /* 定义结构体变量指针 */
 struct Chess *p;
@@ -26,11 +28,24 @@ int main() {
 		Init(p);
 		ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
 		startSize = size.ws_col / 2 - 20;
+		fp = fopen(Config,"r");
+		fscanf(fp,"%d%d",&config[0],&config[1]);
+		fclose(fp);
 		if (currentPage == 1){
-			printf("\033[8;%dH\033[1;33m1.开始游戏\033[8;%dH2.游戏记录\033[9;%dH3.游戏帮助\033[9;%dH4.清除存档", startSize, startSize + 32, startSize, startSize + 32);
+			if (config[1] == 0) {
+				printf("\033[8;%dH\033[1;33m1.开始游戏\033[8;%dH2.游戏记录\033[9;%dH3.游戏帮助\033[9;%dH4.清除存档", startSize, startSize + 32, startSize, startSize + 32);
+			}
+			else {
+				printf("\033[8;%dH\033[1;33m1.Start the game\033[8;%dH2.Game history\033[9;%dH3.Game help\033[9;%dH4.Clear the archive", startSize, startSize + 32, startSize, startSize + 32);
+			}
 		}
 		else if (currentPage == 2) {
-			printf("%s",LANG[11]);
+			if (config[1] == 0) {
+				printf("\033[8;%dH\033[1;33m5.设置\033[8;%dH0.退出游戏\033[0m", startSize, startSize + 32);
+			}
+			else {
+				printf("\033[8;%dH\033[1;33m5.Setting(设置)\033[8;%dH0.Quit the game\033[0m", startSize, startSize + 32);
+			}
 		}
 		KbhitNoTime();
 		Menu(LANG[12],currentPage,2);
@@ -82,8 +97,16 @@ int main() {
 				History(p);
 				break;
 			case 0x33:
-				printf("%s",LANG[29]);
-				Menu2(LANG[7]);
+				ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+				startSize = size.ws_col / 2 - 20;
+				if (config[1] == 0) {
+					printf("\033[7;%dH按下0,q,Q退出\033[8;%dHW S A D或者方向键控制上下左右，空格下子\033[9;%dH@为黑棋,O为白棋,+为空白", startSize, startSize, startSize);
+					Menu2("游戏帮助");
+				}
+				else {
+					printf("\033[7;%dH Press 0,q,Q to exit \033[8;%dHW S A D or arrow keys to control up and down, space to play \033[9;%dH@ for black, O for white, + for blank", startSize, startSize, startSize);
+					Menu2("Game Help");
+				}
 				Input();
 				break;
 			case 0x34:

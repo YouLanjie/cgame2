@@ -17,6 +17,7 @@
 #include <string.h>
 /* strcat() strcmp() strcpy() */
 #include <dirent.h>
+#include <sys/ioctl.h>
 
 #ifndef Clear
 	#define Clear printf("\033[2J\033[1;1H");
