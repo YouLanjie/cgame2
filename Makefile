@@ -12,7 +12,7 @@ all: cgame2
 $(prom): $(OBJ)
 	$(CC) $(OBJ) -o $(prom)
 	@mkdir bin
-	@mv $(prom) $(BIN)/
+	@mv $(prom) $(BIN)/main
 	@rm -rf $(OBJ)
 
 %.o: %.c $(incl)
