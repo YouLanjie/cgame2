@@ -1,0 +1,20 @@
+Source: cgame2
+Section: games
+Priority: optional
+Maintainer: Lanjie You <ylj18926385312@163.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.5.0
+Homepage: https://github.com/Youlanjie/cgame2
+Vcs-Git: https://github.com/Youlanjie/cgame2.git
+Vcs-Browser: https://github.com/Youlanjie/cgame2.git
+#Vcs-Browser: https://salsa.debian.org/debian/cgame2
+#Vcs-Git: https://salsa.debian.org/debian/cgame2.git
+
+Package: cgame2
+Architecture: amd64
+Depends: gcc,libc6
+Description: 这是一个c语言编写的实战游戏。 \
+ 游戏是五子棋。它只有TUI字符界面，可能没有 \
+ 那么美观，但是挺好玩的。此程序已开源，你 \
+ 可以在https://github.com/Youlanjie/cgame2 \
+ 上找到它

@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+
+include /usr/share/dpkg/buildflags.mk
+
+build:
+	$(MAKE) cgame2
+
+install:
+	$(MAKE) install prefix="$(prefix)"
+	$(MAKE) clean
+
+clean:
+	$(MAKE) clean
+	@rm -rf "$(CURDIR)/debian/cgame2"
+
+%:
+	dh $@
+
