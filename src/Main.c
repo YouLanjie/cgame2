@@ -15,6 +15,8 @@ int main() {
 	int inputContent = 0; /* 输入的内容 */
 	int currentPage = 1; /* 但前所处主菜单页面 */
 	int config[3] = {1, 0, 0};    //配置选项
+	struct winsize size;
+	int startSize = 0;
 
 	signal(SIGINT, stop);
 	printf("\033[?25l");
@@ -22,8 +24,10 @@ int main() {
 	Clear2
 	while (inputContent != 0x1B && inputContent != 0x30 && inputContent != 0x51 && inputContent != 0x71) {
 		Init(p);
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+		startSize = size.ws_col / 2 - 20;
 		if (currentPage == 1){
-			printf("%s",LANG[10]);
+			printf("\033[8;%dH\033[1;33m1.开始游戏\033[8;%dH2.游戏记录\033[9;%dH3.游戏帮助\033[9;%dH4.清除存档", startSize, startSize + 32, startSize, startSize + 32);
 		}
 		else if (currentPage == 2) {
 			printf("%s",LANG[11]);
