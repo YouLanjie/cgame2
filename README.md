@@ -27,18 +27,11 @@
       ```
 
     - 或者从[这里](https://github.com/YouLanjie/cgame2/archive/refs/heads/main.zip)下载压缩包并解压
-    - 再或者直接复制源代码，如果这样注意一定要复制include里的文件
   - 编译
     - 使用make编译，文件会生成在bin目录下：
 
       ``` sh
       make
-      ```
-
-      生成deb包并安装：
-
-      ```sh
-      make building && make install
       ```
 
     - 或者 **进入cgame2/src/** 目录，使用gcc编译所有c文件：
@@ -47,6 +40,13 @@
       gcc *.c */*.c -o main
       ```
 
-- 编译好的文件(main)可以直接执行，程序做过兼容性的加强
+    - 安装程序：
+
+      ```sh
+      make && make install
+      ```
+
+
+- 编译好的文件(bin/main)可以直接执行，程序做过兼容性的加强
 
 - 其实在仓库的母文件夹下的bin目录就存放着已经编译好了的ELF文件，只要你的CPU架构是x86\_64的，就可以直接执行
