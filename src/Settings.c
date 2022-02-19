@@ -1,15 +1,16 @@
 #include "../include/head.h"
+#include <stdio.h>
 
 void Settings() {
 	unsigned short x = 1,y = 1,iy = 1,ix = 1;  //x轴坐标 y轴坐标 计算y轴位置的坐标
-	int config[4] = {0, 0, 0};    //存储选项
+	int config[3] = {0, 0, 0};    //存储选项
 	int inputContent = 0;    //输入
 
 	fp = fopen(Config, "r");
-	fscanf(fp, "%d%d%d%d", &config[0], &config[1], &config[2], &config[3]);
+	fscanf(fp, "%d%d%d", &config[0], &config[1], &config[2]);
 	fclose(fp);
-	printf("%s",LANG[3]);
-	printf("%s",LANG[6]);
+	gotoxy(2,25); fontColorSet(1,32); printf("游戏设置\n"); fontColorSet(1,33); printf("q键退出，退出保存\n");
+	printf("游戏时是否启用AI"); gotoxy(4,25); printf("( )"); fontColorSet(1,31); gotoxy(4,29); printf("|"); fontColorSet(0,0); printf("使用当前目录作为游戏目录"); gotoxy(4,50); printf("( )\n"); gotoxy(5,25) ;printf("( )");
 	kbhitGetchar();
 	for (int i = 1; i <= 3; i++) {  //i为循环中的临时变量
 		iy = i / 2 + 3;
@@ -21,10 +22,12 @@ void Settings() {
 			ix = 51;
 		}
 		if (config[i - 1] == 1) {
-			printf("\033[1;31m\033[%d;%dH*\033[0m",iy,ix);
+			gotoxy(iy, ix); fontColorSet(1,31);
+			printf("*");
+			fontColorSet(1,31);
 		}
 	}
-	printf("\033[%d;%dH",y + 3,x * 25 + 1);
+	gotoxy(y + 3,x * 25 + 1);
 	kbhitGetchar();
 	while (inputContent != 'q' && inputContent != 'Q' && inputContent != 'w' && inputContent != 'W' && inputContent != 0x1B) {
 		inputContent = getch();
@@ -53,8 +56,11 @@ void Settings() {
 			x = 1;
 		}
 		Clear
-		printf("%s",LANG[3]);
-		printf("%s",LANG[6]);
+#ifdef __linux
+		printf("\033[?25h");
+#endif
+		gotoxy(2,25); fontColorSet(1,32); printf("游戏设置\n"); fontColorSet(1,33); printf("q键退出，退出保存\n");
+		printf("游戏时是否启用AI"); gotoxy(4,25); printf("( )"); fontColorSet(1,31); gotoxy(4,29); printf("|"); fontColorSet(0,0); printf("使用当前目录作为游戏目录"); gotoxy(4,50); printf("( )\n"); gotoxy(5,25) ;printf("( )");
 		kbhitGetchar();
 		for (int i = 1; i <= 3; i++) {
 			iy = i / 2 + 3;
@@ -66,20 +72,24 @@ void Settings() {
 				ix = 51;
 			}
 			if (config[i - 1] == 1) {
-				printf("\033[1;31m\033[%d;%dH*\033[0m",iy,ix);
+				gotoxy(iy, ix); fontColorSet(1,31);
+				printf("*");
+				fontColorSet(1,31);
 			}
 			else {
-				printf("\033[0m\033[%d;%dH ",iy,ix);
+				gotoxy(iy, ix); fontColorSet(0,0);
+				printf(" ");
 			}
 			kbhitGetchar();
 		}
-		printf("\033[%d;%dH",y + 3,x * 25 + 1);
+		gotoxy(y + 3,x * 25 + 1);
 		kbhitGetchar();
 	}
 	fp = fopen(Config, "w");
-	fprintf(fp,"%d %d %d %d", config[0], config[1], config[2], config[3]);
+	fprintf(fp,"%d %d %d", config[0], config[1], config[2]);
 	fclose(fp);
+#ifdef __linux
 	printf("\033[?25l");
+#endif
 	return;
 }
-

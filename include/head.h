@@ -1,7 +1,7 @@
 #include "include.h"                         //头文件
 #include <time.h>
 
-#define LANGFILELINE 33
+#define LANGFILELINE 33  /* 语言句数 */
 
 #define Time "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec,Max,Max //开局时间标准格式
 #define NowTime "\033[1;31m%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d\n",p -> nt.year,p -> nt.mon,p -> nt.day,p -> nt.hour,p -> nt.min,p -> nt.sec,Max,Max //现在时间标准格式

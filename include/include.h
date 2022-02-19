@@ -32,7 +32,7 @@
 		#define fontColorSet(a,b) printf("\033[%d;%dm",a, b)
 	#endif
 	#ifndef gotoxy
-		#define gotoxy(x,y) printf("\033[%d;%dH\n",x, y)
+		#define gotoxy(x,y) printf("\033[%d;%dH",x, y)
 	#endif
 	/* kbhit */
 	int getch();
@@ -45,6 +45,9 @@
 	#ifndef Clear
 		#define Clear system("cls");
 		#define Clear2 system("cls");
+	#endif
+	#ifndef fontColorSet
+		#define fontColorSet(a,b) (a + b)
 	#endif
 	void gotoxy(int x,int y);
 #endif
