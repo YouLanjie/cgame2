@@ -10,7 +10,7 @@ void Settings() {
 	fclose(fp);
 	printf("%s",LANG[3]);
 	printf("%s",LANG[6]);
-	KbhitNoTime();
+	kbhitGetchar();
 	for (int i = 1; i <= 3; i++) {  //i为循环中的临时变量
 		iy = i / 2 + 3;
 		if (i % 2 != 0) {
@@ -25,12 +25,12 @@ void Settings() {
 		}
 	}
 	printf("\033[%d;%dH",y + 3,x * 25 + 1);
-	KbhitNoTime();
+	kbhitGetchar();
 	while (inputContent != 'q' && inputContent != 'Q' && inputContent != 'w' && inputContent != 'W' && inputContent != 0x1B) {
-		inputContent = Input();
+		inputContent = getch();
 		if (inputContent == 0x1B) {
-			if (KbhitHas() == 1) {
-				KbhitNoTime();
+			if (kbhit() == 1) {
+				kbhitGetchar();
 				inputContent = getchar();
 			}
 		}
@@ -55,7 +55,7 @@ void Settings() {
 		Clear
 		printf("%s",LANG[3]);
 		printf("%s",LANG[6]);
-		KbhitNoTime();
+		kbhitGetchar();
 		for (int i = 1; i <= 3; i++) {
 			iy = i / 2 + 3;
 			if (i % 2 != 0) {
@@ -71,10 +71,10 @@ void Settings() {
 			else {
 				printf("\033[0m\033[%d;%dH ",iy,ix);
 			}
-			KbhitNoTime();
+			kbhitGetchar();
 		}
 		printf("\033[%d;%dH",y + 3,x * 25 + 1);
-		KbhitNoTime();
+		kbhitGetchar();
 	}
 	fp = fopen(Config, "w");
 	fprintf(fp,"%d %d %d %d", config[0], config[1], config[2], config[3]);

@@ -14,7 +14,7 @@ void History() {
 	fp = fopen(Save,"rb");
 	if (!fp) {
 		printf("%s",LANG[22]);
-		Input();
+		getch();
 		return;
 	}
 	fseek(fp, 0L, 2);
@@ -22,7 +22,7 @@ void History() {
 	fseek(fp, 0L, 0);
 	if(ftell(fp) == way) {
 		printf("%s",LANG[21]);
-		Input();
+		getch();
 		return;
 	}
 	fseek(fp, 0L, 0);
@@ -48,11 +48,11 @@ void History() {
 			printf("\n");
 		}
 		printf("%s",LANG[23]);
-		b = Input();
+		b = getch();
 		if (b == 0x1B) {
-			if (KbhitHas() == 1) {
+			if (kbhit() == 1) {
 				getchar();
-				b = Input();
+				b = getch();
 				if (b == 0x41 || b == 0x44) {
 					b = 0x4C;
 				}
@@ -74,7 +74,7 @@ void History() {
 			case 0x6C:
 				if (count == 0) {
 					printf("\033[s");
-					KbhitNoTime();
+					kbhitGetchar();
 					pid = fork();
 					if(pid == 0) {
 						system("sleep 0.001");
@@ -99,7 +99,7 @@ void History() {
 			case 0x6E:
 				if (ftell(fp) >= way) {
 					printf("\033[s");
-					KbhitNoTime();
+					kbhitGetchar();
 					pid = fork();
 					if(pid == 0) {
 						system("sleep 0.001");
@@ -133,7 +133,7 @@ void History() {
 				count--;
 				break;
 		}
-		KbhitNoTime();
+		kbhitGetchar();
 		printf("\033[0m\033[2;1H");
 	}
 	fclose(fp);

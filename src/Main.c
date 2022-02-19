@@ -47,11 +47,11 @@ int main() {
 				printf("\033[8;%dH\033[1;33m5.Setting(设置)\033[8;%dH0.Quit the game\033[0m", startSize, startSize + 32);
 			}
 		}
-		KbhitNoTime();
+		kbhitGetchar();
 		Menu(LANG[12],currentPage,2);
-		KbhitNoTime();
+		kbhitGetchar();
 
-		inputContent = Input();
+		inputContent = getch();
 		printf("\n\n\n\n");
 		Clear2
 		switch (inputContent) {
@@ -63,7 +63,7 @@ int main() {
 				return 0;
 				break;
 			case 0x1B:
-				if (KbhitHas() == 1) {
+				if (kbhit() == 1) {
 					getchar();
 					inputContent = getchar();
 					if (inputContent == 0x41 || inputContent == 0x44) {
@@ -107,12 +107,12 @@ int main() {
 					printf("\033[7;%dH Press 0,q,Q to exit \033[8;%dHW S A D or arrow keys to control up and down, space to play \033[9;%dH@ for black, O for white, + for blank", startSize, startSize, startSize);
 					Menu2("Game Help");
 				}
-				Input();
+				getch();
 				break;
 			case 0x34:
 				Clear
 				printf("%s",LANG[5]);
-				inputContent = Input();
+				inputContent = getch();
 				if (strcmp(Save,"/usr/local/cgame2/data/save.txt") != 0) {
 					printf("%s",LANG[4]);
 				}
@@ -120,7 +120,7 @@ int main() {
 					fp = fopen(Save, "w");
 					if(!fp) {
 						perror(LANG[1]);
-						Input();
+						getch();
 					}
 					else {
 						fclose(fp);
@@ -128,7 +128,7 @@ int main() {
 					fp = fopen(Config,"w");
 					if(!fp) {
 						perror(LANG[0]);
-						Input();
+						getch();
 					}
 					else {
 						fprintf(fp, "1 0 0 15");
@@ -140,7 +140,7 @@ int main() {
 					remove(Config);
 					remove("cgame2-data");
 					printf("%s",LANG[2]);
-					inputContent = Input();
+					inputContent = getch();
 					if (inputContent != 0x4E && inputContent != 0x6E) {
 						free(p);
 						printf("\033[?25h\n");
@@ -157,7 +157,7 @@ int main() {
 						Max = 15;
 						if (!fp) {
 							perror("\033[1;31m[init](Config): fopen\033[0m");
-							Input();
+							getch();
 							exit(1);
 						}
 						fprintf(fp, "%d %d %d %d", config[0], config[1], config[2], Max);

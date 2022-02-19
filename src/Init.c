@@ -29,7 +29,7 @@ void Init() {
 		fp = fopen(Config,"w");
 		if (!fp) {
 			perror("\033[1;31m[init](Config): fopen\033[0m");
-			Input();
+			getch();
 			exit(1);
 		}
 		fprintf(fp, "1 0 %d 15",config[2]);
@@ -56,7 +56,7 @@ void Init() {
 		mkdir("./cgame2-data/", 0777);
 		if (access("cgame2-data", 0) == EOF) {
 			perror("\033[1;31m[init](mkdir)创建文件夹失败Failed to create folder\033[0m");
-			Input();
+			getch();
 			exit(1);
 		}
 		if (access(Config,0) == EOF) {
@@ -67,7 +67,7 @@ void Init() {
 			Max = 15;
 			if (!fp) {
 				perror("\033[1;31m[init](Config): fopen\033[0m");
-				Input();
+				getch();
 				exit(1);
 			}
 			fprintf(fp, "%d %d %d %d", config[0], config[1], config[2], Max);
@@ -92,7 +92,7 @@ void Init() {
 			Max = 15;
 			if (!fp) {
 				perror("\033[1;31m[init](Config): fopen\033[0m");
-				Input();
+				getch();
 				exit(1);
 			}
 			fprintf(fp, "%d %d %d %d", config[0], config[1], config[2], Max);
@@ -109,7 +109,7 @@ void Init() {
 		fp = fopen(Save,"w");
 		if (!fp) {
 			perror("\033[1;31m[init](Save): fopen\033[0m");
-			Input();
+			getch();
 			exit(1);
 		}
 		fclose(fp);

@@ -28,11 +28,11 @@ void Game() {
 		}
 		while (pid == 0) {
 			printf("\033[s\033[1;1H");
-			KbhitNoTime();
+			kbhitGetchar();
 			GetNowTime();
 			printf(NowTime);
 			printf("\033[u");
-			KbhitNoTime();
+			kbhitGetchar();
 			sleep(1);
 		}
 		PrintBoard();
@@ -55,7 +55,7 @@ void Game() {
 		else {
 			printf("\033[%d;%dH\033[1;37;40m>\033[0m",y + 2,x * 3 - 1);
 		}
-		way = Input();
+		way = getch();
 		printf("\033[%d;%dH\033[2m \033[0m",y + 2,x * 3 - 1);
 		switch (way) {
 			case 0x30:
@@ -65,7 +65,7 @@ void Game() {
 				pid = 1;
 				Clear
 				printf("%s",LANG[16]);
-				way = Input();
+				way = getch();
 				if (way == 0x59 || way == 0x79) {
 					for (count = 0; count < Max ; count++) {
 						for (count2= 0; count2 < Max; count2++) {
@@ -82,7 +82,7 @@ void Game() {
 				}
 				break;
 			case 0x1B:
-				way = KbhitHas();
+				way = kbhit();
 				if (way == 0) {
 					way = 0x1B;
 				}
@@ -127,7 +127,7 @@ void Game() {
 					pid = 1;
 					Clear
 					printf("%s",LANG[16]);
-					way = Input();
+					way = getch();
 					if (way == 0x59 || way == 0x79) {
 						for (count = 0; count < Max ; count++) {
 							for (count2= 0; count2 < Max; count2++) {
@@ -203,7 +203,7 @@ void Game() {
 							printf("%s",LANG[19]);
 						}
 						printf("%s",LANG[20]);
-						Input();
+						getch();
 					}
 					if (a == 1) {
 						AI();
@@ -223,7 +223,7 @@ void Game() {
 	fp = fopen(Save,"a");
 	if (!fp) {
 		perror("\033[1;31m[save]\033[0m");
-		Input();
+		getch();
 		return;
 	}
 	fprintf(fp,Time);
