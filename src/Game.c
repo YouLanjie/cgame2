@@ -9,37 +9,15 @@ void Game() {
 	int who = 1;           //现在下子的玩家
 	int a = 0;             //是否要使用AI下棋
 
-	pid_t pid = 1;
-
 	fp = fopen(Config, "r");
 	fscanf(fp, "%d", &a);
 	fclose(fp);
 	Clear
 	GetTime();
 	GetNowTime();
-	printf(NowTime);
+	printf(Time);
 
 	while(win != 1 && win != 2) {
-		if (pid == 1) {
-			pid = fork();
-			if (pid != 0) {
-				system("sleep 0.05");
-			}
-		}
-		while (pid == 0) {
-#ifdef __linux
-			printf("\033[s");
-#endif
-			gotoxy(1,1);
-			kbhitGetchar();
-			GetNowTime();
-			printf(NowTime);
-#ifdef __linux
-			printf("\033[u");
-#endif
-			kbhitGetchar();
-			sleep(1);
-		}
 		PrintBoard();
 		if (who == 1) {
 			printf("黑方下\n");
@@ -76,8 +54,6 @@ void Game() {
 			case 0x30:
 			case 0x51:
 			case 0x71:
-				kill(pid,1);
-				pid = 1;
 				Clear
 				fontColorSet(1,33);
 				printf("请确认退出！本次游戏将不会记录！（Y/n）\n");
@@ -89,7 +65,6 @@ void Game() {
 						}
 					}
 					Clear
-					kill(pid,1);
 					return;
 				}
 				else {
@@ -139,8 +114,6 @@ void Game() {
 					}
 				}
 				else {
-					kill(pid,1);
-					pid = 1;
 					Clear
 					fontColorSet(1,33);
 					printf("请确认退出！本次游戏将不会记录！（Y/n）\n");
@@ -152,7 +125,6 @@ void Game() {
 							}
 						}
 						Clear
-						kill(pid,1);
 						return;
 					}
 					else {
@@ -210,7 +182,6 @@ void Game() {
 					p -> y = y;
 					win = IfWin(5);
 					if (win == who) {
-						kill(pid,1);
 						Clear
 						fontColorSet(0,33);
 						printf("游戏结束，");

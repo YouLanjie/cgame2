@@ -32,7 +32,7 @@ void PrintBoard() {
 				fontColorSet(0,0);
 			}
 		}
-		fontColorSet(1,33); printf("|"); fontColorSet(0,0);
+		fontColorSet(1,33); printf("|\n"); fontColorSet(0,0);
 	}
 	fontColorSet(1,33);
 	for (count = 0; count < Max; count++) {

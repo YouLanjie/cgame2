@@ -12,7 +12,9 @@ int main() {
 	int inputContent = 0; /* 输入的内容 */
 	int currentPage = 1; /* 但前所处主菜单页面 */
 	int config[2] = {1, 0};    //配置选项
+#ifdef __linux
 	struct winsize size;
+#endif
 	int startSize = 0;
 
 	signal(SIGINT, stop);
@@ -23,8 +25,12 @@ int main() {
 	Clear2
 	while (inputContent != 0x1B && inputContent != 0x30 && inputContent != 0x51 && inputContent != 0x71) {
 		Init(p);
+#ifdef __linux
 		ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
 		startSize = size.ws_col / 2 - 20;
+#else
+		startSize = 56 / 2 -20
+#endif
 		fp = fopen(Config,"r");
 		fscanf(fp,"%d%d",&config[0],&config[1]);
 		fclose(fp);

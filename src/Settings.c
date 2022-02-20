@@ -1,92 +1,98 @@
 #include "../include/head.h"
-#include <stdio.h>
 
 void Settings() {
-	unsigned short x = 1,y = 1,iy = 1,ix = 1;  //x轴坐标 y轴坐标 计算y轴位置的坐标
+	unsigned short where = 1, a = 0;  //对应的位置
 	int config[3] = {0, 0, 0};    //存储选项
 	int inputContent = 0;    //输入
+#ifdef __linux
+	struct winsize size;
+#endif
+	int startSize = 0;
 
-	fp = fopen(Config, "r");
+	fp = fopen(Config, "r"); /* 读取文件 */
 	fscanf(fp, "%d%d%d", &config[0], &config[1], &config[2]);
 	fclose(fp);
-	gotoxy(2,25); fontColorSet(1,32); printf("游戏设置\n"); fontColorSet(1,33); printf("q键退出，退出保存\n");
-	printf("游戏时是否启用AI"); gotoxy(4,25); printf("( )"); fontColorSet(1,31); gotoxy(4,29); printf("|"); fontColorSet(0,0); printf("使用当前目录作为游戏目录"); gotoxy(4,50); printf("( )\n"); gotoxy(5,25) ;printf("( )");
-	kbhitGetchar();
-	for (int i = 1; i <= 3; i++) {  //i为循环中的临时变量
-		iy = i / 2 + 3;
-		if (i % 2 != 0) {
-			iy = (i + 1) / 2 + 3;
-			ix = 26;
+#ifdef __linux
+		printf("\033[?25h");
+#endif
+#ifdef __linux
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+		startSize = size.ws_col / 2 - 20;
+#else
+		startSize = 56 / 2 -20
+#endif
+	/* 打印菜单 */
+	while (inputContent != 'q' && inputContent != 'Q' && inputContent != 'w' && inputContent != 'W' && inputContent != 0x1B) {
+		Clear2
+		/* 显示菜单 */
+		Menu("游戏设置", 1, 1);
+		fontColorSet(1,33); gotoxy(3,startSize); printf("q键退出，退出保存\n");
+		fontColorSet(0,0); gotoxy(8, startSize); printf("自动下棋 ( )"); gotoxy(8,startSize + 32); printf("当前目录 ( )"); gotoxy(9, startSize); printf("棋盘大小：%d", config[2]);
+		kbhitGetchar();
+		/* 显示状态 */
+		for (int i = 1; i <= 2; i++) {
+			if (i % 2) {
+				i++;
+				a = 1;
+			}
+			else {
+				a = 0;
+			}
+			if (config[i - 1 - a] == 1) {
+				gotoxy(i / 2 + 7, startSize + 10 + (i + 1 - a) % 2 * 32); fontColorSet(1,31);
+				printf("*");
+				fontColorSet(1,31);
+			}
+			else {
+				gotoxy(i / 2 + 7, startSize + 10 + (i + 1 - a) % 2 * 32); fontColorSet(0,0);
+				printf(" ");
+			}
+			i -= a;
+			kbhitGetchar();
+		}
+		if (where % 2) {
+			gotoxy((where + 1) / 2 + 7, startSize + 10 + (where + 1) % 2 * 32);
 		}
 		else {
-			ix = 51;
+			gotoxy(where / 2 + 7, startSize + 10 + (where + 1) % 2 * 32);
 		}
-		if (config[i - 1] == 1) {
-			gotoxy(iy, ix); fontColorSet(1,31);
-			printf("*");
-			fontColorSet(1,31);
-		}
-	}
-	gotoxy(y + 3,x * 25 + 1);
-	kbhitGetchar();
-	while (inputContent != 'q' && inputContent != 'Q' && inputContent != 'w' && inputContent != 'W' && inputContent != 0x1B) {
+		kbhitGetchar();
 		inputContent = getch();
+		/* 更改状态 */
 		if (inputContent == 0x1B) {
 			if (kbhit() == 1) {
 				kbhitGetchar();
 				inputContent = getchar();
 			}
 		}
-		if (inputContent == 'D' && x > 1) {
-			x--;
+		if (inputContent == 'D' && where > 1) {
+			where--;
 		}
-		else if (inputContent == 'C' && x < 2) {
-			x++;
+		else if (inputContent == 'C' && where < 3) {
+			where++;
 		}
-		else if (inputContent == 'A' && y > 1) {
-			y--;
+		else if (inputContent == 'A' && where > 2) {
+			where -= 2;
 		}
-		else if (inputContent == 'B' && y < 2) {
-			y++;
-		}
-		else if (inputContent == 0x0A || inputContent == 0x20) {
-			config[2 * (y - 1) + x - 1] = 1 - config[2 * (y - 1) + x - 1];
-		}
-		if (x == 2 && y ==2) {
-			x = 1;
-		}
-		Clear
-#ifdef __linux
-		printf("\033[?25h");
-#endif
-		gotoxy(2,25); fontColorSet(1,32); printf("游戏设置\n"); fontColorSet(1,33); printf("q键退出，退出保存\n");
-		printf("游戏时是否启用AI"); gotoxy(4,25); printf("( )"); fontColorSet(1,31); gotoxy(4,29); printf("|"); fontColorSet(0,0); printf("使用当前目录作为游戏目录"); gotoxy(4,50); printf("( )\n"); gotoxy(5,25) ;printf("( )");
-		kbhitGetchar();
-		for (int i = 1; i <= 3; i++) {
-			iy = i / 2 + 3;
-			if (i % 2 != 0) {
-				iy = (i + 1) / 2 + 3;
-				ix = 26;
+		else if (inputContent == 'B' && where < 3) {
+			where += 2;
+			if (where == 4) {
+				where = 3;
 			}
-			else {
-				ix = 51;
-			}
-			if (config[i - 1] == 1) {
-				gotoxy(iy, ix); fontColorSet(1,31);
-				printf("*");
-				fontColorSet(1,31);
-			}
-			else {
-				gotoxy(iy, ix); fontColorSet(0,0);
-				printf(" ");
-			}
-			kbhitGetchar();
 		}
-		gotoxy(y + 3,x * 25 + 1);
-		kbhitGetchar();
+		else if (inputContent == 0x0D || inputContent == 0x20) {
+			config[where - 1] = 1 - config[where - 1];
+		}
+		else if (inputContent == '+' && where == 3) {
+			config[2]++;
+		}
+		else if (inputContent == '-' && where == 3) {
+			config[2]--;
+		}
 	}
 	fp = fopen(Config, "w");
 	fprintf(fp,"%d %d %d", config[0], config[1], config[2]);
+	Max = config[2];
 	fclose(fp);
 #ifdef __linux
 	printf("\033[?25l");
