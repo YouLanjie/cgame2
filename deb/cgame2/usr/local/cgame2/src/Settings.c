@@ -1,85 +1,101 @@
 #include "../include/head.h"
 
 void Settings() {
-	unsigned short x = 1,y = 1,iy = 1,ix = 1;  //x轴坐标 y轴坐标 计算y轴位置的坐标
-	int config[4] = {0, 0, 0};    //存储选项
+	unsigned short where = 1, a = 0;  //对应的位置
 	int inputContent = 0;    //输入
+#ifdef __linux
+	struct winsize size;
+#endif
+	int startSize = 0;
+	FILE * fp;
 
-	fp = fopen(Config, "r");
-	fscanf(fp, "%d%d%d%d", &config[0], &config[1], &config[2], &config[3]);
+	fp = fopen(Config, "r"); /* 读取文件 */
+	fscanf(fp, "%d%d%d", &config[0], &config[1], &Max);
 	fclose(fp);
-	printf("%s",LANG[3]);
-	printf("%s",LANG[6]);
-	KbhitNoTime();
-	for (int i = 1; i <= 3; i++) {  //i为循环中的临时变量
-		iy = i / 2 + 3;
-		if (i % 2 != 0) {
-			iy = (i + 1) / 2 + 3;
-			ix = 26;
+#ifdef __linux
+		printf("\033[?25h");
+#endif
+#ifdef __linux
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+		startSize = size.ws_col / 2 - 20;
+#else
+		startSize = 56 / 2 -20
+#endif
+	/* 打印菜单 */
+	while (inputContent != 'q' && inputContent != 'Q' && inputContent != 'w' && inputContent != 'W' && inputContent != 0x1B) {
+		Clear2
+		/* 显示菜单 */
+		Menu("游戏设置", 1, 1);
+		fontColorSet(1,33); gotoxy(3,startSize); printf("q键退出，退出保存\n");
+		fontColorSet(0,0); gotoxy(8, startSize); printf("自动下棋 ( )"); gotoxy(8,startSize + 32); printf("当前目录 ( )"); gotoxy(9, startSize); printf("棋盘大小：%d", Max);
+		kbhitGetchar();
+		/* 显示状态 */
+		for (int i = 1; i <= 2; i++) {
+			if (i % 2) {
+				i++;
+				a = 1;
+			}
+			else {
+				a = 0;
+			}
+			if (config[i - 1 - a] == 1) {
+				gotoxy(i / 2 + 7, startSize + 10 + (i + 1 - a) % 2 * 32); fontColorSet(1,31);
+				printf("*");
+				fontColorSet(1,31);
+			}
+			else {
+				gotoxy(i / 2 + 7, startSize + 10 + (i + 1 - a) % 2 * 32); fontColorSet(0,0);
+				printf(" ");
+			}
+			i -= a;
+			kbhitGetchar();
+		}
+		if (where % 2) {
+			gotoxy((where + 1) / 2 + 7, startSize + 10 + (where + 1) % 2 * 32);
 		}
 		else {
-			ix = 51;
+			gotoxy(where / 2 + 7, startSize + 10 + (where + 1) % 2 * 32);
 		}
-		if (config[i - 1] == 1) {
-			printf("\033[1;31m\033[%d;%dH*\033[0m",iy,ix);
-		}
-	}
-	printf("\033[%d;%dH",y + 3,x * 25 + 1);
-	KbhitNoTime();
-	while (inputContent != 'q' && inputContent != 'Q' && inputContent != 'w' && inputContent != 'W' && inputContent != 0x1B) {
-		inputContent = Input();
+		kbhitGetchar();
+		inputContent = getch();
+		/* 更改状态 */
 		if (inputContent == 0x1B) {
-			if (KbhitHas() == 1) {
-				KbhitNoTime();
+			if (kbhit() == 1) {
+				kbhitGetchar();
 				inputContent = getchar();
 			}
 		}
-		if (inputContent == 'D' && x > 1) {
-			x--;
+		if (inputContent == 'D' && where > 1) {
+			where--;
 		}
-		else if (inputContent == 'C' && x < 2) {
-			x++;
+		else if (inputContent == 'C' && where < 3) {
+			where++;
 		}
-		else if (inputContent == 'A' && y > 1) {
-			y--;
+		else if (inputContent == 'A' && where > 2) {
+			where -= 2;
 		}
-		else if (inputContent == 'B' && y < 2) {
-			y++;
-		}
-		else if (inputContent == 0x0A || inputContent == 0x20) {
-			config[2 * (y - 1) + x - 1] = 1 - config[2 * (y - 1) + x - 1];
-		}
-		if (x == 2 && y ==2) {
-			x = 1;
-		}
-		Clear
-		printf("%s",LANG[3]);
-		printf("%s",LANG[6]);
-		KbhitNoTime();
-		for (int i = 1; i <= 3; i++) {
-			iy = i / 2 + 3;
-			if (i % 2 != 0) {
-				iy = (i + 1) / 2 + 3;
-				ix = 26;
+		else if (inputContent == 'B' && where < 3) {
+			where += 2;
+			if (where == 4) {
+				where = 3;
 			}
-			else {
-				ix = 51;
-			}
-			if (config[i - 1] == 1) {
-				printf("\033[1;31m\033[%d;%dH*\033[0m",iy,ix);
-			}
-			else {
-				printf("\033[0m\033[%d;%dH ",iy,ix);
-			}
-			KbhitNoTime();
 		}
-		printf("\033[%d;%dH",y + 3,x * 25 + 1);
-		KbhitNoTime();
+		else if (inputContent == 0x0D || inputContent == 0x20) {
+			config[where - 1] = 1 - config[where - 1];
+		}
+		else if (inputContent == '+' && where == 3) {
+			Max++;
+		}
+		else if (inputContent == '-' && where == 3) {
+			Max--;
+		}
 	}
 	fp = fopen(Config, "w");
-	fprintf(fp,"%d %d %d %d", config[0], config[1], config[2], config[3]);
+	fprintf(fp,"%d %d %d", config[0], config[1], Max);
+	Max = config[2];
 	fclose(fp);
+#ifdef __linux
 	printf("\033[?25l");
+#endif
 	return;
 }
-

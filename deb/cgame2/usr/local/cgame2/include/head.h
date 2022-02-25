@@ -1,10 +1,10 @@
 #include "include.h"                         //头文件
 #include <time.h>
 
-#define LANGFILELINE 33
+#define LANGFILELINE 33  /* 语言句数 */
 
 #define Time "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec,Max,Max //开局时间标准格式
-#define NowTime "\033[1;31m%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d\n",p -> nt.year,p -> nt.mon,p -> nt.day,p -> nt.hour,p -> nt.min,p -> nt.sec,Max,Max //现在时间标准格式
+#define NowTime "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d\n",p -> nt.year,p -> nt.mon,p -> nt.day,p -> nt.hour,p -> nt.min,p -> nt.sec,Max,Max //现在时间标准格式
 
 /* 定义结构体 */
 struct time {                                //存储时间信息
@@ -31,7 +31,9 @@ extern struct Chess *p;
 /* 文件位置 */
 extern char Save[];
 extern char Config[];
-extern FILE * fp;
+extern char * GameDir;
+
+extern int config[];
 
 extern int Max;//棋盘大小
 extern char LANG[LANGFILELINE][200];

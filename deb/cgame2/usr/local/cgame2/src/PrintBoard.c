@@ -4,30 +4,43 @@ void PrintBoard() {
 	int count;
 	int count2;
 
-	printf("\033[2;1H\033[1;33m-");
+	gotoxy(2,1);
+	fontColorSet(1,33);
+	printf("-");
 	for (count = 0; count < Max; count++) {
 		printf("---");
 	}
-	printf("-\033[0m\n");
+	printf("-\n");
+	fontColorSet(1,33);
+	kbhitGetchar();
 	for (count = 0; count < Max; count++) {    //打印棋盘
-		printf("\033[1;33m|\033[0m");
+		fontColorSet(1,33); printf("|"); fontColorSet(0,0);
 		for (count2= 0; count2 < Max; count2++) {
 			if (p -> board[count][count2] == 0) {
-				printf("\033[37;40;2m + \033[0m");
+				fontColorSet(0,2); fontColorSet(37,40);
+				printf(" + ");
+				fontColorSet(0,0);
 			}
 			else if (p -> board[count][count2] == 1) {
-				printf("\033[30;47m @ \033[0m");
+				fontColorSet(0,2); fontColorSet(30,47);
+				printf(" @ ");
+				fontColorSet(0,0);
 			}
 			else if (p -> board[count][count2] == 2) {
-				printf("\033[37;40m O \033[0m");
+				fontColorSet(0,2); fontColorSet(37,40);
+				printf(" O ");
+				fontColorSet(0,0);
 			}
 		}
-		printf("\033[1;33m|\033[0m\n");
+		fontColorSet(1,33); printf("|\n"); fontColorSet(0,0);
 	}
-	printf("\033[1;33m");
+	fontColorSet(1,33);
 	for (count = 0; count < Max; count++) {
 		printf("---");
 	}
-	printf("--\033[0m\n");
+	printf("--\n");
+	fontColorSet(0,0);
+	kbhitGetchar();
 	return;
 }
+

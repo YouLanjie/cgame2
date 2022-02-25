@@ -10,38 +10,56 @@
 /* system() srand() rand() malloc() free() exit() */
 #include <unistd.h>
 /* pause() */
-#include <sys/stat.h>
-/* pass */
-#include <sys/types.h>
-/* pass */
 #include <string.h>
 /* strcat() strcmp() strcpy() */
 #include <dirent.h>
-#include <sys/ioctl.h>
-
-#ifndef Clear
-	#define Clear printf("\033[2J\033[1;1H");
-#endif
-#ifndef Clear2
-	#define Clear2 system("clear");
-#endif
-
-/* kbhit */
-int Kbhit();
-int Input();
-int KbhitHas();
-int KbhitNoTime();
-
-/* menu */
-void Menu(char title[50], short p, short a);
-void Menu2(char title[50]);
-
-/* pid */
-/* #include <sys/types.h> */
-/* pid_t */
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <signal.h>
 /* signal() */
-#include <wait.h>
+#include <pthread.h>
+
+/* 预定义Linux要用到的东西 */
+#ifdef __linux
+	#include <sys/ioctl.h>
+	#include <wait.h>
+	#ifndef Clear
+		#define Clear printf("\033[2J\033[1;1H");
+	#endif
+	#ifndef Clear2
+		#define Clear2 system("clear");
+	#endif
+	#ifndef fontColorSet
+		#define fontColorSet(a,b) printf("\033[%d;%dm",a, b)
+	#endif
+	#ifndef gotoxy
+		#define gotoxy(x,y) printf("\033[%d;%dH",x, y)
+	#endif
+	/* kbhit */
+	int getch();
+	int kbhit();
+#endif
+/* 预定义windows要用到的东西 */
+#ifdef _WIN32
+	#include <windows.h>
+	#include <conio.h>
+	#ifndef Clear
+		#define Clear system("cls");
+		#define Clear2 system("cls");
+	#endif
+	#ifndef fontColorSet
+		#define fontColorSet(a,b) (a + b)
+	#endif
+	void gotoxy(int x,int y);
+#endif
+
+
+/* kbhit */
+int kbhitGetchar();
+
+/* menu */
+void Menu(char title[], short p, short a);
+void Menu2(char title[]);
 
 #endif
 

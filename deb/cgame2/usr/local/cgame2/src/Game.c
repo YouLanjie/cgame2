@@ -1,5 +1,9 @@
 #include "../include/head.h"
 
+#ifdef __linux
+static void * showTime();
+#endif
+
 void Game() {
 	int count,count2;      //用于计数
 	int error = 0;         //记录错误
@@ -8,64 +12,73 @@ void Game() {
 	int win  = 0;          //赢家，1黑，2白
 	int who = 1;           //现在下子的玩家
 	int a = 0;             //是否要使用AI下棋
-
-	pid_t pid = 1;
+	FILE * fp;
+	pthread_t pid;
 
 	fp = fopen(Config, "r");
 	fscanf(fp, "%d", &a);
 	fclose(fp);
 	Clear
 	GetTime();
-	GetNowTime();
-	printf(NowTime);
 
+#ifdef __linux
+	pthread_create(&pid, NULL, showTime, NULL);
+	Clear2
+	GetNowTime();
+	gotoxy(1, 1);
+	fontColorSet(1,31);
+	printf(NowTime);
+#endif
+#ifdef _WIN32
+	gotoxy(1, 1);
+	fontColorSet(1,31);
+	printf(Time);
+#endif
 	while(win != 1 && win != 2) {
-		if (pid == 1) {
-			pid = fork();
-			if (pid != 0) {
-				system("sleep 0.05");
-			}
-		}
-		while (pid == 0) {
-			printf("\033[s\033[1;1H");
-			KbhitNoTime();
-			GetNowTime();
-			printf(NowTime);
-			printf("\033[u");
-			KbhitNoTime();
-			sleep(1);
-		}
+		gotoxy(2,1);
 		PrintBoard();
 		if (who == 1) {
-			printf("%s",LANG[13]);
+			printf("黑方下\n");
 		}
 		else if (who == 2) {
-			printf("%s",LANG[14]);
+			printf("白方下\n");
 		}
 		if (error == 1) {
-			printf("%s",LANG[15]);
+			fontColorSet(1,33);
+			gotoxy(20,1);
+			printf("你不能下在非空的格子!\n");
+			fontColorSet(0,0);
 			error = 0;
 		}
 		if (p -> board[y - 1][x - 1] == 1) {
-			printf("\033[%d;%dH\033[30;47m>\033[0m",y + 2,x * 3 - 1);
+			gotoxy(y + 2, x * 3 - 1); fontColorSet(30, 47);
+			printf(">");
+			fontColorSet(0,0);
 		}
 		else if (p -> board[y - 1][x - 1] == 2) {
-			printf("\033[%d;%dH\033[1;37;40m>\033[0m",y + 2,x * 3 - 1);
+			gotoxy(y + 2, x * 3 - 1); fontColorSet(0,1); fontColorSet(37, 40);
+			printf(">");
+			fontColorSet(0,0);
 		}
 		else {
-			printf("\033[%d;%dH\033[1;37;40m>\033[0m",y + 2,x * 3 - 1);
+			gotoxy(y + 2, x * 3 - 1); fontColorSet(0,1); fontColorSet(37, 40);
+			printf(">");
+			fontColorSet(0,0);
 		}
-		way = Input();
-		printf("\033[%d;%dH\033[2m \033[0m",y + 2,x * 3 - 1);
+		way = getch();
+		gotoxy(y + 2, x * 3 - 1);
+		printf(" ");
 		switch (way) {
 			case 0x30:
 			case 0x51:
 			case 0x71:
-				kill(pid,1);
-				pid = 1;
+#ifdef __linux
+				pthread_cancel(pid);
+#endif
 				Clear
-				printf("%s",LANG[16]);
-				way = Input();
+				fontColorSet(1,33);
+				printf("请确认退出！本次游戏将不会记录！（Y/n）\n");
+				way = getch();
 				if (way == 0x59 || way == 0x79) {
 					for (count = 0; count < Max ; count++) {
 						for (count2= 0; count2 < Max; count2++) {
@@ -73,16 +86,18 @@ void Game() {
 						}
 					}
 					Clear
-					kill(pid,1);
 					return;
 				}
 				else {
 					way = 0x00;
+#ifdef __linux
+					pthread_create(&pid, NULL, showTime, NULL);
+#endif
 					Clear
 				}
 				break;
 			case 0x1B:
-				way = KbhitHas();
+				way = kbhit();
 				if (way == 0) {
 					way = 0x1B;
 				}
@@ -123,11 +138,13 @@ void Game() {
 					}
 				}
 				else {
-					kill(pid,1);
-					pid = 1;
+#ifdef __linux
+					pthread_cancel(pid);
+#endif
 					Clear
-					printf("%s",LANG[16]);
-					way = Input();
+					fontColorSet(1,33);
+					printf("请确认退出！本次游戏将不会记录！（Y/n）\n");
+					way = getch();
 					if (way == 0x59 || way == 0x79) {
 						for (count = 0; count < Max ; count++) {
 							for (count2= 0; count2 < Max; count2++) {
@@ -135,11 +152,13 @@ void Game() {
 							}
 						}
 						Clear
-						kill(pid,1);
 						return;
 					}
 					else {
 						way = 0x00;
+#ifdef __linux
+						pthread_create(&pid, NULL, showTime, NULL);
+#endif
 						Clear
 					}
 					break;
@@ -193,17 +212,23 @@ void Game() {
 					p -> y = y;
 					win = IfWin(5);
 					if (win == who) {
-						kill(pid,1);
+#ifdef __linux
+	pthread_cancel(pid);
+#endif
 						Clear
-						printf("%s",LANG[17]);
+						fontColorSet(0,33);
+						printf("游戏结束，");
 						if (who == 1) {
-							printf("%s",LANG[18]);
+							printf("黑方");
 						}
 						else if (who == 2) {
-							printf("%s",LANG[19]);
+							printf("白方");
 						}
-						printf("%s",LANG[20]);
-						Input();
+						printf("胜利！\n");
+						fontColorSet(0,31);
+						printf("按Enter返回\n");
+						fontColorSet(0,0);
+						getch();
 					}
 					if (a == 1) {
 						AI();
@@ -222,8 +247,9 @@ void Game() {
 	}
 	fp = fopen(Save,"a");
 	if (!fp) {
-		perror("\033[1;31m[save]\033[0m");
-		Input();
+		fontColorSet(1,31);
+		perror("[save]");
+		fontColorSet(0,0);
 		return;
 	}
 	fprintf(fp,Time);
@@ -244,4 +270,17 @@ void Game() {
 	Clear
 	return;
 }
+
+#ifdef __linux
+static void * showTime() {
+	while(1) {
+		GetNowTime();
+		gotoxy(1, 1);
+		fontColorSet(1,31);
+		printf(NowTime);
+		sleep(1);
+	}
+	pthread_exit(0);
+}
+#endif
 
