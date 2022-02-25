@@ -5,7 +5,7 @@ void History() {
 	int b = 0;              //选择
 	char board[52][50];     //棋盘信息
 	long way = 0;           //文件的大小
-	pid_t pid;
+	FILE * fp;
 
 	fp = fopen(Save,"rb");
 	if (!fp) {
@@ -26,7 +26,7 @@ void History() {
 	}
 	fseek(fp, 0L, 0);
 	for (count = 0; ftell(fp) <= way; count++) {
-		Clear
+		Clear2
 		fgets(board[0],50,fp);
 		for (int i = 1; board[i - 1][0] != '\n' && board[i - 1][0] != EOF && i < 52 && ftell(fp) <= way; i++) {
 			fgets(board[i],50,fp);
@@ -82,21 +82,6 @@ void History() {
 			case 0x4C:
 			case 0x6C:
 				if (count == 0) {
-#ifdef __linux
-					printf("\033[s");
-#endif
-					kbhitGetchar();
-					pid = fork();
-					if(pid == 0) {
-						system("sleep 0.001");
-						fontColorSet(0,33);
-#ifdef __linux
-						printf("\033[u");
-#endif
-						printf("这已经是第一个记录了\n");
-						fontColorSet(0,0);
-						exit(0);
-					}
 					fseek(fp,0L,0);
 					count = -1;
 				}
@@ -114,20 +99,6 @@ void History() {
 			case 0x4E:
 			case 0x6E:
 				if (ftell(fp) >= way) {
-#ifdef __linux
-					printf("\033[s");
-#endif
-					kbhitGetchar();
-					pid = fork();
-					if(pid == 0) {
-						system("sleep 0.001");
-#ifdef __linux
-						printf("\033[u");
-#endif
-						fontColorSet(0,33);
-						printf("这已经是最后一个记录了\n");
-						exit(0);
-					}
 					fseek(fp, 0L, 0);
 					for (int i = 0; i < count && ftell(fp) <= way; i++) {
 						fgets(board[0],50,fp);

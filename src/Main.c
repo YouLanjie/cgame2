@@ -3,8 +3,10 @@
 struct Chess *p;
 
 /* 文件位置 */
-char Save[] = "/usr/local/cgame2/data/save.txt";
-char Config[] = "/usr/local/cgame2/data/config.txt";
+char Save[] = "/usr/local/cgame2/save.txt";
+char Config[] = "/usr/local/cgame2/config.txt";
+char * GameDir = "/usr/local/cgame2/";
+int config[] = {0, 0};
 int Max = 15;
 FILE * fp;
 
@@ -31,9 +33,6 @@ int main() {
 #else
 		startSize = 56 / 2 -20
 #endif
-		fp = fopen(Config,"r");
-		fscanf(fp,"%d%d",&config[0],&config[1]);
-		fclose(fp);
 		fontColorSet(1,33);
 		if (currentPage == 1){
 			gotoxy(8, startSize); printf("1.开始游戏"); gotoxy(8, startSize + 32); printf("2.游戏记录"); gotoxy(9, startSize); printf("3.游戏帮助"); gotoxy(9, startSize + 32); printf("4.清除存档");
@@ -47,7 +46,7 @@ int main() {
 		kbhitGetchar();
 
 		inputContent = getch();
-		printf("\n\n\n\n");
+		printf("\n");
 		Clear2
 		switch (inputContent) {
 			case 0x30:
@@ -96,8 +95,12 @@ int main() {
 				History(p);
 				break;
 			case 0x33:
+#ifdef __linux
 				ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
 				startSize = size.ws_col / 2 - 20;
+#else
+				startSize = 56 / 2 -20
+#endif
 				gotoxy(7, startSize); printf("按下0,q,Q退出"); gotoxy(8, startSize); printf("W S A D或者方向键控制上下左右，空格下子"); gotoxy(9, startSize); printf("@为黑棋,O为白棋,+为空白");
 				Menu2("游戏帮助");
 				getch();
@@ -107,36 +110,10 @@ int main() {
 				fontColorSet(1,33);
 				printf("请确清除存档，您将失去您的所有记录！（Y/n）\n");
 				inputContent = getch();
-				if (strcmp(Save,"/usr/local/cgame2/data/save.txt") != 0) {
-					printf("\n由于使用的是当前目录，所以会删除数据文件夹\n");
-				}
-				if (inputContent == 0x59 || inputContent == 0x79) {
-					fp = fopen(Save, "w");
-					if(!fp) {
-						fontColorSet(1,31);
-						perror("[main](remove Save): ");
-						fontColorSet(0,0);
-						getch();
-					}
-					else {
-						fclose(fp);
-					}
-					fp = fopen(Config,"w");
-					if(!fp) {
-						fontColorSet(1,31);
-						perror("[main](remove Config): ");
-						fontColorSet(0,0);
-						getch();
-					}
-					else {
-						fprintf(fp, "1 0 15");
-						fclose(fp);
-					}
-				}
-				if ((inputContent == 0x59 || inputContent == 0x79) && strcmp(Save,"/usr/local/cgame2/data/save.txt") != 0) {
-					remove(Save);
-					remove(Config);
-					remove("cgame2-data");
+				remove(Save);
+				remove(Config);
+				if (access("./cgame2-data/", 0) != EOF && config[1] == 1) {
+					remove("./cgame2-data");
 					printf("是否直接退出游戏?否则将重新创建目录!(默认退出)Y/n\n");
 					inputContent = getch();
 					if (inputContent != 0x4E && inputContent != 0x6E) {
@@ -146,29 +123,6 @@ int main() {
 #endif
 						Clear
 						return 0;
-					}
-					strcpy(Save, "/usr/local/cgame2/data/save.txt");
-					strcpy(Config, "/usr/local/cgame2/data/config.txt");
-					if (access(Config,0) == EOF) {
-						fp = fopen(Config,"w");
-						config[0] = 1;
-						config[1] = 0;
-						Max = 15;
-						if (!fp) {
-							fontColorSet(1,31);
-							perror("[init](Config): fopen");
-							fontColorSet(0,0);
-							getch();
-							exit(1);
-						}
-						fprintf(fp, "%d %d %d", config[0], config[1], Max);
-						fclose(fp);
-					}
-					else {
-						fp = fopen(Config,"w");
-						config[1] = 0;
-						fprintf(fp, "%d %d %d", config[0], config[1], Max);
-						fclose(fp);
 					}
 				}
 				Clear
@@ -199,6 +153,5 @@ void stop() {
 		fclose(fp);
 	}
 	Clear2
-	free(p);
 	exit(0);
 }

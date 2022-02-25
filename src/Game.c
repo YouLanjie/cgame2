@@ -1,5 +1,9 @@
 #include "../include/head.h"
 
+#ifdef __linux
+static void * showTime();
+#endif
+
 void Game() {
 	int count,count2;      //用于计数
 	int error = 0;         //记录错误
@@ -8,16 +12,30 @@ void Game() {
 	int win  = 0;          //赢家，1黑，2白
 	int who = 1;           //现在下子的玩家
 	int a = 0;             //是否要使用AI下棋
+	FILE * fp;
+	pthread_t pid;
 
 	fp = fopen(Config, "r");
 	fscanf(fp, "%d", &a);
 	fclose(fp);
 	Clear
 	GetTime();
-	GetNowTime();
-	printf(Time);
 
+#ifdef __linux
+	pthread_create(&pid, NULL, showTime, NULL);
+	Clear2
+	GetNowTime();
+	gotoxy(1, 1);
+	fontColorSet(1,31);
+	printf(NowTime);
+#endif
+#ifdef _WIN32
+	gotoxy(1, 1);
+	fontColorSet(1,31);
+	printf(Time);
+#endif
 	while(win != 1 && win != 2) {
+		gotoxy(2,1);
 		PrintBoard();
 		if (who == 1) {
 			printf("黑方下\n");
@@ -54,6 +72,9 @@ void Game() {
 			case 0x30:
 			case 0x51:
 			case 0x71:
+#ifdef __linux
+				pthread_cancel(pid);
+#endif
 				Clear
 				fontColorSet(1,33);
 				printf("请确认退出！本次游戏将不会记录！（Y/n）\n");
@@ -69,6 +90,9 @@ void Game() {
 				}
 				else {
 					way = 0x00;
+#ifdef __linux
+					pthread_create(&pid, NULL, showTime, NULL);
+#endif
 					Clear
 				}
 				break;
@@ -114,6 +138,9 @@ void Game() {
 					}
 				}
 				else {
+#ifdef __linux
+					pthread_cancel(pid);
+#endif
 					Clear
 					fontColorSet(1,33);
 					printf("请确认退出！本次游戏将不会记录！（Y/n）\n");
@@ -129,6 +156,9 @@ void Game() {
 					}
 					else {
 						way = 0x00;
+#ifdef __linux
+						pthread_create(&pid, NULL, showTime, NULL);
+#endif
 						Clear
 					}
 					break;
@@ -182,6 +212,9 @@ void Game() {
 					p -> y = y;
 					win = IfWin(5);
 					if (win == who) {
+#ifdef __linux
+	pthread_cancel(pid);
+#endif
 						Clear
 						fontColorSet(0,33);
 						printf("游戏结束，");
@@ -217,7 +250,6 @@ void Game() {
 		fontColorSet(1,31);
 		perror("[save]");
 		fontColorSet(0,0);
-		getch();
 		return;
 	}
 	fprintf(fp,Time);
@@ -238,4 +270,17 @@ void Game() {
 	Clear
 	return;
 }
+
+#ifdef __linux
+static void * showTime() {
+	while(1) {
+		GetNowTime();
+		gotoxy(1, 1);
+		fontColorSet(1,31);
+		printf(NowTime);
+		sleep(1);
+	}
+	pthread_exit(0);
+}
+#endif
 

@@ -17,6 +17,7 @@
 #include <sys/types.h>
 #include <signal.h>
 /* signal() */
+#include <pthread.h>
 
 /* 预定义Linux要用到的东西 */
 #ifdef __linux

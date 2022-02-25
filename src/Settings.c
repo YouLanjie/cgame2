@@ -2,15 +2,15 @@
 
 void Settings() {
 	unsigned short where = 1, a = 0;  //对应的位置
-	int config[3] = {0, 0, 0};    //存储选项
 	int inputContent = 0;    //输入
 #ifdef __linux
 	struct winsize size;
 #endif
 	int startSize = 0;
+	FILE * fp;
 
 	fp = fopen(Config, "r"); /* 读取文件 */
-	fscanf(fp, "%d%d%d", &config[0], &config[1], &config[2]);
+	fscanf(fp, "%d%d%d", &config[0], &config[1], &Max);
 	fclose(fp);
 #ifdef __linux
 		printf("\033[?25h");
@@ -27,7 +27,7 @@ void Settings() {
 		/* 显示菜单 */
 		Menu("游戏设置", 1, 1);
 		fontColorSet(1,33); gotoxy(3,startSize); printf("q键退出，退出保存\n");
-		fontColorSet(0,0); gotoxy(8, startSize); printf("自动下棋 ( )"); gotoxy(8,startSize + 32); printf("当前目录 ( )"); gotoxy(9, startSize); printf("棋盘大小：%d", config[2]);
+		fontColorSet(0,0); gotoxy(8, startSize); printf("自动下棋 ( )"); gotoxy(8,startSize + 32); printf("当前目录 ( )"); gotoxy(9, startSize); printf("棋盘大小：%d", Max);
 		kbhitGetchar();
 		/* 显示状态 */
 		for (int i = 1; i <= 2; i++) {
@@ -84,14 +84,14 @@ void Settings() {
 			config[where - 1] = 1 - config[where - 1];
 		}
 		else if (inputContent == '+' && where == 3) {
-			config[2]++;
+			Max++;
 		}
 		else if (inputContent == '-' && where == 3) {
-			config[2]--;
+			Max--;
 		}
 	}
 	fp = fopen(Config, "w");
-	fprintf(fp,"%d %d %d", config[0], config[1], config[2]);
+	fprintf(fp,"%d %d %d", config[0], config[1], Max);
 	Max = config[2];
 	fclose(fp);
 #ifdef __linux
