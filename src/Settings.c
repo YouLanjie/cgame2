@@ -19,7 +19,7 @@ void Settings() {
 		ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
 		startSize = size.ws_col / 2 - 20;
 #else
-		startSize = 56 / 2 -20
+		startSize = 56 / 2 -20;
 #endif
 	/* 打印菜单 */
 	while (inputContent != 'q' && inputContent != 'Q' && inputContent != 'w' && inputContent != 'W' && inputContent != 0x1B) {

@@ -31,7 +31,7 @@ int main() {
 		ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
 		startSize = size.ws_col / 2 - 20;
 #else
-		startSize = 56 / 2 -20
+		startSize = 56 / 2 -20;
 #endif
 		fontColorSet(1,33);
 		if (currentPage == 1){
@@ -99,7 +99,7 @@ int main() {
 				ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
 				startSize = size.ws_col / 2 - 20;
 #else
-				startSize = 56 / 2 -20
+				startSize = 56 / 2 -20;
 #endif
 				gotoxy(7, startSize); printf("按下0,q,Q退出"); gotoxy(8, startSize); printf("W S A D或者方向键控制上下左右，空格下子"); gotoxy(9, startSize); printf("@为黑棋,O为白棋,+为空白");
 				Menu2("游戏帮助");

@@ -13,7 +13,9 @@ void Game() {
 	int who = 1;           //现在下子的玩家
 	int a = 0;             //是否要使用AI下棋
 	FILE * fp;
+#ifdef __linux
 	pthread_t pid;
+#endif
 
 	fp = fopen(Config, "r");
 	fscanf(fp, "%d", &a);
@@ -33,6 +35,11 @@ void Game() {
 	gotoxy(1, 1);
 	fontColorSet(1,31);
 	printf(Time);
+	for (count = 0; count < Max ; count++) {
+		for (count2= 0; count2 < Max; count2++) {
+			p -> board[count][count2] = 0;
+		}
+	}
 #endif
 	while(win != 1 && win != 2) {
 		gotoxy(2,1);
@@ -50,6 +57,7 @@ void Game() {
 			fontColorSet(0,0);
 			error = 0;
 		}
+#ifdef __linux
 		if (p -> board[y - 1][x - 1] == 1) {
 			gotoxy(y + 2, x * 3 - 1); fontColorSet(30, 47);
 			printf(">");
@@ -65,6 +73,11 @@ void Game() {
 			printf(">");
 			fontColorSet(0,0);
 		}
+#endif
+#ifdef _WIN32
+	gotoxy(y + 2, x * 3 - 2);
+	printf(">");
+#endif
 		way = getch();
 		gotoxy(y + 2, x * 3 - 1);
 		printf(" ");

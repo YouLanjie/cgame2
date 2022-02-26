@@ -7,9 +7,11 @@ void Init() {
 
 #ifdef _WIN32
 	changeDir("./cgame2-data/");
+	config[1] = 1;
 #endif
 	if (access(GameDir, 0) == EOF) {
 		changeDir("./cgame2-data/");
+		config[1] = 1;
 		if (access(GameDir, 0) == EOF) {
 #ifdef __linux
 			mkdir(GameDir, 0777);
@@ -44,6 +46,7 @@ void Init() {
 			exit(-1);
 		}
 		if (fscanf(fp, "%d%d%d", &config[0], &config[1], &Max) == EOF) {
+			perror("[init](Config): fscanf");
 			fclose(fp);
 			fp = fopen(Config, "w");
 			config[0] = config[1] = 0;
@@ -56,10 +59,12 @@ void Init() {
 		changeDir("./cgame2-data/");
 		Init();
 	}
+#ifdef __linux
 	else if (config[1] == 0 && strcmp(Config, "./cgame2-data/config.txt") == 0) {
 		changeDir("/usr/local/cgame2/");
 		Init();
 	}
+#endif
 	if(access(Save, 0) == EOF) {       /*创建Save文件*/
 		fp = fopen(Save,"w");
 		if (!fp) {
