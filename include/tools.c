@@ -2,6 +2,8 @@
 #include <string.h>
 #include <unistd.h>
 
+/* ===================== 通用 ======================= */
+
 /* ===================== Linux ======================= */
 #ifdef __linux
 	#include <termios.h>

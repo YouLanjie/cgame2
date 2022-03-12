@@ -27,6 +27,10 @@ int main() {
 	Clear2
 	while (inputContent != 0x1B && inputContent != 0x30 && inputContent != 0x51 && inputContent != 0x71) {
 		Init(p);
+		if ((fp = fopen(Config, "r"))) {
+			fscanf(fp,"%d%d%d", &config[0], &config[1], &Max);
+			fclose(fp);
+		}
 #ifdef __linux
 		ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
 		startSize = size.ws_col / 2 - 20;
@@ -82,10 +86,28 @@ int main() {
 				else {
 					free(p);
 #ifdef __linux
-				printf("\033[?25h");
+					printf("\033[?25h");
 #endif
 					return 0;
 					break;
+				}
+				break;
+			case 0x57:
+			case 0x77:
+				if (currentPage > 1) {
+					currentPage--;
+				}
+				else {
+					printf("\a");
+				}
+				break;
+			case 0x53:
+			case 0x73:
+				if (currentPage < 2) {
+					currentPage++;
+				}
+				else {
+					printf("\a");
 				}
 				break;
 			case 0x31:
@@ -110,19 +132,27 @@ int main() {
 				fontColorSet(1,33);
 				printf("请确清除存档，您将失去您的所有记录！（Y/n）\n");
 				inputContent = getch();
-				remove(Save);
-				remove(Config);
-				if (access("./cgame2-data/", 0) != EOF && config[1] == 1) {
-					remove("./cgame2-data");
-					printf("是否直接退出游戏?否则将重新创建目录!(默认退出)Y/n\n");
-					inputContent = getch();
-					if (inputContent != 0x4E && inputContent != 0x6E) {
-						free(p);
+				if (inputContent == 'y' || inputContent == 'Y') {
+					remove(Save);
+					remove(Config);
+					if (access("./cgame2-data/", 0) != EOF && config[1] == 1) {
+						remove("./cgame2-data");
+						config[1] = 0;
+						changeDir("/usr/local/cgame2/");
+						if ((fp = fopen(Config, "w"))) {
+							fprintf(fp,"%d %d %d", config[0], config[1], Max);
+							fclose(fp);
+						}
+						printf("是否直接退出游戏?否则将重新创建目录!(默认退出)Y/n\n");
+						inputContent = getch();
+						if (inputContent != 0x4E && inputContent != 0x6E) {
+							free(p);
 #ifdef __linux
-						printf("\033[?25h\n");
+							printf("\033[?25h\n");
 #endif
-						Clear
-						return 0;
+							Clear
+							return 0;
+						}
 					}
 				}
 				Clear

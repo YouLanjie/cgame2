@@ -7,13 +7,17 @@
   - [x] Ubuntu Linux
   - [ ] Debian Linux
   - [ ] Deepin Linux
-- 支持两种语言： 汉语、英语
+
+- 支持的系统
+  - [x] Linux
+  - [x] Windows (使用gcc在VScode中运行)
 
 ## 使用
 
 - 通过源代码
-  - 必要的软件:***gcc***
-    - 如果没有，Debian Linux or Ubuntu Linux使用以下命令安装gcc
+  - 建议安装的软件: ***make、git***
+  - 需要的软件: ***gcc***
+    - 如果没有，Debian Linux or Ubuntu Linux可以使用以下命令安装gcc
 
       ``` sh
       sudo apt install gcc
@@ -26,7 +30,7 @@
       git clone https://github.com/youlanjie/cgame2.git
       ```
 
-    - 或者从[这里](https://github.com/YouLanjie/cgame2/archive/refs/heads/main.zip)下载压缩包并解压
+    - 或者从[这里下载压缩包](https://github.com/YouLanjie/cgame2/archive/refs/heads/main.zip)并解压
   - 编译
     - 使用make编译，文件会生成在bin目录下：
 
@@ -34,19 +38,18 @@
       make
       ```
 
-    - 或者 **进入cgame2/src/** 目录，使用gcc编译所有c文件：
+    - 或者在 *cgame2* 文件夹下直接使用gcc编译所有c文件：
 
       ``` sh
-      gcc *.c */*.c -o main
+      gcc include/tools.c *.c -o main
       ```
 
-    - 安装程序：
+    - 安装软件到 */usr/local/cgame2* 下：
 
       ```sh
       make && make install
       ```
 
 
-- 编译好的文件(bin/main)可以直接执行，程序做过兼容性的加强
+- 手动编译好的文件(**bin/main**)可以直接执行，程序做过兼容性的加强
 
-- 其实在仓库的母文件夹下的bin目录就存放着已经编译好了的ELF文件，只要你的CPU架构是x86\_64的，就可以直接执行

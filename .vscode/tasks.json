@@ -15,8 +15,7 @@
                                 "${fileDirname}/Init.c",
                                 "${fileDirname}/PrintBoard.c",
                                 "${fileDirname}/Settings.c",
-                                "${fileDirname}/tool/kbhit.c",
-                                "${fileDirname}/tool/menu.c",
+                                "${fileDirname}/../include/tools.c",
                                 "-o",
                                 "${fileDirname}/../bin/main"
                         ],

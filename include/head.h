@@ -41,6 +41,7 @@ extern char LANG[LANGFILELINE][200];
 /* 定义函数 */
 int IfWin(int c);//是否胜利，返回1黑方胜，返回2白方胜
 void Init();//初始化：创建文件、选择语言
+void changeDir(char * dir);//用于更改游戏目录
 void Game();//游戏主体
 void AI();//AI下棋
 void History();//查看历史局数信息

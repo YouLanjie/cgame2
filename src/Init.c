@@ -1,8 +1,7 @@
 #include "../include/head.h"
 
-static void changeDir(char * dir);
-
 void Init() {
+	int error = 0;
 	FILE * fp;
 
 #ifdef _WIN32
@@ -20,8 +19,9 @@ void Init() {
 			mkdir(GameDir);
 #endif
 		}
+		config[1] = 1;
 		fp = fopen(Config, "w+");
-		fprintf(fp, "%d %d %d",config[0], config[2], Max);
+		fprintf(fp, "%d %d %d",config[0], config[1], Max);
 		fclose(fp);
 	}
 	if(access(Config,0) == EOF) {       /* 创建Config文件 */
@@ -33,7 +33,7 @@ void Init() {
 			perror("[init](Config): fopen");
 			exit(-1);
 		}
-		fprintf(fp, "%d %d %d",config[0], config[2], Max);
+		fprintf(fp, "%d %d %d",config[0], config[1], Max);
 		fclose(fp);
 	}
 	else {
@@ -45,23 +45,32 @@ void Init() {
 			perror("Can't open file");
 			exit(-1);
 		}
-		if (fscanf(fp, "%d%d%d", &config[0], &config[1], &Max) == EOF) {
+		error = fscanf(fp,"%d%d%d", &config[0], &config[1], &Max);
+		if (error == EOF) {
 			perror("[init](Config): fscanf");
 			fclose(fp);
 			fp = fopen(Config, "w");
 			config[0] = config[1] = 0;
 			Max = 15;
-			fprintf(fp, "%d %d %d",config[0], config[2], Max);
+			fprintf(fp, "%d %d %d",config[0], config[1], Max);
 		}
 		fclose(fp);
 	}
 	if (config[1] == 1 && strcmp(Config, "/usr/local/cgame2/config.txt") == 0) {
 		changeDir("./cgame2-data/");
+		if ((fp = fopen(Config, "w"))) {
+			fprintf(fp,"%d %d %d", config[0], config[1], Max);
+			fclose(fp);
+		}
 		Init();
 	}
 #ifdef __linux
 	else if (config[1] == 0 && strcmp(Config, "./cgame2-data/config.txt") == 0) {
 		changeDir("/usr/local/cgame2/");
+		if ((fp = fopen(Config, "w"))) {
+			fprintf(fp,"%d %d %d", config[0], config[1], Max);
+			fclose(fp);
+		}
 		Init();
 	}
 #endif
@@ -79,7 +88,7 @@ void Init() {
 	return;
 }
 
-static void changeDir(char * dir) {
+void changeDir(char * dir) {
 	GameDir = dir;
 	strcpy(Config, GameDir);
 	strcat(Config, "config.txt");

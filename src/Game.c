@@ -82,9 +82,9 @@ void Game() {
 		gotoxy(y + 2, x * 3 - 1);
 		printf(" ");
 		switch (way) {
-			case 0x30:
-			case 0x51:
-			case 0x71:
+			case 0x30: /* 0 */
+			case 0x51: /* Q */
+			case 0x71: /* q */
 #ifdef __linux
 				pthread_cancel(pid);
 #endif
@@ -109,16 +109,19 @@ void Game() {
 					Clear
 				}
 				break;
-			case 0x1B:
-				way = kbhit();
-				if (way == 0) {
+			case 0x1B:  /* 在Linux中的Esc键 */
+				if (way == kbhit()) { /* 判断在esc符号后还有没有字符 */
 					way = 0x1B;
 				}
 				else {
 					getchar();
-					way = getchar();
+					way = getchar(); /* 若有，则获取 */
 				}
-				if (way == 0x41) {
+				/* 方向键对应字符示意
+				 *         A
+				 *      D  +  C
+				 *         B         */
+				if (way == 0x41) {  /* A */
 					if (y < 2) {
 						y = Max;
 					}
@@ -126,7 +129,7 @@ void Game() {
 						y--;
 					}
 				}
-				else if (way == 0x44) {
+				else if (way == 0x44) { /* D */
 					if (x < 2) {
 						x = Max;
 					}
@@ -134,7 +137,7 @@ void Game() {
 						x--;
 					}
 				}
-				else if (way == 0x42) {
+				else if (way == 0x42) { /* B */
 					if (y > Max - 1) {
 						y = 1;
 					}
@@ -142,7 +145,7 @@ void Game() {
 						y++;
 					}
 				}
-				else if (way == 0x43) {
+				else if (way == 0x43) { /* C */
 					if (x > Max - 1) {
 						x = 1;
 					}
@@ -150,7 +153,7 @@ void Game() {
 						x++;
 					}
 				}
-				else {
+				else { /* 不是以上的则认作退出处理 */
 #ifdef __linux
 					pthread_cancel(pid);
 #endif
@@ -177,7 +180,8 @@ void Game() {
 					break;
 				}
 				break;
-			case 0x77:
+			/* 此处则以WASD操控 */
+			case 0x77:  /* w */
 				if (y < 2) {
 					y = Max;
 				}
@@ -185,8 +189,8 @@ void Game() {
 					y--;
 				}
 				break;
-			case 0x41:
-			case 0x61:
+			case 0x41: /* A */
+			case 0x61: /* a */
 				if (x < 2) {
 					x = Max;
 				}
@@ -194,8 +198,8 @@ void Game() {
 					x--;
 				}
 				break;
-			case 0x53:
-			case 0x73:
+			case 0x53: /* S */
+			case 0x73: /* s */
 				if (y > Max - 1) {
 					y = 1;
 				}
@@ -203,8 +207,8 @@ void Game() {
 					y++;
 				}
 				break;
-			case 0x44:
-			case 0x64:
+			case 0x44: /* D */
+			case 0x64: /* d */
 				if (x > Max - 1) {
 					x = 1;
 				}
@@ -212,8 +216,8 @@ void Game() {
 					x++;
 				}
 				break;
-			case 0x0D:
-			case 0x20:
+			case 0x0D: /* CR回车键 \r */
+			case 0x20: /* 空格键 */
 				if (p -> board[y - 1][x - 1] == 1 || p -> board[y - 1][x - 1] == 2) {
 					error = 1;
 					break;

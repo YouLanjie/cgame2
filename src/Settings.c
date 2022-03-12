@@ -2,6 +2,7 @@
 
 void Settings() {
 	unsigned short where = 1, a = 0;  //对应的位置
+	unsigned short esc = 0;
 	int inputContent = 0;    //输入
 #ifdef __linux
 	struct winsize size;
@@ -22,11 +23,11 @@ void Settings() {
 		startSize = 56 / 2 -20;
 #endif
 	/* 打印菜单 */
-	while (inputContent != 'q' && inputContent != 'Q' && inputContent != 'w' && inputContent != 'W' && inputContent != 0x1B) {
+	while (inputContent != 'q' && inputContent != 'Q' && inputContent != 0x1B) {
 		Clear2
 		/* 显示菜单 */
 		Menu("游戏设置", 1, 1);
-		fontColorSet(1,33); gotoxy(3,startSize); printf("q键退出，退出保存\n");
+		fontColorSet(1,33); gotoxy(3,startSize); printf("q键保存并退出\n");
 		fontColorSet(0,0); gotoxy(8, startSize); printf("自动下棋 ( )"); gotoxy(8,startSize + 32); printf("当前目录 ( )"); gotoxy(9, startSize); printf("棋盘大小：%d", Max);
 		kbhitGetchar();
 		/* 显示状态 */
@@ -39,12 +40,14 @@ void Settings() {
 				a = 0;
 			}
 			if (config[i - 1 - a] == 1) {
-				gotoxy(i / 2 + 7, startSize + 10 + (i + 1 - a) % 2 * 32); fontColorSet(1,31);
+				gotoxy(i / 2 + 7, startSize + 10 + (i + 1 - a) % 2 * 32);
+				fontColorSet(1,31);
 				printf("*");
 				fontColorSet(1,31);
 			}
 			else {
-				gotoxy(i / 2 + 7, startSize + 10 + (i + 1 - a) % 2 * 32); fontColorSet(0,0);
+				gotoxy(i / 2 + 7, startSize + 10 + (i + 1 - a) % 2 * 32);
+				fontColorSet(0,0);
 				printf(" ");
 			}
 			i -= a;
@@ -63,19 +66,23 @@ void Settings() {
 			if (kbhit() == 1) {
 				kbhitGetchar();
 				inputContent = getchar();
+				esc = 1;
+			}
+			else {
+				esc = 0;
 			}
 		}
-		if (inputContent == 'D' && where > 1) {
-			where--;
+		if (((esc && inputContent == 'D') || (!esc && (inputContent == 'a' || inputContent == 'A'))) && where > 1) {
+			where--; /* 左 */
 		}
-		else if (inputContent == 'C' && where < 3) {
-			where++;
+		else if (((esc && inputContent == 'C') || (!esc && (inputContent == 'd' || inputContent == 'D'))) && where < 3) {
+			where++; /* 右 */
 		}
-		else if (inputContent == 'A' && where > 2) {
-			where -= 2;
+		else if (((esc && inputContent == 'A') || (!esc && (inputContent == 'w' || inputContent == 'W'))) && where > 2) {
+			where -= 2; /* 上 */
 		}
-		else if (inputContent == 'B' && where < 3) {
-			where += 2;
+		else if (((esc && inputContent == 'B') || (!esc && (inputContent == 's' || inputContent == 'S'))) && where < 3) {
+			where += 2; /* 下 */
 			if (where == 4) {
 				where = 3;
 			}
@@ -83,7 +90,7 @@ void Settings() {
 		else if (inputContent == 0x0D || inputContent == 0x20) {
 			config[where - 1] = 1 - config[where - 1];
 		}
-		else if (inputContent == '+' && where == 3) {
+		else if ((inputContent == '+' || inputContent == '=') && where == 3) {
 			Max++;
 		}
 		else if (inputContent == '-' && where == 3) {
@@ -92,8 +99,17 @@ void Settings() {
 	}
 	fp = fopen(Config, "w");
 	fprintf(fp,"%d %d %d", config[0], config[1], Max);
-	Max = config[2];
 	fclose(fp);
+	if (config[1] == 1 && strcmp(Config, "/usr/local/cgame2/config.txt") == 0) {
+		changeDir("./cgame2-data/");
+	}
+	else if (config[1] == 0 && strcmp(Config, "./cgame2-data/config.txt") == 0) {
+		changeDir("/usr/local/cgame2/");
+	}
+	if ((fp = fopen(Config, "w"))) {
+		fprintf(fp,"%d %d %d", config[0], config[1], Max);
+		fclose(fp);
+	}
 #ifdef __linux
 	printf("\033[?25l");
 #endif
