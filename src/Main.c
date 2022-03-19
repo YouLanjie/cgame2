@@ -140,10 +140,10 @@ int main() {
 						config[1] = 0;
 						changeDir("/usr/local/cgame2/");
 						if ((fp = fopen(Config, "w"))) {
-							fprintf(fp,"%d %d %d", config[0], config[1], Max);
+							fprintf(fp,"%d %d %d", config[0], 0, Max);
 							fclose(fp);
 						}
-						printf("是否直接退出游戏?否则将重新创建目录!(默认退出)Y/n\n");
+						printf("是否直接退出游戏?否则将重新创建数据目录!(默认退出)Y/n\n");
 						inputContent = getch();
 						if (inputContent != 0x4E && inputContent != 0x6E) {
 							free(p);
