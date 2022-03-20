@@ -269,12 +269,12 @@ void Game() {
 		fontColorSet(0,0);
 		return;
 	}
-	fprintf(fp,Time);
+	fprintf(fp,"%d %d %d %d %d %d %d ", p -> t.year, p -> t.mon, p -> t.day, p -> t.hour, p -> t.min, p -> t.sec, Max);
 	for (count = 0; count < Max ; count++) {    //打印棋盘到文件
 		for (count2= 0; count2 < Max; count2++) {
 			fprintf(fp,"%d", p -> board[count][count2]);
 		}
-		fprintf(fp,"\n");
+		fprintf(fp," ");
 	}
 	fprintf(fp,"\n");
 	fclose(fp);
