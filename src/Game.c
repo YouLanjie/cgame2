@@ -20,6 +20,11 @@ void Game() {
 
 	Clear
 	p = (struct Chess *)malloc(sizeof(struct Chess));
+	for (count = 0; count < Max ; count++) {  /* 用于初始化内存 */
+		for (count2 = 0; count2 < Max; count2++) {
+			p -> board[count][count2] = 0;
+		}
+	}
 	GetTime();
 
 #ifdef __linux
@@ -50,7 +55,6 @@ void Game() {
 		}
 		if (error == 1) {
 			fontColorSet(1,33);
-			gotoxy(20,1);
 			printf("你不能下在非空的格子!\n");
 			fontColorSet(0,0);
 			error = 0;
