@@ -158,7 +158,7 @@ int main() {
 						else printf("\a");
 					}
 					else if (inputContent == 0x53 || inputContent == 0x73) {
-						if (currentPage < 2) currentPage++;
+						if (currentPage < 4) currentPage++;
 						else printf("\a");
 					}
 				}
