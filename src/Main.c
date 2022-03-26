@@ -23,7 +23,6 @@ int main() {
 #ifdef __linux
 	printf("\033[?25l");
 #endif
-	p = (struct Chess *)malloc(sizeof(struct Chess));
 	Clear2
 	while (inputContent != 0x1B && inputContent != 0x30 && inputContent != 0x51 && inputContent != 0x71) {
 		Init(p);
@@ -56,7 +55,6 @@ int main() {
 			case 0x30:
 			case 0x51:
 			case 0x71:
-				free(p);
 #ifdef __linux
 				printf("\033[?25h");
 #endif
@@ -84,7 +82,6 @@ int main() {
 					}
 				}
 				else {
-					free(p);
 #ifdef __linux
 					printf("\033[?25h");
 #endif
@@ -117,15 +114,55 @@ int main() {
 				History(p);
 				break;
 			case 0x33:
+				for (int currentPage = 1; inputContent != 'q' && inputContent != 'Q' && inputContent != '0' && inputContent != 0x1B; ) {
 #ifdef __linux
-				ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
-				startSize = size.ws_col / 2 - 20;
+					ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+					startSize = size.ws_col / 2 - 20;
 #else
-				startSize = 56 / 2 -20;
+					startSize = 56 / 2 -20;
 #endif
-				gotoxy(7, startSize); printf("按下0,q,Q退出"); gotoxy(8, startSize); printf("W S A D或者方向键控制上下左右，空格下子"); gotoxy(9, startSize); printf("@为黑棋,O为白棋,+为空白");
-				Menu2("游戏帮助");
-				getch();
+					Clear
+					if (currentPage == 1) {
+						gotoxy(7, startSize); printf("1.按下0,q,Q,esc退出"); gotoxy(8, startSize); printf("2.WSAD或者方向键控制方向，回车、空格下子"); gotoxy(9, startSize); printf("3.@为黑棋,O为白棋,+为未下棋子");
+						Menu("游戏帮助 - 游戏界面", currentPage, 4);
+					}
+					if (currentPage == 2) {
+						gotoxy(7, startSize); printf("1.可以参照界面的提示操作"); gotoxy(8, startSize); printf("2.同时可以用方向键控制方向"); gotoxy(9, startSize); printf("3.历史界面需要您的终端足够大以保持正常显示");
+						Menu("游戏帮助 - 历史记录", currentPage, 4);
+					}
+					if (currentPage == 3) {
+						gotoxy(7, startSize); printf("1.按照提示，键入Y删除，否则键入N或者其他按键"); gotoxy(8, startSize); printf("2.倘若您使用当前目录作为数据的存储目录，则会提"); gotoxy(9, startSize); printf("  示是否删除直接退出程序防止再次创建文件夹");
+						Menu("游戏帮助 - 清除存档", currentPage, 4);
+					}
+					if (currentPage == 4) {
+						gotoxy(7, startSize); printf("1.同其他界面，使用WASD或方向键移动光标"); gotoxy(8, startSize); printf("2.使用空格或者回车开启或者关闭光标所在选项"); gotoxy(9, startSize); printf("3.棋盘大小可以使用+(或=)/-增加或者减少");
+						Menu("游戏帮助 - 设置", currentPage, 4);
+					}
+					inputContent = getch();
+					if (inputContent == 0x1B) {
+						if (kbhit() == 1) {
+							getchar();
+							inputContent = getchar();
+							if (inputContent == 0x41 || inputContent == 0x44) {
+								if (currentPage > 1) currentPage--;
+								else printf("\a");
+							}
+							else if (inputContent == 0x42 || inputContent == 0x43) {
+								if (currentPage < 4) currentPage++;
+								else printf("\a");
+							}
+						}
+					}
+					else if (inputContent == 0x57 || inputContent == 0x77) {
+						if (currentPage > 1) currentPage--;
+						else printf("\a");
+					}
+					else if (inputContent == 0x53 || inputContent == 0x73) {
+						if (currentPage < 2) currentPage++;
+						else printf("\a");
+					}
+				}
+				inputContent = 3;
 				break;
 			case 0x34:
 				Clear
@@ -146,7 +183,6 @@ int main() {
 						printf("是否直接退出游戏?否则将重新创建数据目录!(默认退出)Y/n\n");
 						inputContent = getch();
 						if (inputContent != 0x4E && inputContent != 0x6E) {
-							free(p);
 #ifdef __linux
 							printf("\033[?25h\n");
 #endif
@@ -165,7 +201,6 @@ int main() {
 		}
 		Clear2
 	}
-	free(p);
 	Clear2
 #ifdef __linux
 	printf("\033[?25h");
@@ -185,3 +220,4 @@ void stop() {
 	Clear2
 	exit(0);
 }
+

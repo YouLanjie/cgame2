@@ -14,13 +14,13 @@ void Settings() {
 	fscanf(fp, "%d%d%d", &config[0], &config[1], &Max);
 	fclose(fp);
 #ifdef __linux
-		printf("\033[?25h");
+	printf("\033[?25h");
 #endif
 #ifdef __linux
-		ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
-		startSize = size.ws_col / 2 - 20;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+	startSize = size.ws_col / 2 - 20;
 #else
-		startSize = 56 / 2 -20;
+	startSize = 56 / 2 -20;
 #endif
 	/* 打印菜单 */
 	while (inputContent != 'q' && inputContent != 'Q' && inputContent != 0x1B) {
@@ -92,9 +92,15 @@ void Settings() {
 		}
 		else if ((inputContent == '+' || inputContent == '=') && where == 3) {
 			Max++;
+			if (Max > 50) {
+				Max = 5;
+			}
 		}
 		else if (inputContent == '-' && where == 3) {
 			Max--;
+			if (Max < 5) {
+				Max = 50;
+			}
 		}
 	}
 #ifdef _WIN32
@@ -118,3 +124,4 @@ void Settings() {
 #endif
 	return;
 }
+

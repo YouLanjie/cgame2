@@ -13,12 +13,12 @@ all: cgame2
 
 $(prom): $(OBJ)
 	@rm -rf $(BIN)
-	$(CC) $(OBJ) -o $(prom)
 	@mkdir bin
-	@mv $(prom) $(BIN)/main
+	$(CC) $(OBJ) -o $(BIN)/main
+	rm -rf $(OBJ)
 
 %.o: %.c $(incl)
-	$(CC) -c $< -o $@
+	$(CC) -g -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ) $(prom).deb

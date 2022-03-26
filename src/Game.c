@@ -3,24 +3,23 @@
 #ifdef __linux
 static void * showTime();
 #endif
+static void move(int way, int * x, int * y, int Way[4]);
 
 void Game() {
-	int count,count2;      //用于计数
-	int error = 0;         //记录错误
-	int x = 1,y = 1;       //当前坐标
-	int way;               //光标移动方向
-	int win  = 0;          //赢家，1黑，2白
-	int who = 1;           //现在下子的玩家
-	int a = 0;             //是否要使用AI下棋
+	int count,count2;                      //用于计数
+	int error = 0;                         //记录错误(下棋位置重复)
+	int x = 1,y = 1;                       //当前坐标
+	int way;                               //记录光标移动方向
+	int Way[4] = {87, 65, 83, 68};         //对应的键位
+	int win  = 0;	                       //赢家，1黑，2白
+	int who = 1;                           //现在下子的玩家
 	FILE * fp;
 #ifdef __linux
 	pthread_t pid;
 #endif
 
-	fp = fopen(Config, "r");
-	fscanf(fp, "%d", &a);
-	fclose(fp);
 	Clear
+	p = (struct Chess *)malloc(sizeof(struct Chess));
 	GetTime();
 
 #ifdef __linux
@@ -75,8 +74,8 @@ void Game() {
 		}
 #endif
 #ifdef _WIN32
-	gotoxy(y + 2, x * 3 - 2);
-	printf(">");
+		gotoxy(y + 2, x * 3 - 2);
+		printf(">");
 #endif
 		way = getch();
 		gotoxy(y + 2, x * 3 - 1);
@@ -93,11 +92,7 @@ void Game() {
 				printf("请确认退出！本次游戏将不会记录！（Y/n）\n");
 				way = getch();
 				if (way == 0x59 || way == 0x79) {
-					for (count = 0; count < Max ; count++) {
-						for (count2= 0; count2 < Max; count2++) {
-							p -> board[count][count2] = 0;
-						}
-					}
+					free(p);
 					Clear
 					return;
 				}
@@ -117,41 +112,16 @@ void Game() {
 					getchar();
 					way = getchar(); /* 若有，则获取 */
 				}
-				/* 方向键对应字符示意
-				 *         A
-				 *      D  +  C
-				 *         B         */
-				if (way == 0x41) {  /* A */
-					if (y < 2) {
-						y = Max;
-					}
-					else {
-						y--;
-					}
-				}
-				else if (way == 0x44) { /* D */
-					if (x < 2) {
-						x = Max;
-					}
-					else {
-						x--;
-					}
-				}
-				else if (way == 0x42) { /* B */
-					if (y > Max - 1) {
-						y = 1;
-					}
-					else {
-						y++;
-					}
-				}
-				else if (way == 0x43) { /* C */
-					if (x > Max - 1) {
-						x = 1;
-					}
-					else {
-						x++;
-					}
+				if (way == 0x41 || way == 0x44 || way == 0x42 || way == 0x43) {
+					Way[0] = 'A';
+					Way[1] = 'D';
+					Way[2] = 'B';
+					Way[3] = 'C';
+					move(way, &x, &y, Way);
+					Way[0] = 'W';
+					Way[1] = 'A';
+					Way[2] = 'S';
+					Way[3] = 'D';
 				}
 				else { /* 不是以上的则认作退出处理 */
 #ifdef __linux
@@ -162,11 +132,7 @@ void Game() {
 					printf("请确认退出！本次游戏将不会记录！（Y/n）\n");
 					way = getch();
 					if (way == 0x59 || way == 0x79) {
-						for (count = 0; count < Max ; count++) {
-							for (count2= 0; count2 < Max; count2++) {
-								p -> board[count][count2] = 0;
-							}
-						}
+						free(p);
 						Clear
 						return;
 					}
@@ -178,42 +144,6 @@ void Game() {
 						Clear
 					}
 					break;
-				}
-				break;
-			/* 此处则以WASD操控 */
-			case 0x77:  /* w */
-				if (y < 2) {
-					y = Max;
-				}
-				else {
-					y--;
-				}
-				break;
-			case 0x41: /* A */
-			case 0x61: /* a */
-				if (x < 2) {
-					x = Max;
-				}
-				else {
-					x--;
-				}
-				break;
-			case 0x53: /* S */
-			case 0x73: /* s */
-				if (y > Max - 1) {
-					y = 1;
-				}
-				else {
-					y++;
-				}
-				break;
-			case 0x44: /* D */
-			case 0x64: /* d */
-				if (x > Max - 1) {
-					x = 1;
-				}
-				else {
-					x++;
 				}
 				break;
 			case 0x0D: /* CR回车键 \r */
@@ -247,17 +177,17 @@ void Game() {
 						fontColorSet(0,0);
 						getch();
 					}
-					if (a == 1) {
+					if (config[0] == 1) {  /* 调用自动下棋 */
 						AI();
 					}
-					else {
+					else {  /* 切换下棋的一方 */
 						who = 3 - who;
 					}
 					break;
 				}
 				break;
 			default:
-				Clear
+				move(way, &x, &y, Way);
 				break;
 		}
 		printf("\n");
@@ -278,12 +208,7 @@ void Game() {
 	}
 	fprintf(fp,"\n");
 	fclose(fp);
-	/* 清存 */
-	for (count = 0; count < Max ; count++) {
-		for (count2= 0; count2 < Max; count2++) {
-			p -> board[count][count2] = 0;
-		}
-	}
+	free(p);
 	Clear
 	return;
 }
@@ -300,4 +225,29 @@ static void * showTime() {
 	pthread_exit(0);
 }
 #endif
+
+static void move(int way, int * x, int * y, int Way[4]) {
+	int up = Way[0], down = Way[2], left = Way[1], right = Way[3];
+	/* 方向键对应字符、WASD式控制键位与坐标设计示意
+	 *         A           W        yx->
+	 *      D  +  C     A  +  D     | ++++ 
+	 *         B           S        v ++++ */
+	if (way == up || way == up + 32) {
+		if (*y < 2) *y = Max + 1;
+		(*y)--;
+	}
+	else if (way == left || way == left + 32) {
+		if (*x < 2) *x = Max + 1;
+		(*x)--;
+	}
+	else if (way == down || way == down + 32) {
+		if (*y > Max - 1) *y = 0;
+		(*y)++;
+	}
+	else if (way == right || way == right + 32) {
+		if (*x > Max - 1) *x = 0;
+		(*x)++;
+	}
+	return;
+}
 

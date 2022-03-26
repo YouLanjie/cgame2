@@ -85,7 +85,7 @@
 
 		printf("\033[2;32m\033[6;%dH↑\033[10;%dH↓\033[11;%dH\033[2;32m%d/%d\033[1;33m", winSizeCol / 2 - 1, winSizeCol / 2 - 1, winSizeCol / 2 + 25, pages,allPages);
 		printf("\033[2;%dH\033[1;32m%s", winSizeCol / 2 - (int)strlen(title) / 2, title);
-		printf("\033[5;%dH\033[34m--------------------------------------------------------\033[34m", winSizeCol / 2 - 27);
+		printf("\033[5;%dH\033[1;34m--------------------------------------------------------\033[34m", winSizeCol / 2 - 27);
 		for (int i = 0; i < 7; i++) {
 			gotoxy(i + 6, winSizeCol / 2 - 27);
 			printf("|\033[54C|");
@@ -101,7 +101,7 @@
 			int winSizeCol = size.ws_col;
 
 			printf("\033[2;%dH\033[1;32m%s", winSizeCol / 2 - (int)strlen(title) / 2, title);
-			printf("\033[5;%dH\033[34m--------------------------------------------------------", winSizeCol / 2 - 27);
+			printf("\033[5;%dH\033[1;34m--------------------------------------------------------", winSizeCol / 2 - 27);
 			for (int i = 0; i < 7; i++) {
 				gotoxy(i + 6, winSizeCol / 2 - 27);
 				printf("|\033[54C|");

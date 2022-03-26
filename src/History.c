@@ -2,11 +2,10 @@
 
 void History() {
 	int count;              //数数
-	int b = 0;              //选择
+	int chose = 0;              //选择
 	int max = 0;
-	char board[52][50];     //棋盘信息
 	char *cp;
-	int way = 0;           //文件的大小
+	int line = 0;           //文件的大小
 	FILE * fp;
 
 	fp = fopen(Save,"rb");
@@ -16,21 +15,21 @@ void History() {
 		return;
 	}
 	fseek(fp, 0L, 2);
-	way = ftell(fp);
+	line = ftell(fp);
 	fseek(fp, 0L, 0);
 	cp = (char *)malloc(300);
 	for (int i = 0; 1; ) {
 		if(fgetc(fp) == '\n') {
 			i++;
 		}
-		if (ftell(fp) == way) {
-			way = i;
+		if (ftell(fp) == line) {
+			line = i;
 			break;
 		}
 	}
 	free(cp);
 	fseek(fp, 0L, 0);
-	if(way == 0) {
+	if(line == 0) {
 		fontColorSet(1,33);
 		printf("你还没有游戏记录，赶紧去玩一下吧！\n");
 		fontColorSet(0,0);
@@ -39,31 +38,35 @@ void History() {
 		return;
 	}
 	fseek(fp, 0L, 0);
-	for (count = 0; count + 1 <= way; count++) {
+	p = (struct Chess *)malloc(sizeof(struct Chess));
+	max = Max;
+	for (count = 0; count + 1 <= line; count++) {
 		Clear2
 		fseek(fp, 0L, 0);
+		kbhitGetchar();
 		for (int i = 0; i <= count; i++) {
-			fscanf(fp, "%d%d%d%d%d%d%d", &p -> t.year, &p -> t.mon, &p -> t.day, &p -> t.hour, &p -> t.min, &p -> t.sec, &max);
-			for (int i = 0; i < max; i++) {
-				fscanf(fp, "%s", board[i]);
+			fscanf(fp, "%d%d%d%d%d%d%d", &p -> t.year, &p -> t.mon, &p -> t.day, &p -> t.hour, &p -> t.min, &p -> t.sec, &Max);
+			for (int i = 0; i < Max; i++) {
+				fscanf(fp, "%s", p -> board[i]);
+				p -> board[i + 1][0] = '\0';
 			}
 		}
 		gotoxy(1,1); fontColorSet(1,31);
 		printf(Time);
 		fontColorSet(0,0);
-		for (int i = 0; board[i][0] != '\0' && board[i][0] != EOF; i++) {
-			for (int i2 = 0; board[i][i2] != '\0' && board[i][i2] != EOF; i2++) {
-				if (board[i][i2] == '0') {
+		for (int i = 0; p -> board[i][0] != '\0' && p -> board[i][0] != EOF; i++) {
+			for (int i2 = 0; p -> board[i][i2] != '\0' && p -> board[i][i2] != EOF; i2++) {
+				if (p -> board[i][i2] == '0') {
 					fontColorSet(0,2); fontColorSet(37,40);
 					printf(" + ");
 					fontColorSet(0,0);
 				}
-				else if (board[i][i2] == '1') {
+				else if (p -> board[i][i2] == '1') {
 					fontColorSet(0,2); fontColorSet(30,47);
 					printf(" @ ");
 					fontColorSet(0,0);
 				}
-				else if (board[i][i2] == '2') {
+				else if (p -> board[i][i2] == '2') {
 					fontColorSet(0,2); fontColorSet(37,40);
 					printf(" O ");
 					fontColorSet(0,0);
@@ -74,26 +77,28 @@ void History() {
 		fontColorSet(1,31);
 		printf("按下L查看上一局，按下N查看下一局,0退出");
 		fontColorSet(0,0);
-		b = getch();
-		if (b == 0x1B) {
+		chose = getch();
+		if (chose == 0x1B) {
 			if (kbhit() == 1) {
 				getchar();
-				b = getch();
-				if (b == 0x41 || b == 0x44) {
-					b = 0x4C;
+				chose = getch();
+				if (chose == 0x41 || chose == 0x44) {
+					chose = 0x4C;
 				}
-				else if (b == 0x42 || b == 0x43) {
-					b = 0x4E;
+				else if (chose == 0x42 || chose == 0x43) {
+					chose = 0x4E;
 				}
 			}
 			else {
+				free(p);
 				return;
 			}
 		}
-		switch (b) {
+		switch (chose) {
 			case 0x30:
 			case 0x51:
 			case 0x71:
+				free(p);
 				return;
 				break;
 			case 0x4C:
@@ -107,7 +112,7 @@ void History() {
 				break;
 			case 0x4E:
 			case 0x6E:
-				if (count + 1 >= way) {
+				if (count + 1 >= line) {
 					count--;
 				}
 				break;
@@ -125,5 +130,7 @@ void History() {
 		gotoxy(2,1);
 	}
 	fclose(fp);
+	Max = max;
+	free(p);
 	return;
 }
