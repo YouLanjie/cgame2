@@ -34,13 +34,12 @@ void Game() {
 	gotoxy(1, 1);
 	fontColorSet(1,31);
 	printf(Time);
-	for (count = 0; count < Max ; count++) {
-		for (count2= 0; count2 < Max; count2++) {
-			p -> board[count][count2] = 0;
-		}
-	}
 #endif
 	while(win != 1 && win != 2) {
+		GetNowTime();
+		gotoxy(1, 1);
+		fontColorSet(1,31);
+		printf(NowTime);
 		gotoxy(2,1);
 		PrintBoard();
 		if (who == 1) {
@@ -101,12 +100,32 @@ void Game() {
 #ifdef __linux
 					pthread_create(&pid, NULL, showTime, NULL);
 #endif
-					Clear
+					Clear2
 				}
 				break;
 			case 0x1B:  /* 在Linux中的Esc键 */
-				if (way == kbhit()) { /* 判断在esc符号后还有没有字符 */
+				if (!kbhit()) { /* 判断在esc符号后还有没有字符 */
 					way = 0x1B;
+#ifdef __linux
+					pthread_cancel(pid);
+#endif
+					Clear
+					fontColorSet(1,33);
+					printf("请确认退出！本次游戏将不会记录！（Y/n）\n");
+					way = getch();
+					if (way == 0x59 || way == 0x79) {
+						free(p);
+						Clear2
+						return;
+					}
+					else {
+						way = 0x00;
+#ifdef __linux
+						pthread_create(&pid, NULL, showTime, NULL);
+#endif
+						Clear2
+					}
+					break;
 				}
 				else {
 					getchar();
@@ -122,28 +141,6 @@ void Game() {
 					Way[1] = 'A';
 					Way[2] = 'S';
 					Way[3] = 'D';
-				}
-				else { /* 不是以上的则认作退出处理 */
-#ifdef __linux
-					pthread_cancel(pid);
-#endif
-					Clear
-					fontColorSet(1,33);
-					printf("请确认退出！本次游戏将不会记录！（Y/n）\n");
-					way = getch();
-					if (way == 0x59 || way == 0x79) {
-						free(p);
-						Clear
-						return;
-					}
-					else {
-						way = 0x00;
-#ifdef __linux
-						pthread_create(&pid, NULL, showTime, NULL);
-#endif
-						Clear
-					}
-					break;
 				}
 				break;
 			case 0x0D: /* CR回车键 \r */
