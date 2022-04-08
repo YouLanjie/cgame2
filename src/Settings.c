@@ -26,7 +26,7 @@ void Settings() {
 	while (inputContent != 'q' && inputContent != 'Q' && inputContent != 0x1B) {
 		Clear2
 		/* 显示菜单 */
-		Menu("游戏设置", 1, 1);
+		Menu2("游戏设置", 1, 1);
 		fontColorSet(1,33); gotoxy(3,startSize); printf("q键保存并退出\n");
 		fontColorSet(0,0); gotoxy(8, startSize); printf("自动下棋 ( )"); gotoxy(8,startSize + 32); printf("当前目录 ( )"); gotoxy(9, startSize); printf("棋盘大小：%d", Max);
 		kbhitGetchar();

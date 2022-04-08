@@ -12,8 +12,8 @@ FILE * fp;
 
 int main() {
 	int inputContent = 0; /* 输入的内容 */
-	int currentPage = 1; /* 但前所处主菜单页面 */
 	int config[2] = {1, 0};    //配置选项
+	char *text[] = {"1.开始游戏", "2.游戏记录", "3.游戏帮助", "4.清除存档", "5.设置", "0.退出游戏"};
 #ifdef __linux
 	struct winsize size;
 #endif
@@ -36,84 +36,27 @@ int main() {
 #else
 		startSize = 56 / 2 -20;
 #endif
-		fontColorSet(1,33);
-		if (currentPage == 1){
-			gotoxy(8, startSize); printf("1.开始游戏"); gotoxy(8, startSize + 32); printf("2.游戏记录"); gotoxy(9, startSize); printf("3.游戏帮助"); gotoxy(9, startSize + 32); printf("4.清除存档");
-		}
-		else if (currentPage == 2) {
-			gotoxy(8, startSize); printf("5.设置"); gotoxy(8, startSize + 32); printf("0.退出游戏");
-		}
-		fontColorSet(0,0);
-		kbhitGetchar();
-		Menu("游戏菜单",currentPage,2);
-		kbhitGetchar();
-
-		inputContent = getch();
+		inputContent = Menu("游戏菜单", text, 6);
 		printf("\n");
 		Clear2
 		switch (inputContent) {
-			case 0x30:
-			case 0x51:
-			case 0x71:
+			case 0:
+			case 6:
 #ifdef __linux
 				printf("\033[?25h");
 #endif
 				return 0;
 				break;
-			case 0x1B:
-				if (kbhit() == 1) {
-					getchar();
-					inputContent = getchar();
-					if (inputContent == 0x41 || inputContent == 0x44) {
-						if (currentPage > 1) {
-							currentPage--;
-						}
-						else {
-							printf("\a");
-						}
-					}
-					else if (inputContent == 0x42 || inputContent == 0x43) {
-						if (currentPage < 2) {
-							currentPage++;
-						}
-						else {
-							printf("\a");
-						}
-					}
-				}
-				else {
-#ifdef __linux
-					printf("\033[?25h");
-#endif
-					return 0;
-					break;
-				}
-				break;
-			case 0x57:
-			case 0x77:
-				if (currentPage > 1) {
-					currentPage--;
-				}
-				else {
-					printf("\a");
-				}
-				break;
-			case 0x53:
-			case 0x73:
-				if (currentPage < 2) {
-					currentPage++;
-				}
-				else {
-					printf("\a");
-				}
-				break;
-			case 0x31:
+			case '1':
+			case 1:
 				Game(p);
 				break;
-			case 0x32:
+			case '2':
+			case 2:
 				History(p);
 				break;
-			case 0x33:
+			case '3':
+			case 3:
 				for (int currentPage = 1; inputContent != 'q' && inputContent != 'Q' && inputContent != '0' && inputContent != 0x1B; ) {
 #ifdef __linux
 					ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
@@ -124,19 +67,19 @@ int main() {
 					Clear
 					if (currentPage == 1) {
 						gotoxy(7, startSize); printf("1.按下0,q,Q,esc退出"); gotoxy(8, startSize); printf("2.WSAD或者方向键控制方向，回车、空格下子"); gotoxy(9, startSize); printf("3.@为黑棋,O为白棋,+为未下棋子");
-						Menu("游戏帮助 - 游戏界面", currentPage, 4);
+						Menu2("游戏帮助 - 游戏界面", currentPage, 4);
 					}
 					if (currentPage == 2) {
 						gotoxy(7, startSize); printf("1.可以参照界面的提示操作"); gotoxy(8, startSize); printf("2.同时可以用方向键控制方向"); gotoxy(9, startSize); printf("3.历史界面需要您的终端足够大以保持正常显示");
-						Menu("游戏帮助 - 历史记录", currentPage, 4);
+						Menu2("游戏帮助 - 历史记录", currentPage, 4);
 					}
 					if (currentPage == 3) {
 						gotoxy(7, startSize); printf("1.按照提示，键入Y删除，否则键入N或者其他按键"); gotoxy(8, startSize); printf("2.倘若您使用当前目录作为数据的存储目录，则会提"); gotoxy(9, startSize); printf("  示是否删除直接退出程序防止再次创建文件夹");
-						Menu("游戏帮助 - 清除存档", currentPage, 4);
+						Menu2("游戏帮助 - 清除存档", currentPage, 4);
 					}
 					if (currentPage == 4) {
 						gotoxy(7, startSize); printf("1.同其他界面，使用WASD或方向键移动光标"); gotoxy(8, startSize); printf("2.使用空格或者回车开启或者关闭光标所在选项"); gotoxy(9, startSize); printf("3.棋盘大小可以使用+(或=)/-增加或者减少");
-						Menu("游戏帮助 - 设置", currentPage, 4);
+						Menu2("游戏帮助 - 设置", currentPage, 4);
 					}
 					inputContent = getch();
 					if (inputContent == 0x1B) {
@@ -164,7 +107,8 @@ int main() {
 				}
 				inputContent = 3;
 				break;
-			case 0x34:
+			case '4':
+			case 4:
 				Clear
 				fontColorSet(1,33);
 				printf("请确清除存档，您将失去您的所有记录！（Y/n）\n");
@@ -193,7 +137,8 @@ int main() {
 				}
 				Clear
 				break;
-			case 0x35:
+			case '5':
+			case 5:
 				Settings();
 				break;
 			default:

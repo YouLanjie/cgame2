@@ -15,7 +15,6 @@ $(prom): $(OBJ)
 	@rm -rf $(BIN)
 	@mkdir bin
 	$(CC) $(OBJ) -o $(BIN)/main
-	rm -rf $(OBJ)
 
 %.o: %.c $(incl)
 	$(CC) -g -c $< -o $@
