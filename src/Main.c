@@ -40,23 +40,20 @@ int main() {
 		printf("\n");
 		Clear2
 		switch (inputContent) {
-			case 0:
-			case 6:
+			case '0':
+			case '6':
 #ifdef __linux
 				printf("\033[?25h");
 #endif
 				return 0;
 				break;
 			case '1':
-			case 1:
 				Game(p);
 				break;
 			case '2':
-			case 2:
 				History(p);
 				break;
 			case '3':
-			case 3:
 				for (int currentPage = 1; inputContent != 'q' && inputContent != 'Q' && inputContent != '0' && inputContent != 0x1B; ) {
 #ifdef __linux
 					ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
@@ -108,10 +105,9 @@ int main() {
 				inputContent = 3;
 				break;
 			case '4':
-			case 4:
 				Clear
 				fontColorSet(1,33);
-				printf("请确清除存档，您将失去您的所有记录！（Y/n）\n");
+				printf("请确清除存档，您将失去您的所有记录！（y/N）\n");
 				inputContent = getch();
 				if (inputContent == 'y' || inputContent == 'Y') {
 					remove(Save);
@@ -138,7 +134,6 @@ int main() {
 				Clear
 				break;
 			case '5':
-			case 5:
 				Settings();
 				break;
 			default:

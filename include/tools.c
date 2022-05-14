@@ -335,7 +335,9 @@ int Menu(char *title, char *text[], int tl, int list) {
 		}
 		else if (input == ' ' || input == '\r' || input == '\n') {
 			Clear2
-			return count + 8 * (currentPage - 1);
+			char output[10];
+			sprintf(output, "%d", count + 8 * (currentPage - 1));
+			return output[0];
 		}
 		else {
 			Clear2

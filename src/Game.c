@@ -92,7 +92,7 @@ void Game() {
 #endif
 				Clear
 				fontColorSet(1,33);
-				printf("请确认退出！本次游戏将不会记录！（Y/n）\n");
+				printf("请确认退出！本次游戏将不会记录！（y/N）\n");
 				way = getch();
 				if (way == 0x59 || way == 0x79) {
 					free(p);
@@ -115,7 +115,7 @@ void Game() {
 #endif
 					Clear
 					fontColorSet(1,33);
-					printf("请确认退出！本次游戏将不会记录！（Y/n）\n");
+					printf("请确认退出！本次游戏将不会记录！（y/N）\n");
 					way = getch();
 					if (way == 0x59 || way == 0x79) {
 						free(p);

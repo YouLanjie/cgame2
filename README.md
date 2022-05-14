@@ -3,25 +3,16 @@
 ## 简介
 
 - 这是一个c语言实战程序，一个小游戏——五子棋
-- 开发平台:
-  - [x] Ubuntu Linux
-  - [ ] Debian Linux
-  - [ ] Deepin Linux
 
 - 支持的系统
   - [x] Linux
-  - [x] Windows (使用gcc在VScode中运行)
+  - [x] Windows (使用gcc编译)
 
 ## 使用
 
 - 通过源代码
   - 建议安装的软件: ***make、git***
   - 需要的软件: ***gcc***
-    - 如果没有，Debian Linux or Ubuntu Linux可以使用以下命令安装gcc
-
-      ``` sh
-      sudo apt install gcc
-      ```
 
   - 下载源代码到本地
     - 使用git克隆此仓库到本地：
@@ -50,6 +41,4 @@
       make && make install
       ```
 
-
 - 手动编译好的文件(**bin/main**)可以直接执行，程序做过兼容性的加强
-
