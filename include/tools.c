@@ -331,7 +331,7 @@ int Menu(char *title, char *text[], int tl, int list) {
 		}
 		else if (input == 'q' || input == 'Q') {
 			Clear
-			return 0;
+			return '0';
 		}
 		else if (input == ' ' || input == '\r' || input == '\n') {
 			Clear2
