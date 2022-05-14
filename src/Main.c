@@ -36,7 +36,7 @@ int main() {
 #else
 		startSize = 56 / 2 -20;
 #endif
-		inputContent = Menu("游戏菜单", text, 6);
+		inputContent = Menu("游戏菜单", text, 6, 2);
 		printf("\n");
 		Clear2
 		switch (inputContent) {
