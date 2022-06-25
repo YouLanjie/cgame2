@@ -35,7 +35,7 @@
       gcc include/tools.c *.c -o main
       ```
 
-    - Arch用户可以使用[PKGBUILD文件](https://github.com/YouLanjie/cgame2/blob/arch-package/PKGBUILD)运行`makepkg`构建软件包再运行Pacman进行安装
+    - Arch用户可以使用[PKGBUILD文件](https://github.com/YouLanjie/cgame2/blob/arch-package/PKGBUILD)运行`makepkg`构建软件包再运行Pacman进行安装，也可以从[AUR](https://aur.archlinux.org/packages/cgame2)上安装
 
 
 - 手动编译好的文件(**bin/main**)可以直接执行，程序做过兼容性的加强
