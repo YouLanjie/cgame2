@@ -3,7 +3,7 @@ pkgname='cgame2'
 pkgver=1.0
 pkgrel=1
 epoch=0
-pkgdesc="五子棋游戏"
+pkgdesc="五子棋游戏(Chinese Only)"
 arch=('x86_64')
 url="https://github.com/youlanjie/cgame2"
 license=('MIT')
@@ -36,7 +36,5 @@ package() {
 	install -D -m=0644 "res/cgame2.desktop" "${pkgdir}/usr/share/applications/cgame2.desktop"
 	install -D -m=0644 "./LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 	mkdir -p "${pkgdir}/etc/cgame2"
-	touch "${pkgdir}/etc/cgame2/config.txt"
-	echo "0 0 15" >  "${pkgdir}/etc/cgame2/config.txt"
-	chmod 0666 "${pkgdir}/etc/cgame2/config.txt"
+	chmod 0777 "${pkgdir}/etc/cgame2"
 }
