@@ -35,10 +35,7 @@
       gcc include/tools.c *.c -o main
       ```
 
-    - 安装软件到 */usr/local/cgame2* 下：
+    - Arch用户可以使用[PKGBUILD文件](https://github.com/YouLanjie/cgame2/blob/arch-package/PKGBUILD)运行`makepkg`构建软件包再运行Pacman进行安装
 
-      ```sh
-      make && make install
-      ```
 
 - 手动编译好的文件(**bin/main**)可以直接执行，程序做过兼容性的加强
