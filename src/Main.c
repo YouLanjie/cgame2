@@ -3,9 +3,9 @@
 struct Chess *p;
 
 /* 文件位置 */
-char Save[] = "/usr/local/cgame2/save.txt";
-char Config[] = "/usr/local/cgame2/config.txt";
-char * GameDir = "/usr/local/cgame2/";
+char Save[] = "/etc/cgame2/save.txt";
+char Config[] = "/etc/cgame2/config.txt";
+char * GameDir = "/etc/cgame2/";
 int config[] = {0, 0};
 int Max = 15;
 FILE * fp;
@@ -115,7 +115,7 @@ int main() {
 					if (access("./cgame2-data/", 0) != EOF && config[1] == 1) {
 						remove("./cgame2-data");
 						config[1] = 0;
-						changeDir("/usr/local/cgame2/");
+						changeDir("/etc/cgame2/");
 						if ((fp = fopen(Config, "w"))) {
 							fprintf(fp,"%d %d %d", config[0], 0, Max);
 							fclose(fp);

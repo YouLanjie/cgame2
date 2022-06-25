@@ -109,11 +109,11 @@ void Settings() {
 	fp = fopen(Config, "w");
 	fprintf(fp,"%d %d %d", config[0], config[1], Max);
 	fclose(fp);
-	if (config[1] == 1 && strcmp(Config, "/usr/local/cgame2/config.txt") == 0) {
+	if (config[1] == 1 && strcmp(Config, "/etc/cgame2/config.txt") == 0) {
 		changeDir("./cgame2-data/");
 	}
 	else if (config[1] == 0 && strcmp(Config, "./cgame2-data/config.txt") == 0) {
-		changeDir("/usr/local/cgame2/");
+		changeDir("/etc/cgame2/");
 	}
 	if ((fp = fopen(Config, "w"))) {
 		fprintf(fp,"%d %d %d", config[0], config[1], Max);
