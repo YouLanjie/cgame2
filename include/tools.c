@@ -79,34 +79,34 @@
 		}
 		return ch;
 	}
-	void Menu2(char title[], short pages, short allPages) {   /* 菜单#1 */
+	void Menu2(char title[], short pages, short allPages) {   /* 菜单#1带翻页提示的菜单 */
 		struct winsize size;
 		ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
 		int winSizeCol = size.ws_col;
 
-		printf("\033[2;32m\033[6;%dH↑\033[10;%dH↓\033[11;%dH\033[2;32m%d/%d\033[1;33m", winSizeCol / 2 - 1, winSizeCol / 2 - 1, winSizeCol / 2 + 25, pages,allPages);
-		printf("\033[2;%dH\033[1;32m%s", winSizeCol / 2 - (int)strlen(title) / 2, title);
-		printf("\033[5;%dH\033[34m--------------------------------------------------------\033[34m", winSizeCol / 2 - 27);
+		printf("\033[0;2;32m\033[6;%dH↑\033[10;%dH↓\033[11;%dH\033[2;32m%d/%d\033[1;33m", winSizeCol / 2 - 1, winSizeCol / 2 - 1, winSizeCol / 2 + 25, pages,allPages);
+		printf("\033[2;%dH\033[0;1;32m%s", winSizeCol / 2 - (int)strlen(title) / 2, title);
+		printf("\033[5;%dH\033[34m--------------------------------------------------------", winSizeCol / 2 - 27);
 		for (int i = 0; i < 7; i++) {
 			gotoxy(i + 6, winSizeCol / 2 - 27);
 			printf("|\033[54C|");
 		}
-		printf("\033[13;%dH--------------------------------------------------------\033[0m", winSizeCol / 2 - 27);
+		printf("\033[13;%dH--------------------------------------------------------", winSizeCol / 2 - 27);
 		printf("\033[11;%dH\033[1;31m请选择:\033[0m", winSizeCol / 2 - 23);
 		return;
 	}
-	void Menu3(char title[]) {  /* 菜单#2 */
+	void Menu3(char title[]) {  /* 菜单#2纯洁 */
 			struct winsize size;
 			ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
 			int winSizeCol = size.ws_col;
 
-			printf("\033[2;%dH\033[1;32m%s", winSizeCol / 2 - (int)strlen(title) / 2, title);
-			printf("\033[5;%dH\033[34m--------------------------------------------------------", winSizeCol / 2 - 27);
+			printf("\033[2;%dH\033[0;1;32m%s", winSizeCol / 2 - (int)strlen(title) / 2, title);
+			printf("\033[5;%dH\033[0;2;34m--------------------------------------------------------", winSizeCol / 2 - 27);
 			for (int i = 0; i < 7; i++) {
 				gotoxy(i + 6, winSizeCol / 2 - 27);
 				printf("|\033[54C|");
 			}
-			printf("\033[13;%dH--------------------------------------------------------\033[0m", winSizeCol / 2 - 27);
+			printf("\033[13;%dH--------------------------------------------------------", winSizeCol / 2 - 27);
 			printf("\033[11;%dH\033[1;31m按任意按键返回：\033[0m", winSizeCol / 2 - 23);
 		return;
 	}
@@ -136,31 +136,45 @@
 	void Menu2(char title[], short pages, short allPages) {
 		int winSizeCol = 56;
 
-		gotoxy(6, winSizeCol / 2 - 1); printf("↑"); gotoxy(10, winSizeCol / 2 - 1); printf("↓"); gotoxy(11, winSizeCol / 2 + 24); printf("%d/%d", pages,allPages);
-		gotoxy(2, winSizeCol / 2 - (int)strlen(title) / 2); printf("%s", title);
-		gotoxy(5, winSizeCol / 2 - 27); printf("--------------------------------------------------------");
+		gotoxy(6, winSizeCol / 2 - 1);
+		printf("↑");
+		gotoxy(10, winSizeCol / 2 - 1);
+		printf("↓");
+		gotoxy(11, winSizeCol / 2 + 24);
+		printf("%d/%d", pages,allPages);
+		gotoxy(2, winSizeCol / 2 - (int)strlen(title) / 2);
+		printf("%s", title);
+		gotoxy(5, winSizeCol / 2 - 27);
+		printf("--------------------------------------------------------");
 		for (int i = 0; i < 7; i++) {
 			gotoxy(i + 6, winSizeCol / 2 - 27);
 			printf("|");
 			gotoxy(i + 6, winSizeCol / 2 + 27);
 			printf("|");
 		}
-		gotoxy(13, winSizeCol / 2 - 27); printf("--------------------------------------------------------");
-		gotoxy(11, winSizeCol / 2 - 23); printf("请选择:");
+		gotoxy(13, winSizeCol / 2 - 27);
+		printf("--------------------------------------------------------");
+		gotoxy(11, winSizeCol / 2 - 23);
+		printf("请选择:");
 	}
 	void Menu3(char title[]) {
 		int winSizeCol = 56;
 
-		gotoxy(2, winSizeCol / 2 - (int)strlen(title) / 2); printf("%s", title);
-		gotoxy(5, winSizeCol / 2 - 27); printf("--------------------------------------------------------");
+		gotoxy(2, winSizeCol / 2 - (int)strlen(title) / 2);
+		printf("%s", title);
+		gotoxy(5, winSizeCol / 2 - 27);
+		printf("--------------------------------------------------------");
 		for (int i = 0; i < 7; i++) {
-			gotoxy(0, 0);gotoxy(i + 6, winSizeCol / 2 - 27);
+			gotoxy(0, 0);
+			gotoxy(i + 6, winSizeCol / 2 - 27);
 			printf("|");
 			gotoxy(i + 6, winSizeCol / 2 + 27);
 			printf("|");
 		}
-		gotoxy(13, winSizeCol / 2 - 27); printf("--------------------------------------------------------");
-		gotoxy(11, winSizeCol / 2 - 23); printf("按任意按键返回：");
+		gotoxy(13, winSizeCol / 2 - 27);
+		printf("--------------------------------------------------------");
+		gotoxy(11, winSizeCol / 2 - 23);
+		printf("按任意按键返回：");
 	}
 #endif
 
@@ -179,7 +193,7 @@
 	#endif
 #endif
 
-int Menu(char *title, char *text[], int tl, int list) {
+int Menu(char *title, char *text[], int tl, int list) { /* 菜单程序 */
 #ifdef __linux
 	struct winsize size;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
@@ -201,25 +215,33 @@ int Menu(char *title, char *text[], int tl, int list) {
 #endif
 
 #ifdef __linux
-		printf("\033[5;%dH\033[34m--------------------------------------------------------\033[34m", winSizeCol / 2 - 27);
+		printf("\033[5;%dH\033[0;2;34m--------------------------------------------------------", winSizeCol / 2 - 27);
 		for (int i = 0; i < 7; i++) {
 			gotoxy(i + 6, winSizeCol / 2 - 27);
-			printf("|\033[54C|");
+			printf("\033[0;2;34m|\033[54C|");
 		}
-		printf("\033[13;%dH--------------------------------------------------------\033[0m", winSizeCol / 2 - 27);
-		printf("\033[2;32m\033[6;%dH↑\033[11;%dH↓\033[11;%dH\033[2;32m%d/%d\033[1;33m", winSizeCol / 2 - 1, winSizeCol / 2 - 1, winSizeCol / 2 + 25, currentPage,allPages);
+		printf("\033[13;%dH--------------------------------------------------------", winSizeCol / 2 - 27);
+		printf("\033[0;2;32m\033[6;%dH↑\033[11;%dH↓\033[11;%dH\033[0;2;32m%d/%d\033[0;1;33m", winSizeCol / 2 - 1, winSizeCol / 2 - 1, winSizeCol / 2 + 25, currentPage,allPages);
 		printf("\033[2;%dH\033[1;32m%s\033[0m", winSizeCol / 2 - (int)strlen(title) / 2, title);
 #else
-		gotoxy(6, winSizeCol / 2 - 1); printf("↑"); gotoxy(11, winSizeCol / 2 - 1); printf("↓"); gotoxy(11, winSizeCol / 2 + 24); printf("%d/%d", currentPage,allPages);
-		gotoxy(2, winSizeCol / 2 - (int)strlen(title) / 2); printf("%s", title);
-		gotoxy(5, winSizeCol / 2 - 27); printf("--------------------------------------------------------");
+		gotoxy(6, winSizeCol / 2 - 1);
+		printf("↑");
+		gotoxy(11, winSizeCol / 2 - 1);
+		printf("↓");
+		gotoxy(11, winSizeCol / 2 + 24);
+		printf("%d/%d", currentPage,allPages);
+		gotoxy(2, winSizeCol / 2 - (int)strlen(title) / 2);
+		printf("%s", title);
+		gotoxy(5, winSizeCol / 2 - 27);
+		printf("--------------------------------------------------------");
 		for (int i = 0; i < 7; i++) {
 			gotoxy(i + 6, winSizeCol / 2 - 27);
 			printf("|");
 			gotoxy(i + 6, winSizeCol / 2 + 27);
 			printf("|");
 		}
-		gotoxy(13, winSizeCol / 2 - 27); printf("--------------------------------------------------------");
+		gotoxy(13, winSizeCol / 2 - 27);
+		printf("--------------------------------------------------------");
 #endif
 		for (int i = 1; i <= tl - list * 4 * (currentPage - 1) && i <= list * 4; i++) {
 			if (i != count) {
