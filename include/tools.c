@@ -201,7 +201,7 @@ int Menu(char *title, char *text[], int tl, int list) { /* 菜单程序 */
 #else
 	int winSizeCol = 56;
 #endif
-	int input = 1, currentPage = 1, count = 1, allPages = (tl - 1) / 6 + 1;
+	int input = 1, currentPage = 1, count = 1, allPages = (tl - 1) / (4 * list) + 1;
 
 	if (list <= 0 || list > 2) {
 		list = 2;
@@ -229,7 +229,7 @@ int Menu(char *title, char *text[], int tl, int list) { /* 菜单程序 */
 		gotoxy(11, winSizeCol / 2 - 1);
 		printf("↓");
 		gotoxy(11, winSizeCol / 2 + 24);
-		printf("%d/%d", currentPage,allPages);
+		printf("%2d/%2d", currentPage,allPages);
 		gotoxy(2, winSizeCol / 2 - (int)strlen(title) / 2);
 		printf("%s", title);
 		gotoxy(5, winSizeCol / 2 - 27);
@@ -246,17 +246,17 @@ int Menu(char *title, char *text[], int tl, int list) { /* 菜单程序 */
 		for (int i = 1; i <= tl - list * 4 * (currentPage - 1) && i <= list * 4; i++) {
 			if (i != count) {
 #ifdef __linux
-				printf("\033[33m\033[%d;%dH%s\033[0m", (i + 1) / list + 6, winSizeCol / list - 20 + ((i + 1) % list) * 32, text[i - 1 +  list * 4 * (currentPage - 1)]);
+				printf("\033[33m\033[%d;%dH%s\033[0m", (i + 1) / list + 6 - list % 2, winSizeCol / 2 - 20 + ((i + 1) % list) * 32, text[i - 1 +  list * 4 * (currentPage - 1)]);
 #else
-				gotoxy((i + 1) / list + 6, winSizeCol / list - 20 + ((i + 1) % list) * 32);
+				gotoxy((i + 1) / list + 6 - list % 2, winSizeCol / 2 - 20 + ((i + 1) % list) * 32);
 				printf("%s", text[i - 1 +  list * 4 * (currentPage - 1)]);
 #endif
 			}
 			else {
 #ifdef __linux
-				printf("\033[1;7;33m\033[%d;%dH%s\033[0m", (i + 1) / list + 6, winSizeCol / list - 20 + ((i + 1) % list) * 32, text[i - 1 +  list * 4 * (currentPage - 1)]);
+				printf("\033[1;7;33m\033[%d;%dH%s\033[0m", (i + 1) / list + 6 - list % 2, winSizeCol / 2 - 20 + ((i + 1) % list) * 32, text[i - 1 +  list * 4 * (currentPage - 1)]);
 #else
-				gotoxy((i + 1) / list + 6, winSizeCol / list - 20 + ((i + 1) % list) * 32 - list);
+				gotoxy((i + 1) / list + 6 - list % 2, winSizeCol / 2 - 20 + ((i + 1) % list) * 32 - list);
 				printf("> %s", text[i - 1 +  list * 4 * (currentPage - 1)]);
 #endif
 			}
@@ -277,13 +277,13 @@ int Menu(char *title, char *text[], int tl, int list) { /* 菜单程序 */
 					}
 				}
 				else if (input == 'B') {
-					if (count < list * 4 - 1 && count + list * 4 * (currentPage - 1) <= tl - list) {
+					if (count < list * 4 - (list + 1) % 2 && count + list * 4 * (currentPage - 1) <= tl - list) {
 						count += list;
 					}
 					else if (currentPage < allPages){
 						count -= list * 3;
 						currentPage++;
-						if (count + 8 * (currentPage - 1) > tl) {
+						if (count + (4 * list) * (currentPage - 1) > tl) {
 							count -= 1;
 						}
 					}
@@ -312,7 +312,7 @@ int Menu(char *title, char *text[], int tl, int list) { /* 菜单程序 */
 				return 0;
 			}
 		}
-		else if (input == 'w' || input == 'W') {
+		else if (input == 'w' || input == 'W' || input == 'k' || input == 'K') {
 			if (count > list) {
 				count -= list;
 			}
@@ -321,20 +321,20 @@ int Menu(char *title, char *text[], int tl, int list) { /* 菜单程序 */
 				currentPage--;
 			}
 		}
-		else if (input == 's' || input == 'S') {
-			if (count < 7 && count + 8 * (currentPage - 1) <= tl - list) {
+		else if (input == 's' || input == 'S' || input == 'j' || input == 'J') {
+			if (count < list * 4 - (list + 1) % 2 && count + list * 4 * (currentPage - 1) <= tl - list) {
 				count += list;
 			}
 			else if (currentPage < allPages){
 				count -= list * 3;
 				currentPage++;
-				if (count + 8 * (currentPage - 1) > tl) {
+				if (count + (4 * list) * (currentPage - 1) > tl) {
 					count -= 1;
 				}
 			}
 		}
-		else if (input == 'd' || input == 'D') {
-			if (count < 8 && count + 8 * (currentPage - 1) < tl) {
+		else if (input == 'd' || input == 'D' || input == 'l' || input == 'L') {
+			if (count < list * 4 && count + list * 4 * (currentPage - 1) < tl) {
 				count++;
 			}
 			else if (currentPage < allPages){
@@ -342,12 +342,12 @@ int Menu(char *title, char *text[], int tl, int list) { /* 菜单程序 */
 				currentPage++;
 			}
 		}
-		else if (input == 'a' || input == 'A') {
+		else if (input == 'a' || input == 'A' || input == 'h' || input == 'H') {
 			if (count > 1) {
 				count--;
 			}
 			else if (currentPage > 1){
-				count = 8;
+				count = list * 4;
 				currentPage--;
 			}
 		}
