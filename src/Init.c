@@ -20,7 +20,7 @@ void Init() {
 #endif
 		}
 		config[1] = 1;
-		fp = fopen(Config, "w+");
+		fp = fopen(Config, "w");
 		fprintf(fp, "%d %d %d",config[0], config[1], Max);
 		fclose(fp);
 	}

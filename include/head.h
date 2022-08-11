@@ -1,4 +1,4 @@
-#include "include.h"                         //头文件
+#include "tools.h"                         //头文件
 #include <time.h>
 
 #define LANGFILELINE 33  /* 语言句数 */
@@ -28,8 +28,8 @@ struct Chess {            //游戏信息大杂烩
 /* 定义结构体变量 */
 extern struct Chess *p;
 
-extern char Save[];  /* 保存文件路径 */
-extern char Config[];  /* 选项文件路径 */
+extern char Save[20];  /* 保存文件路径 */
+extern char Config[25];  /* 选项文件路径 */
 extern char * GameDir;  /* 使用的文件路径 */
 
 extern int config[];  /* 选项的保存 */

@@ -6,7 +6,10 @@
 
 - 支持的系统
   - [x] Linux
-  - [x] Windows (使用gcc编译)
+  - [ ] ~~Windows (使用gcc编译)~~
+
+> 我于2022-08的更新中暂时抛弃了对windows的兼容。  
+与windows兼容的版本在`windows`分支中
 
 ## 使用
 
@@ -38,4 +41,4 @@
     - Arch用户可以使用[PKGBUILD文件](https://github.com/YouLanjie/cgame2/blob/arch-package/PKGBUILD)运行`makepkg`构建软件包再运行Pacman进行安装，也可以从[AUR](https://aur.archlinux.org/packages/cgame2)上安装
 
 
-- 手动编译好的文件(**bin/main**)可以直接执行，程序做过兼容性的加强
+- 手动编译好的文件(**bin/main**)应可以直接执行，~~程序做过兼容性的加强~~

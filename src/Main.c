@@ -3,8 +3,8 @@
 struct Chess *p;
 
 /* 文件位置 */
-char Save[] = "/etc/cgame2/save.txt";
-char Config[] = "/etc/cgame2/config.txt";
+char Save[20] = "/etc/cgame2/save.txt";
+char Config[25] = "/etc/cgame2/config.txt";
 char * GameDir = "/etc/cgame2/";
 int config[] = {0, 0};
 int Max = 15;
@@ -13,19 +13,30 @@ FILE * fp;
 int main() {
 	int inputContent = 0; /* 输入的内容 */
 	int config[2] = {1, 0};    //配置选项
-	char *text[] = {"1.开始游戏", "2.游戏记录", "3.游戏帮助", "4.清除存档", "5.设置", "0.退出游戏"};
+	menuData data, help;
 #ifdef __linux
 	struct winsize size;
 #endif
 	int startSize = 0;
+
+	menuDataInit(&data);
+	data.title = "游戏菜单";
+	data.addText(&data, "1.开始游戏", "2.游戏记录", "3.游戏帮助", "4.清除存档", "5.设置", "0.退出游戏", NULL);
+	data.addTextData(&data, 0, "%s%s%s%s%s", "%z开始玩五子棋%z!%z好耶%z!", "%z查看所有记录下来的棋盘结果记录%z", "%z查看和游戏有关的帮助内容%z", "%z这会移除所有的记录%z，%z请慎重%z", "%z设置游戏内部的一些变量%z");
+
+	menuDataInit(&help);
+	help.title = "游戏帮助";
+	help.cfg   = 2;
+	help.addText(&help, "1.按下0,q,Q,esc退出", "2.WSAD%z或者方向键控制方向，回车、空格下子%z", "3.@%z为黑棋%z,O%z为白棋%z,+%z为未下棋子%z", "4.可以参照界面的提示操作", "5.%z同时可以用方向键控制方向%z", "6.%z历史界面需要您的终端足够大以保持正常显示%z", "7.%z按照提示，键入%zY%z删除，否则键入%zN%z或者其他按键%z", "8.%z倘若您使用当前目录作为数据的存储目录，则会提示是否删除直接退出程序防止再次创建文件夹%z", "9.%z同其他界面，使用WASD或方向键移动光标%z", "10.%z使用空格或者回车开启或者关闭光标所在选项%z", "11.%z棋盘大小可以使用%z+(%z或%z=)/-%z增加或者减少%z", NULL);
 
 	signal(SIGINT, stop);
 #ifdef __linux
 	printf("\033[?25l");
 #endif
 	Clear2
+	Max = 15;
 	while (inputContent != 0x1B && inputContent != 0x30 && inputContent != 0x51 && inputContent != 0x71) {
-		Init(p);
+		Init();
 		if ((fp = fopen(Config, "r"))) {
 			fscanf(fp,"%d%d%d", &config[0], &config[1], &Max);
 			fclose(fp);
@@ -36,7 +47,7 @@ int main() {
 #else
 		startSize = 56 / 2 -20;
 #endif
-		inputContent = Menu("游戏菜单", text, 6, 2);
+		inputContent = data.menuShow(&data);
 		printf("\n");
 		Clear2
 		switch (inputContent) {
@@ -54,55 +65,7 @@ int main() {
 				History(p);
 				break;
 			case '3':
-				for (int currentPage = 1; inputContent != 'q' && inputContent != 'Q' && inputContent != '0' && inputContent != 0x1B; ) {
-#ifdef __linux
-					ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
-					startSize = size.ws_col / 2 - 20;
-#else
-					startSize = 56 / 2 -20;
-#endif
-					Clear
-					if (currentPage == 1) {
-						gotoxy(7, startSize); printf("1.按下0,q,Q,esc退出"); gotoxy(8, startSize); printf("2.WSAD或者方向键控制方向，回车、空格下子"); gotoxy(9, startSize); printf("3.@为黑棋,O为白棋,+为未下棋子");
-						Menu2("游戏帮助 - 游戏界面", currentPage, 4);
-					}
-					if (currentPage == 2) {
-						gotoxy(7, startSize); printf("1.可以参照界面的提示操作"); gotoxy(8, startSize); printf("2.同时可以用方向键控制方向"); gotoxy(9, startSize); printf("3.历史界面需要您的终端足够大以保持正常显示");
-						Menu2("游戏帮助 - 历史记录", currentPage, 4);
-					}
-					if (currentPage == 3) {
-						gotoxy(7, startSize); printf("1.按照提示，键入Y删除，否则键入N或者其他按键"); gotoxy(8, startSize); printf("2.倘若您使用当前目录作为数据的存储目录，则会提"); gotoxy(9, startSize); printf("  示是否删除直接退出程序防止再次创建文件夹");
-						Menu2("游戏帮助 - 清除存档", currentPage, 4);
-					}
-					if (currentPage == 4) {
-						gotoxy(7, startSize); printf("1.同其他界面，使用WASD或方向键移动光标"); gotoxy(8, startSize); printf("2.使用空格或者回车开启或者关闭光标所在选项"); gotoxy(9, startSize); printf("3.棋盘大小可以使用+(或=)/-增加或者减少");
-						Menu2("游戏帮助 - 设置", currentPage, 4);
-					}
-					inputContent = getch();
-					if (inputContent == 0x1B) {
-						if (kbhit() == 1) {
-							getchar();
-							inputContent = getchar();
-							if (inputContent == 0x41 || inputContent == 0x44) {
-								if (currentPage > 1) currentPage--;
-								else printf("\a");
-							}
-							else if (inputContent == 0x42 || inputContent == 0x43) {
-								if (currentPage < 4) currentPage++;
-								else printf("\a");
-							}
-						}
-					}
-					else if (inputContent == 0x57 || inputContent == 0x77) {
-						if (currentPage > 1) currentPage--;
-						else printf("\a");
-					}
-					else if (inputContent == 0x53 || inputContent == 0x73) {
-						if (currentPage < 4) currentPage++;
-						else printf("\a");
-					}
-				}
-				inputContent = 3;
+				help.menuShow(&help);
 				break;
 			case '4':
 				Clear
