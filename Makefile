@@ -15,7 +15,7 @@ $(prom): $(OBJ)
 	$(CC) -z now $(OBJ) -L lib -ltools -o $(BIN)/main
 
 %.o: %.c $(incl)
-	$(CC) -g -c $< -o $@
+	$(CC) -g -Wall -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ) $(prom).deb
