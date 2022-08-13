@@ -12,7 +12,7 @@ all: cgame2
 $(prom): $(OBJ)
 	@rm -rf $(BIN)
 	@mkdir bin
-	$(CC) $(OBJ) -L lib -ltools -o $(BIN)/main
+	$(CC) -z now $(OBJ) -L lib -ltools -o $(BIN)/main
 
 %.o: %.c $(incl)
 	$(CC) -g -c $< -o $@
