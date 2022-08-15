@@ -45,15 +45,17 @@
 	#include <windows.h>
 	#include <conio.h>
 	#ifndef Clear
-		#define Clear gotoxy(0, 0); for (int i = 0;i < 50; i++) { printf("                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    "); } gotoxy(0, 0);
+		#define Clear printf("\033[2J\033[1;1H");
 	#endif
 	#ifndef Clear2
 		#define Clear2 system("cls");
 	#endif
 	#ifndef fontColorSet
-		#define fontColorSet(a,b) (a + b)
+		#define fontColorSet(a,b) printf("\033[%d;%dm",a, b)
 	#endif
-	void gotoxy(int x,int y);
+	#ifndef gotoxy
+		#define gotoxy(x,y) printf("\033[%d;%dH",x, y)
+	#endif
 #endif
 
 /* kbhit */
@@ -73,7 +75,7 @@ struct Text {
 	void       (* function);    /* 调用的函数 */
 	int         * var;          /* 调整的变量值 */
 	int           number;       /* 编号 */
-	int           cfg;          /* 类型 */
+	int           cfg;          /* 类型: 0.默认 1.仅显示主界面 2.显示帮助 3.显示设置 4.仅显示帮助，无输入处理 */
 	int           foot;         /* 调整宽度 */
 	struct Text * nextText;     /* 下一条例（链表） */
 };                                  /* 条例结构体 */

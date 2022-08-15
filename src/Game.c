@@ -36,6 +36,7 @@ void Game() {
 	printf(NowTime);
 #endif
 #ifdef _WIN32
+	Clear
 	gotoxy(1, 1);
 	fontColorSet(1,31);
 	printf(Time);
@@ -59,7 +60,6 @@ void Game() {
 			fontColorSet(0,0);
 			error = 0;
 		}
-#ifdef __linux
 		if (p -> board[y - 1][x - 1] == 1) {
 			gotoxy(y + 2, x * 3 - 1); fontColorSet(30, 47);
 			printf(">");
@@ -75,11 +75,6 @@ void Game() {
 			printf(">");
 			fontColorSet(0,0);
 		}
-#endif
-#ifdef _WIN32
-		gotoxy(y + 2, x * 3 - 2);
-		printf(">");
-#endif
 		way = getch();
 		gotoxy(y + 2, x * 3 - 1);
 		printf(" ");
@@ -103,8 +98,10 @@ void Game() {
 					way = 0x00;
 #ifdef __linux
 					pthread_create(&pid, NULL, showTime, NULL);
-#endif
 					Clear2
+#else
+					Clear
+#endif
 				}
 				break;
 			case 0x1B:  /* 在Linux中的Esc键 */
@@ -126,8 +123,10 @@ void Game() {
 						way = 0x00;
 #ifdef __linux
 						pthread_create(&pid, NULL, showTime, NULL);
-#endif
 						Clear2
+#else
+						Clear
+#endif
 					}
 					break;
 				}
@@ -161,7 +160,7 @@ void Game() {
 					win = IfWin(5);
 					if (win == who) {
 #ifdef __linux
-	pthread_cancel(pid);
+						pthread_cancel(pid);
 #endif
 						Clear
 						fontColorSet(0,33);
@@ -186,6 +185,20 @@ void Game() {
 					}
 					break;
 				}
+				break;
+			case 'h':
+			case 'j':
+			case 'k':
+			case 'l':
+				Way[0] = 'K';
+				Way[1] = 'H';
+				Way[2] = 'J';
+				Way[3] = 'L';
+				move(way, &x, &y, Way);
+				Way[0] = 'W';
+				Way[1] = 'A';
+				Way[2] = 'S';
+				Way[3] = 'D';
 				break;
 			default:
 				move(way, &x, &y, Way);
@@ -230,9 +243,10 @@ static void * showTime() {
 static void move(int way, int * x, int * y, int Way[4]) {
 	int up = Way[0], down = Way[2], left = Way[1], right = Way[3];
 	/* 方向键对应字符、WASD式控制键位与坐标设计示意
-	 *         A           W        yx->
-	 *      D  +  C     A  +  D     | ++++ 
-	 *         B           S        v ++++ */
+	 *         A           W           W      yx->
+	 *      D  +  C     A  +  D     A  +  D   | ++++
+	 *         B           S           S      v ++++
+	 */
 	if (way == up || way == up + 32) {
 		if (*y < 2) *y = Max + 1;
 		(*y)--;

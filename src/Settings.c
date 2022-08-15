@@ -1,18 +1,14 @@
 #include "../include/head.h"
 
 void Settings() {
-#ifdef __linux
-	struct winsize size;
-#endif
 	menuData data;
 	FILE * fp;
 
 	fp = fopen(Config, "r"); /* 读取文件 */
 	fscanf(fp, "%d%d%d", &config[0], &config[1], &Max);
 	fclose(fp);
-#ifdef __linux
+
 	printf("\033[?25h");
-#endif
 
 	menuDataInit(&data);
 	data.title = "游戏设置";
@@ -26,6 +22,7 @@ void Settings() {
 #ifdef _WIN32
 	config[1] = 1;
 #endif
+
 	fp = fopen(Config, "w");
 	fprintf(fp,"%d %d %d", config[0], config[1], Max);
 	fclose(fp);
@@ -39,9 +36,7 @@ void Settings() {
 		fprintf(fp,"%d %d %d", config[0], config[1], Max);
 		fclose(fp);
 	}
-#ifdef __linux
 	printf("\033[?25l");
-#endif
 	return;
 }
 

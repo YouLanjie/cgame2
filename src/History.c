@@ -41,7 +41,11 @@ void History() {
 	p = (struct Chess *)malloc(sizeof(struct Chess));
 	max = Max;
 	for (count = 0; count + 1 <= line; count++) {
+#ifdef __linux
 		Clear2
+#else
+		Clear
+#endif
 		fseek(fp, 0L, 0);
 		kbhitGetchar();
 		for (int i = 0; i <= count; i++) {
