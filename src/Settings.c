@@ -1,7 +1,7 @@
 #include "../include/head.h"
 
 void Settings() {
-	menuData data;
+	menuData data = menuDataInit();
 	FILE * fp;
 
 	fp = fopen(Config, "r"); /* 读取文件 */
@@ -10,7 +10,6 @@ void Settings() {
 
 	printf("\033[?25h");
 
-	menuDataInit(&data);
 	data.title = "游戏设置";
 	data.cfg   = 3;
 	data.addText(&data, "自动下棋", "当前目录", "棋盘大小", NULL);
