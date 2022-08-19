@@ -1,9 +1,10 @@
 #include "../include/head.h"
+#include <curses.h>
 
 #ifdef __linux
-static void * showTime();
+static void showTime();
 #endif
-static void move(int way, int * x, int * y, int Way[4]);
+static void Move(int way, int * x, int * y, int Way[4]);
 
 void Game() {
 	int count,count2;                      //用于计数
@@ -14,9 +15,6 @@ void Game() {
 	int win  = 0;	                       //赢家，1黑，2白
 	int who = 1;                           //现在下子的玩家
 	FILE * fp;
-#ifdef __linux
-	pthread_t pid;
-#endif
 
 	Clear
 	p = (struct Chess *)malloc(sizeof(struct Chess));
@@ -28,12 +26,22 @@ void Game() {
 	GetTime();
 
 #ifdef __linux
-	pthread_create(&pid, NULL, showTime, NULL);
-	Clear2
-	GetNowTime();
-	gotoxy(1, 1);
-	fontColorSet(1,31);
-	printf(NowTime);
+	struct itimerval tick;
+
+	/* 定时间隔 */
+	tick.it_interval.tv_sec = 1;
+	tick.it_interval.tv_usec = 0;
+	/* 延迟启动 */
+	tick.it_value.tv_sec = 0;
+	tick.it_value.tv_usec = 100000;
+
+	alarm(0);
+	signal(SIGALRM, showTime);
+	if (setitimer(ITIMER_REAL, &tick, NULL)) {
+		perror("Error");
+		getch();
+		return;
+	}
 #endif
 #ifdef _WIN32
 	Clear
@@ -43,51 +51,58 @@ void Game() {
 #endif
 	while(win != 1 && win != 2) {
 		GetNowTime();
-		gotoxy(1, 1);
-		fontColorSet(1,31);
-		printf(NowTime);
-		gotoxy(2,1);
+		move(0, 0);
+		attron(COLOR_PAIR(1));
+		printw(NowTime);
+		attroff(COLOR_PAIR(1));
 		PrintBoard();
+		attron(COLOR_PAIR(1));
+		move(Max + 4, Max * 3 / 4 * 1 - 4);
 		if (who == 1) {
-			printf("黑方下\n");
+			printw("黑方下 @");
 		}
 		else if (who == 2) {
-			printf("白方下\n");
+			printw("白方下 0");
+		}
+		if (config[0] == 1) {
+			mvaddstr(Max + 4, Max * 3 / 4 * 3 - 5, "自动下棋开启");
 		}
 		if (error == 1) {
-			fontColorSet(1,33);
-			printf("你不能下在非空的格子!\n");
-			fontColorSet(0,0);
+			move(Max + 5, 3);
+			printw("你不能下在非空的格子!");
 			error = 0;
 		}
+		attroff(COLOR_PAIR(1));
+		showTime();
+		mvaddch(y + 2, x * 3 - 2, ' ');
+		move(y + 2, x * 3 - 2);
 		if (p -> board[y - 1][x - 1] == 1) {
-			gotoxy(y + 2, x * 3 - 1); fontColorSet(30, 47);
-			printf(">");
-			fontColorSet(0,0);
+			attron(COLOR_PAIR(5));
+			printw(">");
+			attroff(COLOR_PAIR(5));
 		}
 		else if (p -> board[y - 1][x - 1] == 2) {
-			gotoxy(y + 2, x * 3 - 1); fontColorSet(0,1); fontColorSet(37, 40);
-			printf(">");
-			fontColorSet(0,0);
+			attron(COLOR_PAIR(4));
+			printw(">");
+			attroff(COLOR_PAIR(4));
 		}
 		else {
-			gotoxy(y + 2, x * 3 - 1); fontColorSet(0,1); fontColorSet(37, 40);
-			printf(">");
-			fontColorSet(0,0);
+			attron(COLOR_PAIR(1));
+			printw(">");
+			attroff(COLOR_PAIR(1));
 		}
 		way = getch();
-		gotoxy(y + 2, x * 3 - 1);
-		printf(" ");
 		switch (way) {
 			case 0x30: /* 0 */
 			case 0x51: /* Q */
 			case 0x71: /* q */
 #ifdef __linux
-				pthread_cancel(pid);
+				alarm(0);
 #endif
-				Clear
-				fontColorSet(1,33);
-				printf("请确认退出！本次游戏将不会记录！（y/N）\n");
+				attron(COLOR_PAIR(1));
+				move(Max + 5, 3);
+				printw("请确认退出！本次游戏将不会记录！（y/N）");
+				attroff(COLOR_PAIR(1));
 				way = getch();
 				if (way == 0x59 || way == 0x79) {
 					free(p);
@@ -97,7 +112,11 @@ void Game() {
 				else {
 					way = 0x00;
 #ifdef __linux
-					pthread_create(&pid, NULL, showTime, NULL);
+					if (setitimer(ITIMER_REAL, &tick, NULL)) {
+						perror("Error");
+						getch();
+						return;
+					}
 					Clear2
 #else
 					Clear
@@ -108,11 +127,12 @@ void Game() {
 				if (!kbhit()) { /* 判断在esc符号后还有没有字符 */
 					way = 0x1B;
 #ifdef __linux
-					pthread_cancel(pid);
+					alarm(0);
 #endif
-					Clear
-					fontColorSet(1,33);
-					printf("请确认退出！本次游戏将不会记录！（y/N）\n");
+					attron(COLOR_PAIR(1));
+					move(0, 0);
+					printw("请确认退出！本次游戏将不会记录！（y/N）");
+					attroff(COLOR_PAIR(1));
 					way = getch();
 					if (way == 0x59 || way == 0x79) {
 						free(p);
@@ -122,7 +142,11 @@ void Game() {
 					else {
 						way = 0x00;
 #ifdef __linux
-						pthread_create(&pid, NULL, showTime, NULL);
+						if (setitimer(ITIMER_REAL, &tick, NULL)) {
+							perror("Error");
+							getch();
+							return;
+						}
 						Clear2
 #else
 						Clear
@@ -139,7 +163,7 @@ void Game() {
 					Way[1] = 'D';
 					Way[2] = 'B';
 					Way[3] = 'C';
-					move(way, &x, &y, Way);
+					Move(way, &x, &y, Way);
 					Way[0] = 'W';
 					Way[1] = 'A';
 					Way[2] = 'S';
@@ -158,24 +182,62 @@ void Game() {
 					p -> x = x;
 					p -> y = y;
 					win = IfWin(5);
+
+					PrintBoard();
+					showTime();
+					attron(COLOR_PAIR(1));
+					move(Max + 4, Max * 3 / 4 * 1 - 4);
+					if (who == 1) {
+						printw("黑方下 @");
+					}
+					else if (who == 2) {
+						printw("白方下 0");
+					}
+					if (config[0] == 1) {
+						mvaddstr(Max + 4, Max * 3 / 4 * 3 - 5, "自动下棋开启");
+					}
+					attroff(COLOR_PAIR(1));
+
+					mvaddch(y + 2, x * 3 - 2, ' ');
+					move(y + 2, x * 3 - 2);
+					if (p -> board[y - 1][x - 1] == 1) {
+						attron(COLOR_PAIR(5));
+						printw(">");
+						attroff(COLOR_PAIR(5));
+					}
+					else if (p -> board[y - 1][x - 1] == 2) {
+						attron(COLOR_PAIR(4));
+						printw(">");
+						attroff(COLOR_PAIR(4));
+					}
+					else {
+						attron(COLOR_PAIR(1));
+						printw(">");
+						attroff(COLOR_PAIR(1));
+					}
+
 					if (win == who) {
 #ifdef __linux
-						pthread_cancel(pid);
+						alarm(0);
 #endif
-						Clear
-						fontColorSet(0,33);
-						printf("游戏结束，");
+						move(Max + 5, 3);
+						attron(COLOR_PAIR(6));
+						attron(A_BOLD);
+						printw("游戏结束，");
 						if (who == 1) {
-							printf("黑方");
+							printw("黑方");
 						}
 						else if (who == 2) {
-							printf("白方");
+							printw("白方");
 						}
-						printf("胜利！\n");
-						fontColorSet(0,31);
-						printf("按Enter返回\n");
-						fontColorSet(0,0);
-						getch();
+						printw("胜利！");
+						printw("（按Q键返回）");
+						attroff(A_BOLD);
+						attroff(COLOR_PAIR(6));
+						way = 0;
+						while (way != 'q' && way != 'Q') {
+							way = getch();
+						}
 					}
 					if (config[0] == 1) {  /* 调用自动下棋 */
 						AI();
@@ -186,6 +248,20 @@ void Game() {
 					break;
 				}
 				break;
+			case 'o':
+			case 'O':
+				alarm(0);
+				clear();
+				Settings();
+				if (setitimer(ITIMER_REAL, &tick, NULL)) {
+					perror("Error");
+					getch();
+					return;
+				}
+				if (config[0] == 1) {
+					who = 1;
+				}
+				break;
 			case 'h':
 			case 'j':
 			case 'k':
@@ -194,17 +270,16 @@ void Game() {
 				Way[1] = 'H';
 				Way[2] = 'J';
 				Way[3] = 'L';
-				move(way, &x, &y, Way);
+				Move(way, &x, &y, Way);
 				Way[0] = 'W';
 				Way[1] = 'A';
 				Way[2] = 'S';
 				Way[3] = 'D';
 				break;
 			default:
-				move(way, &x, &y, Way);
+				Move(way, &x, &y, Way);
 				break;
 		}
-		printf("\n");
 	}
 	fp = fopen(Save,"a");
 	if (!fp) {
@@ -228,19 +303,18 @@ void Game() {
 }
 
 #ifdef __linux
-static void * showTime() {
-	while(1) {
-		GetNowTime();
-		gotoxy(1, 1);
-		fontColorSet(1,31);
-		printf(NowTime);
-		sleep(1);
-	}
-	pthread_exit(0);
+static void showTime() {
+	GetNowTime();
+	move(1, 3);
+	attron(COLOR_PAIR(1));
+	printw(NowTime);
+	attroff(COLOR_PAIR(1));
+	refresh();
+	return;
 }
 #endif
 
-static void move(int way, int * x, int * y, int Way[4]) {
+static void Move(int way, int * x, int * y, int Way[4]) {
 	int up = Way[0], down = Way[2], left = Way[1], right = Way[3];
 	/* 方向键对应字符、WASD式控制键位与坐标设计示意
 	 *         A           W           W      yx->

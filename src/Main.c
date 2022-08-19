@@ -1,4 +1,5 @@
 #include "../include/head.h"                           //导入头文件
+#include <curses.h>
 
 struct Chess *p;
 
@@ -23,8 +24,11 @@ int main() {
 	help.cfg   = 2;
 	help.addText(&help, "1.%z按下%z0,q,Q,esc%z退出%z", "2.WSAD%z或者方向键控制方向，回车、空格下子%z", "3.@%z为黑棋%z,O%z为白棋%z,+%z为未下棋子%z", "4.%z可以参照界面的提示操作%z", "5.%z同时可以用方向键控制方向%z", "6.%z历史界面需要您的终端足够大以保持正常显示%z", "7.%z按照提示，键入%zY%z删除，否则键入%zN%z或者其他按键%z", "8.%z倘若您使用当前目录作为数据的存储目录，则会提示是否删除直接退出程序防止再次创建文件夹%z", "9.%z同其他界面，使用%zWASD%z或方向键移动光标%z", "10.%z使用空格或者回车开启或者关闭光标所在选项%z", "11.%z棋盘大小可以使用%z+(%z或%z=)/-%z增加或者减少%z", NULL);
 
+	init_pair(6, COLOR_YELLOW, COLOR_BLUE);
+	init_pair(7, COLOR_BLACK, COLOR_BLACK);
+	init_pair(8, COLOR_WHITE, COLOR_WHITE);
+
 	signal(SIGINT, stop);
-	printf("\033[?25l");
 	Clear2
 	Max = 15;
 	while (inputContent != 0x1B && inputContent != 0x30 && inputContent != 0x51 && inputContent != 0x71) {
@@ -34,12 +38,17 @@ int main() {
 			fclose(fp);
 		}
 		inputContent = data.menuShow(&data);
-		printf("\n");
-		Clear2
+		attron(COLOR_PAIR(1));
+		for (int i = 0; i < LINES; i++) {
+			for (int i2 = 0; i2 < COLS; i2++) {
+				mvaddch(i, i2, ' ');
+			}
+		}
+		attroff(COLOR_PAIR(1));
 		switch (inputContent) {
 			case '0':
 			case '6':
-				printf("\033[?25h");
+				endwin();
 				return 0;
 				break;
 			case '1':
@@ -52,9 +61,9 @@ int main() {
 				help.menuShow(&help);
 				break;
 			case '4':
-				Clear
-				fontColorSet(1,33);
-				printf("请确清除存档，您将失去您的所有记录！（y/N）\n");
+				attron(COLOR_PAIR(1));
+				move(0, 0);
+				printw("请确清除存档，您将失去您的所有记录！（y/N）");
 				inputContent = getch();
 				if (inputContent == 'y' || inputContent == 'Y') {
 					remove(Save);
@@ -67,16 +76,18 @@ int main() {
 							fprintf(fp,"%d %d %d", config[0], 0, Max);
 							fclose(fp);
 						}
-						printf("是否直接退出游戏?否则将重新创建数据目录!(默认退出)Y/n\n");
+						move(1, 0);
+						printf("是否直接退出游戏?否则将重新创建数据目录!(默认退出)Y/n");
 						inputContent = getch();
 						if (inputContent != 0x4E && inputContent != 0x6E) {
-							printf("\033[?25h\n");
 							Clear
+							endwin();
 							return 0;
 						}
 					}
 				}
 				Clear
+				attroff(COLOR_PAIR(1));
 				break;
 			case '5':
 				Settings();
@@ -87,18 +98,16 @@ int main() {
 		Clear2
 	}
 	Clear2
-	printf("\033[?25h");
+	endwin();
 	return 0;
 }
 
 void stop() {
-	printf("\033[?25h");
-	Clear2
+	endwin();
 	printf("程序退出\n");
 	if (fp) {
 		fclose(fp);
 	}
-	Clear2
 	exit(0);
 }
 

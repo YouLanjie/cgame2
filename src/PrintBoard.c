@@ -1,46 +1,100 @@
 #include "../include/head.h"
+#include <curses.h>
 
 void PrintBoard() {
 	int count;
 	int count2;
 
-	gotoxy(2,1);
-	fontColorSet(1,33);
-	printf("-");
-	for (count = 0; count < Max; count++) {
-		printf("---");
+	attron(COLOR_PAIR(1));
+	move(0, 0);
+	for (int i = 0; i < LINES; i++) {
+		for (int i2 = 0; i2 < COLS; i2++) {
+			mvaddch(i, i2, ' ');
+		}
 	}
-	printf("-\n");
-	fontColorSet(1,33);
-	kbhitGetchar();
+	attroff(COLOR_PAIR(1));
+
+	attron(COLOR_PAIR(6));
+	attron(A_BOLD);
+
+	move(0, 0);
+	printw(LineLU);
+	for (count = 0; count < Max; count++) {
+		printw("%s%s%s", LineH, LineH, LineH);
+	}
+	printw(LineRU);
+	mvaddstr(1, Max * 3 + 1, LineV);
+	mvaddstr(1, 0, LineV);
+
+	move(2, 0);
+	printw(LineLC);
+	for (count = 0; count < Max; count++) {
+		printw("%s%s%s", LineH, LineH, LineH);
+	}
+	printw(LineRC);
+	attroff(COLOR_PAIR(6));
+
 	for (count = 0; count < Max; count++) {    //打印棋盘
-		fontColorSet(1,33); printf("|"); fontColorSet(0,0);
+		move(count + 3, 0);
+		attron(COLOR_PAIR(6));
+		attron(A_BOLD);
+		printw(LineV);
+		attroff(A_BOLD);
+		attroff(COLOR_PAIR(6));
 		for (count2= 0; count2 < Max; count2++) {
 			if (p -> board[count][count2] == 0) {
-				fontColorSet(0,2); fontColorSet(37,40);
-				printf(" + ");
-				fontColorSet(0,0);
+				attron(COLOR_PAIR(1));
+				printw(" + ");
+				attron(COLOR_PAIR(1));
 			}
 			else if (p -> board[count][count2] == 1) {
-				fontColorSet(0,2); fontColorSet(30,47);
-				printf(" @ ");
-				fontColorSet(0,0);
+				attron(COLOR_PAIR(7));
+				printw(" @ ");
+				attron(COLOR_PAIR(7));
 			}
 			else if (p -> board[count][count2] == 2) {
-				fontColorSet(0,2); fontColorSet(37,40);
-				printf(" O ");
-				fontColorSet(0,0);
+				attron(COLOR_PAIR(8));
+				printw(" O ");
+				attron(COLOR_PAIR(8));
 			}
 		}
-		fontColorSet(1,33); printf("|\n"); fontColorSet(0,0);
+		attron(COLOR_PAIR(6));
+		attron(A_BOLD);
+		printw(LineV);
+		attroff(A_BOLD);
+		attroff(COLOR_PAIR(6));
 	}
-	fontColorSet(1,33);
+
+	attron(COLOR_PAIR(6));
+	attron(A_BOLD);
+
+	mvaddstr(count + 3, 0, LineLC);
 	for (count = 0; count < Max; count++) {
-		printf("---");
+		printw("%s%s%s", LineH, LineH, LineH);
 	}
-	printf("--\n");
-	fontColorSet(0,0);
-	kbhitGetchar();
+	printw(LineRC);
+
+	mvaddstr(count + 4, 0, LineV);
+	for (count = 0; count < Max; count++) {
+		printw("   ");
+	}
+	printw(LineV);
+
+	mvaddstr(count + 5, 0, LineV);
+	for (count = 0; count < Max; count++) {
+		printw("   ");
+	}
+	printw(LineV);
+
+	mvaddstr(count + 6, 0, LineLD);
+	for (count = 0; count < Max; count++) {
+		printw("%s%s%s", LineH, LineH, LineH);
+	}
+	printw(LineRD);
+
+	attroff(A_BOLD);
+	attroff(COLOR_PAIR(6));
+	refresh();
 	return;
 }
 

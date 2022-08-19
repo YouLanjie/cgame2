@@ -8,7 +8,6 @@ void Settings() {
 	fscanf(fp, "%d%d%d", &config[0], &config[1], &Max);
 	fclose(fp);
 
-	printf("\033[?25h");
 
 	data.title = "游戏设置";
 	data.cfg   = 3;
@@ -23,19 +22,10 @@ void Settings() {
 #endif
 
 	fp = fopen(Config, "w");
-	fprintf(fp,"%d %d %d", config[0], config[1], Max);
-	fclose(fp);
-	if (config[1] == 1 && strcmp(Config, "/etc/cgame2/config.txt") == 0) {
-		changeDir("./cgame2-data/");
-	}
-	else if (config[1] == 0 && strcmp(Config, "./cgame2-data/config.txt") == 0) {
-		changeDir("/etc/cgame2/");
-	}
-	if ((fp = fopen(Config, "w"))) {
+	if (fp) {
 		fprintf(fp,"%d %d %d", config[0], config[1], Max);
 		fclose(fp);
 	}
-	printf("\033[?25l");
 	return;
 }
 

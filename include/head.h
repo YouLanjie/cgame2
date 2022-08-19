@@ -1,10 +1,12 @@
 #include "tools.h"                         //头文件
-#include <time.h>
+#include "specialChar.h"
+#include <sys/time.h>
+#include <curses.h>
 
 #define LANGFILELINE 33  /* 语言句数 */
 
-#define Time "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d\n",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec,Max,Max //开局时间标准格式
-#define NowTime "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d\n",p -> nt.year,p -> nt.mon,p -> nt.day,p -> nt.hour,p -> nt.min,p -> nt.sec,Max,Max //现在时间标准格式
+#define Time "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec,Max,Max //开局时间标准格式
+#define NowTime "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d",p -> nt.year,p -> nt.mon,p -> nt.day,p -> nt.hour,p -> nt.min,p -> nt.sec,Max,Max //现在时间标准格式
 
 /* 定义结构体 */
 struct time {                                //存储时间信息
