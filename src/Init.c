@@ -1,5 +1,4 @@
 #include "../include/head.h"
-#include <curses.h>
 
 void Init() {
 	int error = 0;
@@ -19,6 +18,11 @@ void Init() {
 #ifdef _WIN32
 			mkdir(GameDir);
 #endif
+		}
+		if (access(GameDir, 0) == EOF) {    /* 再无就退出 */
+			endwin();
+			perror("无法创建游戏数据文件夹");
+			exit(-1);
 		}
 		config[1] = 1;
 	}
