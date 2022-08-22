@@ -147,43 +147,63 @@ void Game() {
 				}
 				break;
 			case 0x0D: /* CR回车键 \r */
+			case '\n':
 			case 0x20: /* 空格键 */
-				if (p -> board[y - 1][x - 1] == 1 || p -> board[y - 1][x - 1] == 2) {
+				if (!config[2] && (p -> board[y - 1][x - 1] == 1 || p -> board[y - 1][x - 1] == 2)) {
 					error = 1;
 					break;
 				}
-				else if (p -> board[y - 1][x - 1] == 0) {
-					p -> board[y - 1][x - 1] = who;
-					p -> who = who;
-					p -> x = x;
-					p -> y = y;
-					win = IfWin(5);
-					if (win == who) {
-#ifdef __linux
-						pthread_cancel(pid);
-#endif
-						Clear
-						fontColorSet(0,33);
-						printf("游戏结束，");
-						if (who == 1) {
-							printf("黑方");
-						}
-						else if (who == 2) {
-							printf("白方");
-						}
-						printf("胜利！\n");
-						fontColorSet(0,31);
-						printf("按Enter返回\n");
-						fontColorSet(0,0);
-						getch();
+				else if (p -> board[y - 1][x - 1] == 0 || config[2]) {
+					if (!config[2] || way == '\n') {    /* 用户输入 */
+						p -> board[y - 1][x - 1] = who;
 					}
-					if (config[0] == 1) {  /* 调用自动下棋 */
+					else {    /* 自动下棋 */
 						AI();
 					}
-					else {  /* 切换下棋的一方 */
+					p -> who = who;
+					win = IfWin(5);
+
+					if (win != who && config[0] == 1) {  /* 使用AI下棋 */
+						who = 3 - who;
+						p -> who = who;
+						AI();
+						win = IfWin(5);
+						if (win == 0) {
+							who = 3 - who;
+							p -> who = who;
+						}
+					}
+
+					if (win == who) {    /* 判断输赢 */
+#ifdef __linux
+						alarm(0);
+#endif
+						PrintBoard();
+						way = 0;
+						while (way != 'q' && way != 'Q') {
+							way = getch();
+						}
+					}
+					if (config[0] == 0) {  /* 切换下棋的一方 */
 						who = 3 - who;
 					}
 					break;
+				}
+				break;
+			case 'o':
+			case 'O':
+#ifdef __linux
+				pthread_cancel(pid);
+#endif
+				Settings();
+#ifdef __linux
+				pthread_create(&pid, NULL, showTime, NULL);
+				Clear2
+#else
+				Clear
+#endif
+				if (config[0] == 1) {
+					who = 1;
 				}
 				break;
 			case 'h':
