@@ -36,7 +36,7 @@ void Init() {
 			perror("[init](Config): fopen");
 			exit(-1);
 		}
-		fprintf(fp, "%d %d %d",config[0], config[1], Max);    /* 创建Config文件并写入配置 */
+		fprintf(fp, "%d %d %d %d",config[0], config[1], config[2], Max);    /* 创建Config文件并写入配置 */
 		fclose(fp);
 	}
 	else {
@@ -48,7 +48,7 @@ void Init() {
 			perror("Can't open file");
 			exit(-1);
 		}
-		error = fscanf(fp,"%d%d%d", &config[0], &config[1], &Max);
+		error = fscanf(fp,"%d%d%d%d", &config[0], &config[1], &config[2], &Max);
 
 		if (error == EOF) {    /* 如果读取错误 */
 			perror("[init](Config): fscanf");
@@ -56,7 +56,7 @@ void Init() {
 			fp = fopen(Config, "w");    /* 则写入数据 */
 			config[0] = config[1] = 0;
 			Max = 15;
-			fprintf(fp, "%d %d %d",config[0], config[1], Max);
+			fprintf(fp, "%d %d %d %d",config[0], config[1], config[2], Max);
 		}
 		fclose(fp);
 	}
@@ -64,7 +64,7 @@ void Init() {
 	if (config[1] == 1 && strcmp(Config, "/etc/cgame2/config.txt") == 0) {    /* 更改目录为当前目录 */
 		changeDir("./cgame2-data/");    /* 更该目录为当前目录 */
 		if ((fp = fopen(Config, "w"))) {    /* 拷贝当前的设置数据到更改后的目录 */
-			fprintf(fp,"%d %d %d", config[0], config[1], Max);
+			fprintf(fp,"%d %d %d %d", config[0], config[1], config[2], Max);
 			fclose(fp);
 		}
 		Init();    /* 重新读取 */
@@ -73,7 +73,7 @@ void Init() {
 	else if (config[1] == 0 && strcmp(Config, "./cgame2-data/config.txt") == 0) {    /* 更改目录为系统目录（Linux限定） */
 		changeDir("/etc/cgame2/");    /* 更改目录为系统目录 */
 		if ((fp = fopen(Config, "w"))) {    /* 拷贝当前的设置数据到更改后的目录 */
-			fprintf(fp,"%d %d %d", config[0], config[1], Max);
+			fprintf(fp,"%d %d %d %d", config[0], config[1], config[2], Max);
 			fclose(fp);
 		}
 		Init();    /* 重新读取 */

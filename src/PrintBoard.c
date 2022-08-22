@@ -44,19 +44,22 @@ void PrintBoard() {
 		for (count2= 0; count2 < Max; count2++) {
 			if (p -> board[count][count2] == 0) {
 				attron(COLOR_PAIR(1));
-				printw(" + ");
+				printw("::");
 				attron(COLOR_PAIR(1));
 			}
 			else if (p -> board[count][count2] == 1) {
 				attron(COLOR_PAIR(7));
-				printw(" @ ");
+				printw("@@");
 				attron(COLOR_PAIR(7));
 			}
 			else if (p -> board[count][count2] == 2) {
 				attron(COLOR_PAIR(8));
-				printw(" O ");
+				printw("OO");
 				attron(COLOR_PAIR(8));
 			}
+			attron(COLOR_PAIR(1));
+			printw(" ");
+			attroff(COLOR_PAIR(1));
 		}
 		attron(COLOR_PAIR(6));
 		attron(A_BOLD);

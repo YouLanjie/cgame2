@@ -74,23 +74,24 @@ void Game() {
 		}
 		attroff(COLOR_PAIR(1));
 		showTime();
-		mvaddch(y + 2, x * 3 - 2, ' ');
 		move(y + 2, x * 3 - 2);
+		attron(A_REVERSE);
 		if (p -> board[y - 1][x - 1] == 1) {
-			attron(COLOR_PAIR(5));
-			printw(">");
-			attroff(COLOR_PAIR(5));
+			attron(COLOR_PAIR(7));
+			printw("@@");
+			attroff(COLOR_PAIR(7));
 		}
 		else if (p -> board[y - 1][x - 1] == 2) {
-			attron(COLOR_PAIR(4));
-			printw(">");
-			attroff(COLOR_PAIR(4));
+			attron(COLOR_PAIR(8));
+			printw("OO");
+			attroff(COLOR_PAIR(8));
 		}
 		else {
 			attron(COLOR_PAIR(1));
-			printw(">");
+			printw("><");
 			attroff(COLOR_PAIR(1));
 		}
+		attroff(A_REVERSE);
 		way = getch();
 		switch (way) {
 			case 0x30: /* 0 */
@@ -171,55 +172,71 @@ void Game() {
 				}
 				break;
 			case 0x0D: /* CR回车键 \r */
-			case 0x20: /* 空格键 */
-				if (p -> board[y - 1][x - 1] == 1 || p -> board[y - 1][x - 1] == 2) {
+			case '\n':
+			case 0x20: /* 空格键 -> 下棋 */
+				if (!config[2] && (p -> board[y - 1][x - 1] == 1 || p -> board[y - 1][x - 1] == 2)) {
 					error = 1;
 					break;
 				}
-				else if (p -> board[y - 1][x - 1] == 0) {
-					p -> board[y - 1][x - 1] = who;
+				else if (p -> board[y - 1][x - 1] == 0 || config[2]) {
+					if (!config[2] || way == '\n') {    /* 用户输入 */
+						p -> board[y - 1][x - 1] = who;
+					}
+					else {    /* 自动下棋 */
+						AI();
+					}
 					p -> who = who;
-					p -> x = x;
-					p -> y = y;
 					win = IfWin(5);
 
-					PrintBoard();
-					showTime();
-					attron(COLOR_PAIR(1));
-					move(Max + 4, Max * 3 / 4 * 1 - 4);
-					if (who == 1) {
-						printw("黑方下 @");
-					}
-					else if (who == 2) {
-						printw("白方下 0");
-					}
-					if (config[0] == 1) {
-						mvaddstr(Max + 4, Max * 3 / 4 * 3 - 5, "自动下棋开启");
-					}
-					attroff(COLOR_PAIR(1));
-
-					mvaddch(y + 2, x * 3 - 2, ' ');
-					move(y + 2, x * 3 - 2);
-					if (p -> board[y - 1][x - 1] == 1) {
-						attron(COLOR_PAIR(5));
-						printw(">");
-						attroff(COLOR_PAIR(5));
-					}
-					else if (p -> board[y - 1][x - 1] == 2) {
-						attron(COLOR_PAIR(4));
-						printw(">");
-						attroff(COLOR_PAIR(4));
-					}
-					else {
-						attron(COLOR_PAIR(1));
-						printw(">");
-						attroff(COLOR_PAIR(1));
+					if (win != who && config[0] == 1) {  /* 使用AI下棋 */
+						who = 3 - who;
+						p -> who = who;
+						AI();
+						win = IfWin(5);
+						if (win == 0) {
+							who = 3 - who;
+							p -> who = who;
+						}
 					}
 
-					if (win == who) {
+					if (win == who) {    /* 判断输赢 */
 #ifdef __linux
 						alarm(0);
 #endif
+						PrintBoard();
+						showTime();
+						attron(COLOR_PAIR(1));
+						move(Max + 4, Max * 3 / 4 * 1 - 4);
+						if (who == 1) {
+							printw("黑方下 @");
+						}
+						else if (who == 2) {
+							printw("白方下 0");
+						}
+						if (config[0] == 1) {
+							mvaddstr(Max + 4, Max * 3 / 4 * 3 - 5, "自动下棋开启");
+						}
+						attroff(COLOR_PAIR(1));
+
+						move(y + 2, x * 3 - 2);
+						attron(A_REVERSE);
+						if (p -> board[y - 1][x - 1] == 1) {
+							attron(COLOR_PAIR(7));
+							printw("@@");
+							attroff(COLOR_PAIR(7));
+						}
+						else if (p -> board[y - 1][x - 1] == 2) {
+							attron(COLOR_PAIR(8));
+							printw("OO");
+							attroff(COLOR_PAIR(8));
+						}
+						else {
+							attron(COLOR_PAIR(1));
+							printw("><");
+							attroff(COLOR_PAIR(1));
+						}
+						attroff(A_REVERSE);
+
 						move(Max + 5, 3);
 						attron(COLOR_PAIR(6));
 						attron(A_BOLD);
@@ -239,10 +256,7 @@ void Game() {
 							way = getch();
 						}
 					}
-					if (config[0] == 1) {  /* 调用自动下棋 */
-						AI();
-					}
-					else {  /* 切换下棋的一方 */
+					if (config[0] == 0) {  /* 切换下棋的一方 */
 						who = 3 - who;
 					}
 					break;

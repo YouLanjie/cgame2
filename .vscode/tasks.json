@@ -16,6 +16,7 @@
                                 "${fileDirname}/../src/PrintBoard.c",
                                 "${fileDirname}/../src/Settings.c",
                                 "${fileDirname}/../lib/libtools.a",
+                                "-lncurses",
                                 "-o",
                                 "${fileDirname}/../bin/main"
                         ],

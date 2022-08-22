@@ -76,24 +76,28 @@ void History() {
 			for (int i2 = 0; p -> board[i][i2] != '\0' && p -> board[i][i2] != EOF; i2++) {
 				if (p -> board[i][i2] == '0') {
 					attron(COLOR_PAIR(1));
-					printw(" + ");
+					printw("::");
 					attron(COLOR_PAIR(1));
 				}
 				else if (p -> board[i][i2] == '1') {
 					attron(COLOR_PAIR(7));
-					printw(" @ ");
+					printw("@@");
 					attron(COLOR_PAIR(7));
 				}
 				else if (p -> board[i][i2] == '2') {
 					attron(COLOR_PAIR(8));
-					printw(" O ");
+					printw("OO");
 					attron(COLOR_PAIR(8));
 				}
+				attron(COLOR_PAIR(1));
+				printw(" ");
+				attroff(COLOR_PAIR(1));
 			}
 		}
 		move(i + 1, 0);
 		attron(COLOR_PAIR(1));
-		printw("按下L查看上一局，按下N查看下一局,0退出");
+		printw("(%02d/%02d)", count + 1, line);
+		mvaddstr(i + 2, 0, "按下wahk查看上一局，按下sdjl查看下一局,0q退出");
 		attroff(COLOR_PAIR(1));
 		chose = getch();
 		if (chose == 0x1B) {
@@ -119,8 +123,10 @@ void History() {
 				free(p);
 				return;
 				break;
-			case 0x4C:
-			case 0x6C:
+			case 'w':
+			case 'a':
+			case 'l':
+			case 'k':
 				if (count == 0) {
 					count = -1;
 				}
@@ -128,8 +134,10 @@ void History() {
 					count -= 2;
 				}
 				break;
-			case 0x4E:
-			case 0x6E:
+			case 's':
+			case 'd':
+			case 'h':
+			case 'j':
 				if (count + 1 >= line) {
 					count--;
 				}
