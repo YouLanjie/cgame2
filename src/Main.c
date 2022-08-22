@@ -77,7 +77,7 @@ int main() {
 							fclose(fp);
 						}
 						move(1, 0);
-						printf("是否直接退出游戏?否则将重新创建数据目录!(默认退出)Y/n");
+						printw("是否直接退出游戏?否则将重新创建数据目录!(默认退出)Y/n");
 						inputContent = getch();
 						if (inputContent != 0x4E && inputContent != 0x6E) {
 							Clear
