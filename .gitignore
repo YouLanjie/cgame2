@@ -1,0 +1,9 @@
+.vscode
+src
+pkg
+*.deb
+*.rpm
+*.AppImage
+*.pkg.tar.xz
+cgame2
+cgame2-*
