@@ -88,10 +88,10 @@ void History() {
 				getchar();
 				chose = getch();
 				if (chose == 0x41 || chose == 0x44) {
-					chose = 0x4C;
+					chose = 'w';
 				}
 				else if (chose == 0x42 || chose == 0x43) {
-					chose = 0x4E;
+					chose = 's';
 				}
 			}
 			else {
