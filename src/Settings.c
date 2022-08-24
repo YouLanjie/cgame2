@@ -41,8 +41,8 @@ void Settings() {
 			"当前目录",
 			"棋盘大小",
 			"调试功能（扩展）",
-			"全自动下棋",
-			"绘图",
+			"	全自动下棋",
+			"	绘图",
 			NULL
 		);
 		data.addTextData(&data, 0,
