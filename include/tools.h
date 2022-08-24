@@ -39,6 +39,22 @@
 #ifndef gotoxy
 	#define gotoxy(x,y) printf("\033[%d;%dH",x, y)
 #endif
+
+#define menuType_OnlyMain    1
+#define menuType_Help        2
+#define menuType_Setting     3
+#define menuType_OnlyHelp    4
+
+#define menuTextTypeNumber   1
+#define menuTextTypeButton   1
+
+#define menuTextDataDescribe 0
+#define menuTextDataSetType  1
+#define menuTextDataSetVar   2
+#define menuTextDataSetFoot  3
+#define menuTextDataSetMax   4
+#define menuTextDataSetMin   5
+
 /* kbhit */
 int kbhit();
 #endif
@@ -80,6 +96,8 @@ struct Text {
 	int           number;       /* 编号 */
 	int           cfg;          /* 类型：1数值，2开关 */
 	int           foot;         /* 设置的步长 */
+	int           max;          /* 设置的最大值 */
+	int           min;          /* 设置的最小值 */
 	struct Text * nextText;     /* 下一条例（链表） */
 };                                  /* 条例结构体 */
 
