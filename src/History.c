@@ -108,7 +108,7 @@ void History() {
 				break;
 			case 'w':
 			case 'a':
-			case 'l':
+			case 'h':
 			case 'k':
 				if (count == 0) {
 					count = -1;
@@ -119,7 +119,7 @@ void History() {
 				break;
 			case 's':
 			case 'd':
-			case 'h':
+			case 'l':
 			case 'j':
 				if (count + 1 >= line) {
 					count--;
