@@ -164,13 +164,17 @@ void Game() {
 				break;
 			case 0x0D: /* CR回车键 \r */
 			case '\n':
-			case 0x20: /* 空格键 */
-				if (!config[2] && (p -> board[y - 1][x - 1] == 1 || p -> board[y - 1][x - 1] == 2)) {
+			case 0x20: /* 空格键 -> 下棋 */
+				if (config[4]) {
+					p -> board[y - 1][x - 1] = who;
+					break;
+				}
+				if (!config[3] && (p -> board[y - 1][x - 1] == 1 || p -> board[y - 1][x - 1] == 2)) {
 					error = 1;
 					break;
 				}
-				else if (p -> board[y - 1][x - 1] == 0 || config[2]) {
-					if (!config[2] || way == '\n') {    /* 用户输入 */
+				else if (p -> board[y - 1][x - 1] == 0 || config[3]) {
+					if (!config[3] || way == '\n') {    /* 用户输入 */
 						p -> board[y - 1][x - 1] = who;
 					}
 					else {    /* 自动下棋 */
@@ -295,9 +299,64 @@ void Game() {
 				Way[2] = 'S';
 				Way[3] = 'D';
 				break;
+			case '1':
+				if (config[4]) {
+					who = 0;
+				}
+				break;
+			case '2':
+				if (config[4]) {
+					who = 1;
+				}
+				break;
+			case '3':
+				if (config[4]) {
+					who = 2;
+				}
+				break;
+			case 'n':
+				if (config[4]) {
+					fp = fopen(Save,"a");
+					if (!fp) {
+						fontColorSet(1,31);
+						perror("[save]");
+						fontColorSet(0,0);
+						return;
+					}
+
+					fprintf(fp,"%d %d %d %d %d %d %d ", p -> t.year, p -> t.mon, p -> t.day, p -> t.hour, p -> t.min, p -> t.sec, Max);
+
+					for (count = 0; count < Max ; count++) {    //打印棋盘到文件
+						for (count2= 0; count2 < Max; count2++) {
+							fprintf(fp,"%d", p -> board[count][count2]);
+						}
+						fprintf(fp," ");
+					}
+
+					fprintf(fp,"\n");
+					fclose(fp);
+
+					if (config[5]) {
+						free(p);
+
+						p = (struct Chess *)malloc(sizeof(struct Chess));
+						for (count = 0; count < Max ; count++) {  /* 用于初始化内存 */
+							for (count2 = 0; count2 < Max; count2++) {
+								p -> board[count][count2] = 0;
+							}
+						}
+						GetTime();
+					}
+					p -> x = x;
+					p -> y = y;
+				}
+				break;
 			default:
 				move(way, &x, &y, Way);
 				break;
+		}
+		if (config[4] && way == 0x1B) {
+			break;
 		}
 		printf("\n");
 	}
