@@ -7,13 +7,12 @@ struct Chess *p;
 char Save[20] = "/etc/cgame2/save.txt";
 char Config[25] = "/etc/cgame2/config.txt";
 char * GameDir = "/etc/cgame2/";
-int config[] = {0, 0, 0};
+int config[] = {0, 0, 0, 0, 0, 0};    /* 配置选项 */
 int Max = 15;
 FILE * fp;
 
 int main() {
 	int inputContent = 0; /* 输入的内容 */
-	int config[] = {1, 0, 0};    //配置选项
 	menuData data = menuDataInit(), help = menuDataInit();
 
 	data.title = "游戏菜单";
