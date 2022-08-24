@@ -14,7 +14,7 @@ void PrintBoard() {
 	}
 	attroff(COLOR_PAIR(1));
 
-	attron(COLOR_PAIR(6));
+	attron(COLOR_PAIR(8));
 	attron(A_BOLD);
 
 	move(0, 0);
@@ -32,15 +32,15 @@ void PrintBoard() {
 		printw("%s%s%s", LineH, LineH, LineH);
 	}
 	printw(LineRC);
-	attroff(COLOR_PAIR(6));
+	attroff(COLOR_PAIR(8));
 
 	for (count = 0; count < Max; count++) {    //打印棋盘
 		move(count + 3, 0);
-		attron(COLOR_PAIR(6));
+		attron(COLOR_PAIR(8));
 		attron(A_BOLD);
 		printw(LineV);
 		attroff(A_BOLD);
-		attroff(COLOR_PAIR(6));
+		attroff(COLOR_PAIR(8));
 		for (count2= 0; count2 < Max; count2++) {
 			if (p -> board[count][count2] == 0) {
 				attron(COLOR_PAIR(1));
@@ -61,14 +61,14 @@ void PrintBoard() {
 			printw(" ");
 			attroff(COLOR_PAIR(1));
 		}
-		attron(COLOR_PAIR(6));
+		attron(COLOR_PAIR(8));
 		attron(A_BOLD);
 		printw(LineV);
 		attroff(A_BOLD);
-		attroff(COLOR_PAIR(6));
+		attroff(COLOR_PAIR(8));
 	}
 
-	attron(COLOR_PAIR(6));
+	attron(COLOR_PAIR(8));
 	attron(A_BOLD);
 
 	mvaddstr(count + 3, 0, LineLC);
@@ -96,7 +96,7 @@ void PrintBoard() {
 	printw(LineRD);
 
 	attroff(A_BOLD);
-	attroff(COLOR_PAIR(6));
+	attroff(COLOR_PAIR(8));
 	refresh();
 	return;
 }

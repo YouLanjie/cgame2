@@ -103,12 +103,12 @@ void History() {
 		if (chose == 0x1B) {
 			if (kbhit() == 1) {
 				getchar();
-				chose = getch();
+				chose = getchar();
 				if (chose == 0x41 || chose == 0x44) {
-					chose = 0x4C;
+					chose = 'w';
 				}
 				else if (chose == 0x42 || chose == 0x43) {
-					chose = 0x4E;
+					chose = 's';
 				}
 			}
 			else {
@@ -123,9 +123,9 @@ void History() {
 				free(p);
 				return;
 				break;
-			case 'w':
+			case 'w':    /* 下一个 */
 			case 'a':
-			case 'l':
+			case 'h':
 			case 'k':
 				if (count == 0) {
 					count = -1;
@@ -134,9 +134,9 @@ void History() {
 					count -= 2;
 				}
 				break;
-			case 's':
+			case 's':    /* 上一个 */
 			case 'd':
-			case 'h':
+			case 'l':
 			case 'j':
 				if (count + 1 >= line) {
 					count--;
