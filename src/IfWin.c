@@ -1,61 +1,32 @@
 #include "../include/head.h"
 
 int IfWin(int c) {
-	int x = 1,y = 1; /* 坐标 */
-	int have = 1;    /* 连成一线的棋子的数量 */
-	int count;       /* 循环计数用 */
-
-	x = p -> x - 1;
-	y = p -> y - 1;
-
-	for (count = 1; count < c; count++) {         //x轴
-		if (x - count > -1 && p -> board[y][x - count] == p -> who) {
-			have++;
-		}
-		if (x + count < Max && p -> board[y][x + count] == p -> who) {
-			have++;
-		}
-		if (have == c) {
-			return p -> who;
-		}
-	}
-	have = 1;
-	for (count = 1; count < c; count++) {         //y轴
-		if (y - count > -1 && p -> board[y - count][x] == p -> who) {
-			have++;
-		}
-		if (y + count < Max && p -> board[y + count][x] == p -> who) {
-			have++;
-		}
-		if (have == c) {
-			return p -> who;
-		}
-	}
-	have = 1;
-	for (count = 1; count < c; count++) {         //左上右下
-		if (y - count > -1 && x - count > -1 && p -> board[y - count][x - count] == p -> who) {
-			have++;
-		}
-		if (y + count < Max && x + count < Max && p -> board[y + count][x + count] == p -> who) {
-			have++;
-		}
-		if (have == c) {
-			return p -> who;
-		}
-	}
-	have = 1;
-	for (count = 1; count < c; count++) {         //左下右上
-		if (y + count < Max && x - count > -1 && p -> board[y + count][x - count] == p -> who) {
-			have++;
-		}
-		if (y - count > -1 && x + 1 < Max && p -> board[y - count][x + count] == p -> who) {
-			have++;
-		}
-		if (have == c) {
-			return p -> who;
+	for (int i = 0; i < Max; i++) {
+		for (int i2 = 0; i2 < Max; i2++) {
+			if (p -> board[i][i2] == computerChess) {
+				if ((i + 4) < Max) {
+					if (p -> board[i + 1][i2] == computerChess && p -> board[i + 2][i2] == computerChess && p -> board[i + 3][i2] == computerChess && p -> board[i + 4][i2] == computerChess) {
+						return computerChess;
+					}
+				}
+				if ((i2 + 4) < Max) {
+					if (p -> board[i][i2 + 1] == computerChess && p -> board[i][i2 + 2] == computerChess && p -> board[i][i2 + 3] == computerChess && p -> board[i][i2 + 4] == computerChess) {
+						return computerChess;
+					}
+				}
+				if ((i + 4) < Max && (i2 + 4) < Max) {
+					if (p -> board[i + 1][i2 + 1] == computerChess && p -> board[i + 2][i2 + 2] == computerChess && p -> board[i + 3][i2 + 3] == computerChess && p -> board[i + 4][i2 + 4] == computerChess) {
+						return computerChess;
+					}
+				}
+				if ((i + 4) < Max && (i2 - 4) >= 0) {
+					if (p -> board[i + 1][i2 - 1] == computerChess && p -> board[i + 2][i2 - 2] == computerChess && p -> board[i + 3][i2 - 3] == computerChess && p -> board[i + 4][i2 - 4] == computerChess) {
+						return computerChess;
+					}
+				}
+			}
 		}
 	}
 	return 0;
 }
-
 

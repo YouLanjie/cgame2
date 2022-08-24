@@ -42,41 +42,57 @@ void Game() {
 	printf(Time);
 #endif
 	while(win != 1 && win != 2) {
-		GetNowTime();
-		gotoxy(1, 1);
-		fontColorSet(1,31);
-		printf(NowTime);
-		gotoxy(2,1);
 		PrintBoard();
+		gotoxy(Max + 5, Max * 3 / 4 * 1 - 3);
+		fontColorSet(44, 37);
 		if (who == 1) {
-			printf("黑方下\n");
+			printf("黑方下 @\n");
 		}
 		else if (who == 2) {
-			printf("白方下\n");
+			printf("白方下 O\n");
+		}
+		if (config[0] == 1) {
+			gotoxy(Max + 5, Max * 3 / 4 * 3 - 4);
+			printf("自动下棋开启");
 		}
 		if (error == 1) {
-			fontColorSet(1,33);
+			gotoxy(Max + 6, 4);
 			printf("你不能下在非空的格子!\n");
-			fontColorSet(0,0);
 			error = 0;
 		}
-		if (p -> board[y - 1][x - 1] == 1) {
-			gotoxy(y + 2, x * 3 - 1); fontColorSet(30, 47);
+		if (p -> board[y - 1][x - 1] == 1) {    /* 黑 */
+			gotoxy(y + 3, x * 3 - 1);
+			fontColorSet(44, 37);
 			printf(">");
-			fontColorSet(0,0);
+			fontColorSet(40, 34);
+			printf("@@");
+			fontColorSet(0, 0);
 		}
-		else if (p -> board[y - 1][x - 1] == 2) {
-			gotoxy(y + 2, x * 3 - 1); fontColorSet(0,1); fontColorSet(37, 40);
+		else if (p -> board[y - 1][x - 1] == 2) {    /* 白 */
+			gotoxy(y + 3, x * 3 - 1);
+			fontColorSet(44, 37);
 			printf(">");
-			fontColorSet(0,0);
+			fontColorSet(47, 34);
+			printf("OO");
+			fontColorSet(0, 0);
 		}
-		else {
-			gotoxy(y + 2, x * 3 - 1); fontColorSet(0,1); fontColorSet(37, 40);
+		else {    /* 空 */
+			gotoxy(y + 3, x * 3 - 1);
+			fontColorSet(44, 37);
 			printf(">");
-			fontColorSet(0,0);
+			fontColorSet(47, 34);
+			printf("::");
+			fontColorSet(0, 0);
 		}
+
+		GetNowTime();
+		gotoxy(2, 4);
+		fontColorSet(44, 37);
+		printf(NowTime);
+		fontColorSet(0, 0);
+
+		gotoxy(y + 3, x * 3 - 1);
 		way = getch();
-		gotoxy(y + 2, x * 3 - 1);
 		printf(" ");
 		switch (way) {
 			case 0x30: /* 0 */
@@ -85,8 +101,8 @@ void Game() {
 #ifdef __linux
 				pthread_cancel(pid);
 #endif
-				Clear
-				fontColorSet(1,33);
+				fontColorSet(44,37);
+				gotoxy(Max + 6, 4);
 				printf("请确认退出！本次游戏将不会记录！（y/N）\n");
 				way = getch();
 				if (way == 0x59 || way == 0x79) {
@@ -110,8 +126,8 @@ void Game() {
 #ifdef __linux
 					pthread_cancel(pid);
 #endif
-					Clear
-					fontColorSet(1,33);
+					fontColorSet(44,37);
+					gotoxy(Max + 6, 4);
 					printf("请确认退出！本次游戏将不会记录！（y/N）\n");
 					way = getch();
 					if (way == 0x59 || way == 0x79) {
@@ -176,9 +192,68 @@ void Game() {
 
 					if (win == who) {    /* 判断输赢 */
 #ifdef __linux
-						alarm(0);
+						pthread_cancel(pid);
 #endif
 						PrintBoard();
+						gotoxy(Max + 5, Max * 3 / 4 * 1 - 3);
+						fontColorSet(44, 37);
+						if (who == 1) {
+							printf("黑方下 @\n");
+						}
+						else if (who == 2) {
+							printf("白方下 O\n");
+						}
+						if (config[0] == 1) {
+							gotoxy(Max + 5, Max * 3 / 4 * 3 - 4);
+							printf("自动下棋开启");
+						}
+						if (error == 1) {
+							gotoxy(Max + 6, 4);
+							printf("你不能下在非空的格子!\n");
+							error = 0;
+						}
+						if (p -> board[y - 1][x - 1] == 1) {    /* 黑 */
+							gotoxy(y + 3, x * 3 - 1);
+							fontColorSet(44, 37);
+							printf(">");
+							fontColorSet(40, 34);
+							printf("@@");
+							fontColorSet(0, 0);
+						}
+						else if (p -> board[y - 1][x - 1] == 2) {    /* 白 */
+							gotoxy(y + 3, x * 3 - 1);
+							fontColorSet(44, 37);
+							printf(">");
+							fontColorSet(47, 34);
+							printf("OO");
+							fontColorSet(0, 0);
+						}
+						else {    /* 空 */
+							gotoxy(y + 3, x * 3 - 1);
+							fontColorSet(44, 37);
+							printf(">");
+							fontColorSet(47, 34);
+							printf("::");
+							fontColorSet(0, 0);
+						}
+
+						GetNowTime();
+						gotoxy(2, 4);
+						fontColorSet(44, 37);
+						printf(NowTime);
+
+						gotoxy(Max + 6, 4);
+						fontColorSet(44,37);
+						printf("游戏结束，");
+						if (who == 1) {
+							printf("黑方");
+						}
+						else if (who == 2) {
+							printf("白方");
+						}
+						printf("胜利！");
+						printf("按q返回");
+						fontColorSet(0,0);
 						way = 0;
 						while (way != 'q' && way != 'Q') {
 							way = getch();
@@ -251,8 +326,8 @@ void Game() {
 static void * showTime() {
 	while(1) {
 		GetNowTime();
-		gotoxy(1, 1);
-		fontColorSet(1,31);
+		gotoxy(2, 4);
+		fontColorSet(44,37);
 		printf(NowTime);
 		sleep(1);
 	}

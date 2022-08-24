@@ -40,12 +40,11 @@ void History() {
 	fseek(fp, 0L, 0);
 	p = (struct Chess *)malloc(sizeof(struct Chess));
 	max = Max;
+	Clear2
 	for (count = 0; count + 1 <= line; count++) {
-#ifdef __linux
-		Clear2
-#else
+		fontColorSet(37,44);
 		Clear
-#endif
+		fontColorSet(0,0);
 		fseek(fp, 0L, 0);
 		kbhitGetchar();
 		for (int i = 0; i <= count; i++) {
@@ -55,31 +54,33 @@ void History() {
 				p -> board[i + 1][0] = '\0';
 			}
 		}
-		gotoxy(1,1); fontColorSet(1,31);
+		gotoxy(1,1);
+		fontColorSet(0,44);
+		fontColorSet(1,37);
 		printf(Time);
 		fontColorSet(0,0);
 		for (int i = 0; p -> board[i][0] != '\0' && p -> board[i][0] != EOF; i++) {
 			for (int i2 = 0; p -> board[i][i2] != '\0' && p -> board[i][i2] != EOF; i2++) {
 				if (p -> board[i][i2] == '0') {
-					fontColorSet(0,2); fontColorSet(37,40);
-					printf(" + ");
-					fontColorSet(0,0);
+					fontColorSet(37,44);
+					printf("::");
 				}
 				else if (p -> board[i][i2] == '1') {
-					fontColorSet(0,2); fontColorSet(30,47);
-					printf(" @ ");
-					fontColorSet(0,0);
+					fontColorSet(30,44);
+					printf("@@");
 				}
 				else if (p -> board[i][i2] == '2') {
-					fontColorSet(0,2); fontColorSet(37,40);
-					printf(" O ");
-					fontColorSet(0,0);
+					fontColorSet(37,44);
+					printf("OO");
 				}
+				fontColorSet(37,44);
+				printf(" ");
 			}
 			printf("\n");
 		}
-		fontColorSet(1,31);
-		printf("按下L查看上一局，按下N查看下一局,0退出");
+		fontColorSet(0,44);
+		fontColorSet(1,37);
+		printf("(%02d/%02d)\n按下wahk查看上一局，按下sdjl查看下一局,0q退出", count + 1, line);
 		fontColorSet(0,0);
 		chose = getch();
 		if (chose == 0x1B) {
@@ -105,8 +106,10 @@ void History() {
 				free(p);
 				return;
 				break;
-			case 0x4C:
-			case 0x6C:
+			case 'w':
+			case 'a':
+			case 'l':
+			case 'k':
 				if (count == 0) {
 					count = -1;
 				}
@@ -114,8 +117,10 @@ void History() {
 					count -= 2;
 				}
 				break;
-			case 0x4E:
-			case 0x6E:
+			case 's':
+			case 'd':
+			case 'h':
+			case 'j':
 				if (count + 1 >= line) {
 					count--;
 				}

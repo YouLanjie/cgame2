@@ -1,4 +1,5 @@
 #include "tools.h"                         //头文件
+#include "specialChar.h"
 #include <time.h>
 
 #define LANGFILELINE 33  /* 语言句数 */
