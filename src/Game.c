@@ -1,12 +1,13 @@
 #include "../include/head.h"
 
+void Undo();
+
 #ifdef __linux
 static void showTime();
 #endif
 static void Move(int way, int * x, int * y, int Way[4]);
 
 void Game() {
-	int count,count2;                      //用于计数
 	int error = 0;                         //记录错误(下棋位置重复)
 	int x = 1,y = 1;                       //当前坐标
 	int way;                               //记录光标移动方向
@@ -17,11 +18,15 @@ void Game() {
 
 	Clear
 	p = (struct Chess *)malloc(sizeof(struct Chess));
-	for (count = 0; count < Max ; count++) {  /* 用于初始化内存 */
-		for (count2 = 0; count2 < Max; count2++) {
+	for (int count = 0; count < Max ; count++) {  /* 用于初始化内存 */
+		for (int count2 = 0; count2 < Max; count2++) {
 			p -> board[count][count2] = 0;
+			p -> board2[count][count2] = 0;
 		}
 	}
+	p->x = x;
+	p->y = y;
+	p->way=0;
 	GetTime();
 
 #ifdef __linux
@@ -48,7 +53,8 @@ void Game() {
 	fontColorSet(1,31);
 	printf(Time);
 #endif
-	while(win != 1 && win != 2) {
+	p->count = 1;
+	while(win == 0) {
 		GetNowTime();
 		move(0, 0);
 		attron(COLOR_PAIR(1));
@@ -59,11 +65,9 @@ void Game() {
 		move(Max + 4, Max * 3 / 4 * 1 - 4);
 		if (who == 1) {
 			printw("黑方下 @");
-		}
-		else if (who == 2) {
+		} else if (who == 2) {
 			printw("白方下 0");
-		}
-		else if (who == 0) {
+		} else if (who == 0) {
 			printw("空白下 ::");
 		}
 		if (config[0] == 1) {
@@ -76,16 +80,27 @@ void Game() {
 		}
 		attroff(COLOR_PAIR(1));
 		showTime();
+
 		move(y + 2, x * 3 - 2);
 		attron(A_REVERSE);
 		if (p -> board[y - 1][x - 1] == 1) {
 			attron(COLOR_PAIR(7));
-			printw("@@");
+			if (config[8]) {
+				printw("%02d<", p -> board2[y - 1][x - 1]);
+			}
+			else {
+				printw(">@");
+			}
 			attroff(COLOR_PAIR(7));
 		}
 		else if (p -> board[y - 1][x - 1] == 2) {
 			attron(COLOR_PAIR(8));
-			printw("OO");
+			if (config[8]) {
+				printw("%02d<", p -> board2[y - 1][x - 1]);
+			}
+			else {
+				printw(">O");
+			}
 			attroff(COLOR_PAIR(8));
 		}
 		else {
@@ -181,18 +196,23 @@ void Game() {
 			case 0x20: /* 空格键 -> 下棋 */
 				if (config[4]) {
 					p -> board[y - 1][x - 1] = who;
+					p -> board2[y - 1][x - 1] = p->count;
+					p->count++;
 					break;
 				}
-				if (!config[3] && (p -> board[y - 1][x - 1] == 1 || p -> board[y - 1][x - 1] == 2)) {
+				if ((!config[3] || way == '\n') && (p -> board[y - 1][x - 1] != 0)) {    /* 棋盘非空 */
 					error = 1;
 					break;
-				}
-				else if (p -> board[y - 1][x - 1] == 0 || config[3]) {
+				} else if (p -> board[y - 1][x - 1] == 0 || (config[3] && way == ' ')) {
 					if (!config[3] || way == '\n') {    /* 用户输入 */
 						p -> board[y - 1][x - 1] = who;
+						p -> board2[y - 1][x - 1] = p->count;
+						p->count++;
 					}
 					else {    /* 自动下棋 */
 						AI();
+						p -> board2[p->y - 1][p->x - 1] = p->count;
+						p->count++;
 					}
 					p -> who = who;
 					win = IfWin(5);
@@ -201,6 +221,8 @@ void Game() {
 						who = 3 - who;
 						p -> who = who;
 						AI();
+						p -> board2[p->y - 1][p->x - 1] = p->count;
+						p->count++;
 						win = IfWin(5);
 						if (win == 0) {
 							who = 3 - who;
@@ -208,21 +230,78 @@ void Game() {
 						}
 					}
 
-					if (win == who) {    /* 判断输赢 */
+					if (win == who || win == -1) {    /* 判断输赢 */
+						char chess[3] = "@@";
 #ifdef __linux
 						alarm(0);
 #endif
 						PrintBoard();
+
+						attron(A_REVERSE);
+						move(y + 2, x * 3 - 2);
+						if (who == 1) {
+							attron(COLOR_PAIR(7));
+							strcpy(chess, "@@");
+						} else {
+							attron(COLOR_PAIR(8));
+							strcpy(chess, "00");
+						}
+						for (int i = 0; i < 5;i++) {
+							if (config[8]) {
+								switch (p->way) {
+								case 1:
+									move(p->y + i, p->x);
+									printw("%02d", p -> board2[p->y - 3 + i][(p->x - 1) / 3]);
+									break;
+								case 2:
+									move(p->y, p->x + i * 3);
+									printw("%02d", p -> board2[p->y - 3][(p->x - 1) / 3] + i);
+									break;
+								case 3:
+									move(p->y + i, p->x + i * 3);
+									printw("%02d", p -> board2[p->y - 3 + i][(p->x - 1) / 3 + i]);
+									break;
+								case 4:
+									move(p->y + i, p->x - i * 3);
+									printw("%02d", p -> board2[p->y - 3 + i][(p->x - 1) / 3 - i]);
+									break;
+								default:
+									break;
+								}
+							} else {
+								switch (p->way) {
+								case 1:
+									mvaddstr(p->y + i, p->x, chess);
+									break;
+								case 2:
+									mvaddstr(p->y, p->x + i * 3, chess);
+									break;
+								case 3:
+									mvaddstr(p->y + i, p->x + i * 3, chess);
+									break;
+								case 4:
+									mvaddstr(p->y + i, p->x - i * 3, chess);
+									break;
+								default:
+									break;
+								}
+							}
+						}
+						if (who == 1) {
+							attroff(COLOR_PAIR(7));
+						} else {
+							attroff(COLOR_PAIR(8));
+						}
+						attroff(A_REVERSE);
+
 						showTime();
 						attron(COLOR_PAIR(1));
 						move(Max + 4, Max * 3 / 4 * 1 - 4);
 						if (who == 1) {
 							printw("黑方下 @");
-						}
-						else if (who == 2) {
+						} else if (who == 2) {
 							printw("白方下 0");
-						}
-						else if (who == 0) {
+						} else if (who == 0) {
 							printw("空白下 ::");
 						}
 						if (config[0] == 1) {
@@ -234,15 +313,24 @@ void Game() {
 						attron(A_REVERSE);
 						if (p -> board[y - 1][x - 1] == 1) {
 							attron(COLOR_PAIR(7));
-							printw("@@");
+							if (config[8]) {
+								printw("%02d", p -> board2[y - 1][x - 1]);
+							}
+							else {
+								printw(">@");
+							}
 							attroff(COLOR_PAIR(7));
 						}
 						else if (p -> board[y - 1][x - 1] == 2) {
 							attron(COLOR_PAIR(8));
-							printw("OO");
+							if (config[8]) {
+								printw("%02d", p -> board2[y - 1][x - 1]);
+							}
+							else {
+								printw(">O");
+							}
 							attroff(COLOR_PAIR(8));
-						}
-						else {
+						} else {
 							attron(COLOR_PAIR(1));
 							printw("><");
 							attroff(COLOR_PAIR(1));
@@ -253,19 +341,24 @@ void Game() {
 						attron(COLOR_PAIR(6));
 						attron(A_BOLD);
 						printw("游戏结束，");
-						if (who == 1) {
-							printw("黑方");
+						if (win == 1) {
+							printw("黑方胜利！");
+						} else if (win == 2) {
+							printw("白方胜利！");
+						} else if (win == -1) {
+							printw("高手，平局");
 						}
-						else if (who == 2) {
-							printw("白方");
-						}
-						printw("胜利！");
-						printw("（按Q键返回）");
+						printw("（按Q返回，可按u撤回）");
 						attroff(A_BOLD);
 						attroff(COLOR_PAIR(6));
 						way = 0;
-						while (way != 'q' && way != 'Q') {
+						while (way != 'q' && way != 'Q' && way != 'u' && way != 'U') {
 							way = getch();
+						}
+						if (way == 'u' || way == 'U') {
+							win = 0;
+							Undo();
+							who = 3 - who;
 						}
 					}
 					if (config[0] == 0) {  /* 切换下棋的一方 */
@@ -285,7 +378,15 @@ void Game() {
 					return;
 				}
 				if (config[0] == 1) {
-					who = 1;
+					Undo();
+					who = blackChess;
+				}
+				break;
+			case 'u':    /* 撤回 */
+			case 'U':
+				Undo();
+				if (config[0]) {
+					Undo();
 				}
 				break;
 			case 'h':
@@ -329,8 +430,8 @@ void Game() {
 
 					fprintf(fp,"%d %d %d %d %d %d %d ", p -> t.year, p -> t.mon, p -> t.day, p -> t.hour, p -> t.min, p -> t.sec, Max);
 
-					for (count = 0; count < Max ; count++) {    //打印棋盘到文件
-						for (count2= 0; count2 < Max; count2++) {
+					for (int count = 0; count < Max ; count++) {    //打印棋盘到文件
+						for (int count2= 0; count2 < Max; count2++) {
 							fprintf(fp,"%d", p -> board[count][count2]);
 						}
 						fprintf(fp," ");
@@ -343,8 +444,8 @@ void Game() {
 						free(p);
 
 						p = (struct Chess *)malloc(sizeof(struct Chess));
-						for (count = 0; count < Max ; count++) {  /* 用于初始化内存 */
-							for (count2 = 0; count2 < Max; count2++) {
+						for (int count = 0; count < Max ; count++) {  /* 用于初始化内存 */
+							for (int count2 = 0; count2 < Max; count2++) {
 								p -> board[count][count2] = 0;
 							}
 						}
@@ -370,11 +471,16 @@ void Game() {
 		return;
 	}
 	fprintf(fp,"%d %d %d %d %d %d %d ", p -> t.year, p -> t.mon, p -> t.day, p -> t.hour, p -> t.min, p -> t.sec, Max);
-	for (count = 0; count < Max ; count++) {    //打印棋盘到文件
-		for (count2= 0; count2 < Max; count2++) {
+	for (int count = 0; count < Max ; count++) {    //打印棋盘到文件
+		for (int count2 = 0; count2 < Max; count2++) {
 			fprintf(fp,"%d", p -> board[count][count2]);
 		}
 		fprintf(fp," ");
+	}
+	for (int count = 0; count < Max ; count++) {    //打印棋盘到文件
+		for (int count2 = 0; count2 < Max; count2++) {
+			fprintf(fp,"%d ", p -> board2[count][count2]);
+		}
 	}
 	fprintf(fp,"\n");
 	fclose(fp);
@@ -382,6 +488,21 @@ void Game() {
 	Clear
 	return;
 }
+
+void Undo() {
+	for (int i = 0; i < Max; i++) {
+		for (int i2 = 0; i2 < Max; i2++) {
+			if (p->count && p->count > 1 && p->board2[i][i2] == p->count - 1) {
+				p->board[i][i2] = spaceChess;
+				p->board2[i][i2] = spaceChess;
+				p->count--;
+				return;
+			}
+		}
+	}
+	return;
+}
+
 
 #ifdef __linux
 static void showTime() {

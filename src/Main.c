@@ -6,7 +6,7 @@ struct Chess *p;
 char Save[20] = "/etc/cgame2/save.txt";
 char Config[25] = "/etc/cgame2/config.txt";
 char * GameDir = "/etc/cgame2/";
-int config[] = {0, 0, 0, 0, 0, 0, 0};    /* 配置选项 */
+int config[] = {0, 0, 0, 0, 0, 0, 0, 1, 0, 0};    /* 配置选项 */
 int Max = 15;
 FILE * fp;
 

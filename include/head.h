@@ -7,11 +7,15 @@
 #define Time "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec,Max,Max //开局时间标准格式
 #define NowTime "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d",p -> nt.year,p -> nt.mon,p -> nt.day,p -> nt.hour,p -> nt.min,p -> nt.sec,Max,Max //现在时间标准格式
 
+/* 选项的保存/读取格式 */
+#define ConfigWrite fprintf(fp, "%d %d %d %d %d %d %d %d %d %d %d",config[0], config[1], config[2], Max, config[3], config[4], config[5], config[6], config[7], config[8], config[9])  //保存选项格式
+#define ConfigRead fscanf(fp,"%d%d%d%d%d%d%d%d%d%d%d", &config[0], &config[1], &config[2], &Max, &config[3], &config[4], &config[5], &config[6], &config[7], &config[8], &config[9])  //读取选项格式
+
 #define spaceChess 0
 #define blackChess 1
 #define whiteChess 2
-#define playerChess (3 - p -> who)
-#define computerChess (p -> who)
+#define playerChess (3 - p -> who)    /* 敌方 */
+#define computerChess (p -> who)      /* 我方 */
 
 /* 定义结构体 */
 struct time {                                //存储时间信息
@@ -23,13 +27,16 @@ struct time {                                //存储时间信息
 	int sec;       //秒
 };
 
-struct Chess {            //游戏信息大杂烩
-	struct time t;         //开局时间，精确到秒
-	struct time nt;        //现在时间，精确到分
-	char board[52][52];    //棋盘信息
-	int who;               //下棋的一方，1黑，2白
-	int x;                 //新棋子的x轴
-	int y;                 //新棋子的y轴
+struct Chess {                  //游戏信息大杂烩
+	struct time t;          //开局时间，精确到秒
+	struct time nt;         //现在时间，精确到分
+	char board[52][52];     //棋盘信息
+	int board2[52][52];    //棋盘信息
+	int count;              //序列数值
+	int way;                //方向值
+	int who;                //下棋的一方，1黑，2白
+	int x;                  //新棋子的x轴（1开始）
+	int y;                  //新棋子的y轴
 };
 
 /* 定义结构体变量 */

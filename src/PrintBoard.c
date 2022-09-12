@@ -42,20 +42,42 @@ void PrintBoard() {
 		attroff(A_BOLD);
 		attroff(COLOR_PAIR(8));
 		for (count2= 0; count2 < Max; count2++) {
-			if (p -> board[count][count2] == 0) {
-				attron(COLOR_PAIR(1));
-				printw("::");
-				attron(COLOR_PAIR(1));
+			if (p -> board2[count][count2] && p->board2[count][count2] == p->count - 1) {
+				attron(A_REVERSE);
+				attron(A_BOLD);
 			}
-			else if (p -> board[count][count2] == 1) {
+			if (p -> board[count][count2] == 1) {
 				attron(COLOR_PAIR(7));
-				printw("@@");
+				if (config[8]) {
+					printw("%02d", p -> board2[count][count2]);
+				} else if (config[9]) {
+					printw("%02d", p -> board[count][count2]);
+				} else {
+					printw("@@");
+				}
 				attron(COLOR_PAIR(7));
-			}
-			else if (p -> board[count][count2] == 2) {
+			} else if (p -> board[count][count2] == 2) {
 				attron(COLOR_PAIR(8));
-				printw("OO");
+				if (config[8]) {
+					printw("%02d", p -> board2[count][count2]);
+				} else if (config[9]) {
+					printw("%02d", p -> board[count][count2]);
+				} else {
+					printw("OO");
+				}
 				attron(COLOR_PAIR(8));
+			} else {
+				attron(COLOR_PAIR(1));
+				if (config[9]) {
+					printw("%02d", p -> board2[count][count2]);
+				} else {
+					printw("::");
+				}
+				attron(COLOR_PAIR(1));
+			} 
+			if (p -> board2[count][count2] && p -> board2[count][count2] == p->count - 1) {
+				attroff(A_REVERSE);
+				attroff(A_BOLD);
 			}
 			attron(COLOR_PAIR(1));
 			printw(" ");
