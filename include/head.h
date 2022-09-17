@@ -8,8 +8,8 @@
 #define NowTime "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d", GameInfo->chess->nt.year, GameInfo->chess->nt.mon, GameInfo->chess->nt.day, GameInfo->chess->nt.hour, GameInfo->chess->nt.min, GameInfo->chess->nt.sec, GameInfo->config.max, GameInfo->config.max //现在时间标准格式
 
 /* 选项的保存/读取格式 */
-#define ConfigWrite fprintf(fp, "%d %d %d %d %d %d %d %d %d %d %d", GameInfo->config.use_AI, GameInfo->config.chdir, GameInfo->config.debug, GameInfo->config.max, GameInfo->config.all_AI, GameInfo->config.draw, GameInfo->config.draw_reset, GameInfo->config.more_max, GameInfo->config.newest_history, GameInfo->config.show_count, GameInfo->config.show_under_number)  //保存选项格式
-#define ConfigRead fscanf(fp,"%d%d%d%d%d%d%d%d%d%d%d", &GameInfo->config.use_AI, &GameInfo->config.chdir, &GameInfo->config.debug, &GameInfo->config.max, &GameInfo->config.all_AI, &GameInfo->config.draw, &GameInfo->config.draw_reset, &GameInfo->config.more_max, &GameInfo->config.newest_history, &GameInfo->config.show_count, &GameInfo->config.show_under_number)  //读取选项格式
+#define ConfigWrite fprintf(fp, "%d %d %d %d %d %d %d %d %d %d", GameInfo->config.use_AI, GameInfo->config.chdir, GameInfo->config.debug, GameInfo->config.max, GameInfo->config.all_AI, GameInfo->config.draw, GameInfo->config.draw_reset, GameInfo->config.more_max, GameInfo->config.newest_history, GameInfo->config.show_count)  //保存选项格式
+#define ConfigRead fscanf(fp,"%d%d%d%d%d%d%d%d%d%d", &GameInfo->config.use_AI, &GameInfo->config.chdir, &GameInfo->config.debug, &GameInfo->config.max, &GameInfo->config.all_AI, &GameInfo->config.draw, &GameInfo->config.draw_reset, &GameInfo->config.more_max, &GameInfo->config.newest_history, &GameInfo->config.show_count)  //读取选项格式
 
 #define spaceChess 0     /* 空棋 */
 #define blackChess 1     /* 黑棋 */
@@ -54,7 +54,6 @@ typedef struct {
 	int draw_reset;
 	int more_max;
 	int show_count;
-	int show_under_number;
 } Config;
 
 typedef struct {           //游戏信息大杂烩

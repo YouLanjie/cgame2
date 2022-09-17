@@ -40,8 +40,7 @@ void Settings() {
 			&GameInfo->config.newest_history,
 			&GameInfo->config.debug
 		);
-	}
-	else {
+	} else {
 		data.addText(&data,
 			"自动下棋",
 			"当前目录",
@@ -53,7 +52,6 @@ void Settings() {
 			"		棋盘重置",
 			"	更多的棋盘大小",
 			"	显示下棋顺序",
-			"	显示下棋原数",
 			NULL
 		);
 		data.addTextData(&data, 0,
@@ -64,18 +62,16 @@ void Settings() {
 			"%z在查看历史记录时默认查看最后一个记录%z",
 			"%z调试选项显示开关%z",
 			"%z测试功能，两方均使用自动下棋，会自动开启自动下棋\n按下空格让系统下棋，按下回车人工干预手动下棋%z",
-			"%z测试功能，抛弃五子棋胜负判断而保存棋盘形状%z",
-			"%z在开启绘图后，每切换到新的棋盘时清空整个棋盘%z",
+			"%z测试功能，抛弃五子棋胜负判断而保存棋盘形状注意，该功能可能与棋局回放冲突。%z",
+			"%z在开启绘图后，每切换到新的棋盘时清空整个棋盘。注意，该功能可能与棋局回放冲突。%z",
 			"%z部分解除棋盘大小的限制，最小值由%z15%z减少至%z0%z，最大值则不变（主要是因为棋盘的数组没有预设很多）%z",
-			"%z显示下棋的顺序%z",
-			"%z显示下棋的原数%z"
+			"%z显示下棋的顺序%z"
 		);
 		data.addTextData(&data, 1,
-			"%s %s %s %s %s %s %s %s %s %s %s",
-			2,  2, 1, 2, 2, 2, 2, 2, 2, 2, 2
-		);
+			"%s %s %s %s %s %s %s %s %s %s",
+			2,  2, 1, 2, 2, 2, 2, 2, 2, 2 );
 		data.addTextData(&data, 2,
-			"%s %s %s %s %s %s %s %s %s %s %s",
+			"%s %s %s %s %s %s %s %s %s %s",
 			&GameInfo->config.use_AI,
 			&GameInfo->config.chdir,
 			&GameInfo->config.max,
@@ -85,8 +81,7 @@ void Settings() {
 			&GameInfo->config.draw,
 			&GameInfo->config.draw_reset,
 			&GameInfo->config.more_max,
-			&GameInfo->config.show_count,
-			&GameInfo->config.show_under_number
+			&GameInfo->config.show_count
 		);
 	}
 
@@ -115,10 +110,6 @@ void Settings() {
 		GameInfo->config.draw_reset = 0;
 		GameInfo->config.more_max   = 0;
 		GameInfo->config.show_count = 0;
-		GameInfo->config.show_under_number = 0;
-	}
-	if (GameInfo->config.show_count) {
-		GameInfo->config.show_under_number = 0;
 	}
 
 	fp = fopen(GameInfo->config.Config, "w");

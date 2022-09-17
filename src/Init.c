@@ -12,14 +12,13 @@ void Init()
 		GameInfo->config.use_AI  = 0;
 		GameInfo->config.chdir   = 0;
 		GameInfo->config.max     = 15;
-		GameInfo->config.newest_history = 0;
+		GameInfo->config.newest_history = 1;
 		GameInfo->config.debug   = 0;
 		GameInfo->config.all_AI  = 0;
 		GameInfo->config.draw    = 0;
 		GameInfo->config.draw_reset = 0;
 		GameInfo->config.more_max   = 0;
 		GameInfo->config.show_count = 0;
-		GameInfo->config.show_under_number = 0;
 	}
 	return;
 }

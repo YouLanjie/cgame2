@@ -57,7 +57,9 @@ void Game() {
 		PrintInfo();
 		if (error == 1) {
 			move(GameInfo->config.max + 5, 3);
+			attron(COLOR_PAIR(8));
 			printw("你不能下在非空的格子!");
+			attroff(COLOR_PAIR(8));
 			error = 0;
 		}
 		way = getch();
@@ -201,10 +203,12 @@ void Game() {
 						if (way == 'u' || way == 'U') {
 							win = 0;
 							Undo();
-							*who = 3 - *who;
+							if (GameInfo->config.use_AI) {
+								Undo();
+							}
 						}
 					}
-					if (GameInfo->config.use_AI == 0) {  /* 切换下棋的一方 */
+					if (!GameInfo->config.use_AI) {  /* 切换下棋的一方 */
 						*who = 3 - *who;
 					}
 					break;
@@ -325,6 +329,7 @@ void Undo() {
 			if (GameInfo->chess->count && GameInfo->chess->count > 1 && GameInfo->chess->board[i][i2] == GameInfo->chess->count - 1) {
 				GameInfo->chess->board[i][i2] = spaceChess;
 				GameInfo->chess->count--;
+				GameInfo->chess->who = (GameInfo->chess->count % 2 ? (1) : (GameInfo->chess->count ? 2 : 0));
 				return;
 			}
 		}

@@ -85,7 +85,7 @@ void History() {
 		attron(COLOR_PAIR(1));
 		printw("(%03d/%03d)", line + 1, maxLine);
 		mvaddstr(GameInfo->config.max + 4, 23, "wahk上一局，sdjl下一局");
-		mvaddstr(GameInfo->config.max + 5, 5, "0q退出，g第一局，G查看最后一局");
+		mvaddstr(GameInfo->config.max + 5, 4, "0q退出，g第一局，G查看最后一局，r查看回放");
 		attroff(COLOR_PAIR(1));
 
 		chose = getch();
@@ -152,7 +152,7 @@ void History() {
 					}
 				}
 				GameInfo->chess->count = 2;
-				while (chose != 'q' && chose != 'Q' && chose != 0x1B) {
+				while (chose != 'q' && chose != 'Q' && chose != 0x1B && chose != '0') {
 					for (int i = 0; i < GameInfo->config.max; i++) {
 						for (int i2 = 0; i2 < GameInfo->config.max; i2++) {
 							GameInfo->chess->board[i][i2] = 0;
@@ -199,6 +199,12 @@ void History() {
 						if (maxCount > GameInfo->chess->count) {
 							GameInfo->chess->count++;
 						}
+						break;
+					case 'g':
+						GameInfo->chess->count = 2;
+						break;
+					case 'G':
+						GameInfo->chess->count = maxCount;
 						break;
 					default:
 						break;
