@@ -61,6 +61,11 @@ void History() {
 	for (; line + 1 <= maxLine; line++) {
 		fseek(fp, 0L, 0);
 		readSave();
+		GameInfo->chess->way = 0;
+		GameInfo->chess->who = 0;
+		GameInfo->chess->count = 0;
+		GameInfo->chess->x = 0;
+		GameInfo->chess->y = 0;
 		maxCount = 0;
 		for (int i = 0; i < GameInfo->config.max; i++) {
 			for (int i2 = 0; i2 < GameInfo->config.max; i2++) {
