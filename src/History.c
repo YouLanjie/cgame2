@@ -1,14 +1,18 @@
 #include "../include/head.h"
-#include <curses.h>
+
+static void readSave();
+static int fnKey(int ch);
+
+static int line = 0;    //数数
+static int board[52][52];
+static int maxCount = 0;
+static FILE * fp;
 
 void History() {
-	int count = 0;    //数数
 	int chose = 0;    //选择
-	int max = 0;      /* 备份Max值 */
-	int line = 0;     //文件的行数
-	int board[52][52];
+	int max = 0;      /* 备份GameInfo->config.max值 */
+	int maxLine = 0;     //文件的行数
 	char *cp;
-	FILE * fp;
 
 	clear();
 	move(0, 0);
@@ -17,7 +21,7 @@ void History() {
 			mvaddch(i, i2, ' ');
 		}
 	}
-	fp = fopen(Save,"rb");
+	fp = fopen(GameInfo->config.Save,"rb");
 	if (!fp) {
 		move(0, 0);
 		printw("无法打开存档，请自行确认存档文件是否存在！\n按任意按键返回\n");
@@ -25,20 +29,20 @@ void History() {
 		return;
 	}
 	fseek(fp, 0L, 2);
-	line = ftell(fp);
+	maxLine = ftell(fp);
 	fseek(fp, 0L, 0);
 	cp = (char *)malloc(300);
 	for (int i = 0; 1; ) {
 		if(fgetc(fp) == '\n') {
 			i++;
 		}
-		if (ftell(fp) == line) {
-			line = i;
+		if (ftell(fp) == maxLine) {
+			maxLine = i;
 			break;
 		}
 	}
 	free(cp);
-	if(line == 0) {
+	if(maxLine == 0) {
 		attron(COLOR_PAIR(1));
 		move(0, 0);
 		printw("你还没有游戏记录，赶紧去玩一下吧！");
@@ -49,65 +53,39 @@ void History() {
 		return;
 	}
 	fseek(fp, 0L, 0);
-	p = (struct Chess *)malloc(sizeof(struct Chess));
-	for (int i = 0; i < Max; i++) {
-		for (int i2 = 0; i2 < Max; i2++) {
-			p->board[i][i2] = 0;
-			p->board2[i][i2] = 0;
-		}
+	InitChess();
+	max = GameInfo->config.max;
+	if (GameInfo->config.newest_history) {
+		line = maxLine - 1;    /* 设置自动跳转到最后一行 */
 	}
-	p->count = 0;
-	p->x = 1;
-	p->y = 1;
-	max = Max;
-	if (config[7]) {
-		count = line - 1;    /* 设置自动跳转到最后一行 */
-	}
-	for (; count + 1 <= line; count++) {
+	for (; line + 1 <= maxLine; line++) {
 		fseek(fp, 0L, 0);
-		for (int i = 0; i < Max; i++) {
-			for (int i2 = 0; i2 < Max; i2++) {
-				p->board[i][i2] = 0;
-				p->board2[i][i2] = 0;
-				board[i][i2] = 0;
-			}
-		}
-		for (int i = 0; i <= count; i++) {
-			fscanf(fp, "%d%d%d%d%d%d%d", &p -> t.year, &p -> t.mon, &p -> t.day, &p -> t.hour, &p -> t.min, &p -> t.sec, &Max);
-			for (int i = 0; i < Max; i++) {
-				fscanf(fp, "%s", p -> board[i]);
-				for (int i2 = 0; i2 < Max; i2++) {
-					if (p->board[i][i2] == '0') {
-						p->board[i][i2] = board[i][i2] = 0;
-					}else if (p->board[i][i2] == '1') {
-						p->board[i][i2] = board[i][i2] = 1;
-					}else if (p->board[i][i2] == '2') {
-						p->board[i][i2] = board[i][i2] = 2;
-					}
-				}
-			}
-			if (fgetc(fp) == ' ' && fgetc(fp) != '\n') {
-				fseek(fp, -1L, 1);
-				for (int i = 0; i < Max; i++) {
-					for (int i2 = 0; i2 < Max; i2++) {
-						fscanf(fp, "%d", &(p -> board2[i][i2]));
-					}
+		readSave();
+		maxCount = 0;
+		for (int i = 0; i < GameInfo->config.max; i++) {
+			for (int i2 = 0; i2 < GameInfo->config.max; i2++) {
+				if (GameInfo->chess->board[i][i2] > maxCount) {
+					maxCount = GameInfo->chess->board[i][i2];
 				}
 			}
 		}
-
+		GameInfo->chess->who = (maxCount % 2 != 0 ? (blackChess) : (maxCount == 0 ? (spaceChess) : (whiteChess)));
+		maxCount++;
+		GameInfo->chess->count = maxCount;
+		IfWin();
 		PrintBoard();
+		hiChess();
 
 		attron(COLOR_PAIR(1));
 		move(1, 2);
 		printw(Time);
 		attroff(COLOR_PAIR(1));
 
-		move(Max + 4, 2);
+		move(GameInfo->config.max + 4, 2);
 		attron(COLOR_PAIR(1));
-		printw("(%03d/%03d)", count + 1, line);
-		mvaddstr(Max + 4, 23, "wahk上一局，sdjl下一局");
-		mvaddstr(Max + 5, 5, "0q退出，g第一局，G查看最后一局");
+		printw("(%03d/%03d)", line + 1, maxLine);
+		mvaddstr(GameInfo->config.max + 4, 23, "wahk上一局，sdjl下一局");
+		mvaddstr(GameInfo->config.max + 5, 5, "0q退出，g第一局，G查看最后一局");
 		attroff(COLOR_PAIR(1));
 
 		chose = getch();
@@ -123,7 +101,10 @@ void History() {
 				}
 			}
 			else {
-				free(p);
+				fclose(fp);
+				GameInfo->config.max = max;
+				free(GameInfo->chess);
+				GameInfo->chess = NULL;
 				return;
 			}
 		}
@@ -131,46 +112,158 @@ void History() {
 			case 0x30:
 			case 0x51:
 			case 0x71:
-				free(p);
+				fclose(fp);
+				GameInfo->config.max = max;
+				free(GameInfo->chess);
+				GameInfo->chess = NULL;
 				return;
 				break;
 			case 'w':    /* 上一个 */
 			case 'a':
 			case 'h':
 			case 'k':
-				if (count == 0) {
-					count = -1;
+				if (line == 0) {
+					line = -1;
 				}
 				else {
-					count -= 2;
+					line -= 2;
 				}
 				break;
 			case 's':    /* 下一个 */
 			case 'd':
 			case 'l':
 			case 'j':
-				if (count + 1 >= line) {
-					count--;
+				if (line + 1 >= maxLine) {
+					line--;
 				}
 				break;
 			case 'g':    /* 第一个 */
-				count = -1;
+				line = -1;
 				break;
 			case 'G':    /* 最后一个 */
-				while (count + 1 < line - 1) {
-					count++;
+				while (line + 1 < maxLine - 1) {
+					line++;
 				}
 				break;
 			case 'r':
+				for (int i = 0; i < GameInfo->config.max; i++) {
+					for (int i2 = 0; i2 < GameInfo->config.max; i2++) {
+						board[i][i2] = GameInfo->chess->board[i][i2];
+					}
+				}
+				GameInfo->chess->count = 2;
+				while (chose != 'q' && chose != 'Q' && chose != 0x1B) {
+					for (int i = 0; i < GameInfo->config.max; i++) {
+						for (int i2 = 0; i2 < GameInfo->config.max; i2++) {
+							GameInfo->chess->board[i][i2] = 0;
+							if (board[i][i2] <= GameInfo->chess->count - 1) {
+								GameInfo->chess->board[i][i2] = board[i][i2];
+							}
+						}
+					}
+					PrintBoard();
+
+					attron(COLOR_PAIR(1));
+					move(1, 2);
+					printw(Time);
+					attroff(COLOR_PAIR(1));
+
+					move(GameInfo->config.max + 4, 2);
+					attron(COLOR_PAIR(1));
+					printw("(%03d/%03d)", GameInfo->chess->count - 1, maxCount - 1);
+					mvaddstr(GameInfo->config.max + 4, 24, "您现在正处于回放模式");
+					mvaddstr(GameInfo->config.max + 5, 8, "wahk上一步，sdjl下一步。0q退出");
+					attroff(COLOR_PAIR(1));
+
+					if (GameInfo->chess->count == maxCount) {
+						hiChess();
+					}
+					chose = getch();
+					chose = fnKey(chose);
+					switch (chose) {
+					case 'w':    /* 上一个 */
+					case 'a':
+					case 'h':
+					case 'k':
+						if (2 < GameInfo->chess->count) {
+							GameInfo->chess->count--;
+						}
+						break;
+					case 's':    /* 下一个 */
+					case 'd':
+					case 'l':
+					case 'j':
+					case ' ':
+					case '\r':
+					case '\n':
+						if (maxCount > GameInfo->chess->count) {
+							GameInfo->chess->count++;
+						}
+						break;
+					default:
+						break;
+					}
+				}
+				line--;
 				break;
 			default:
-				count--;
+				line--;
 				break;
 		}
 		move(1, 0);
 	}
 	fclose(fp);
-	Max = max;
-	free(p);
+	GameInfo->config.max = max;
+	free(GameInfo->chess);
+	GameInfo->chess = NULL;
 	return;
 }
+
+static int fnKey(int ch)
+{
+	if (ch == 0x1B && kbhit()) {
+		switch (ch) {
+		case 'A':
+			return 'w';
+			break;
+		case 'B':
+			return 's';
+			break;
+		case 'C':
+			return 'd';
+			break;
+		case 'D':
+			return 'a';
+			break;
+		default:
+			break;
+		}
+	} else if (ch == 0x1B) {
+		return 0x1B;
+	}
+	return ch;
+}
+
+
+static void readSave()
+{
+	for (int i = 0; i < GameInfo->config.max; i++) {
+		for (int i2 = 0; i2 < GameInfo->config.max; i2++) {
+			GameInfo->chess->board[i][i2] = 0;
+			board[i][i2] = 0;
+		}
+	}
+	for (int i = 0; i <= line; i++) {
+		fscanf(fp, "%d%d%d%d%d%d%d", &GameInfo->chess->t.year, &GameInfo->chess->t.mon, &GameInfo->chess->t.day, &GameInfo->chess->t.hour, &GameInfo->chess->t.min, &GameInfo->chess->t.sec, &GameInfo->config.max);
+		for (int i = 0; i < GameInfo->config.max; i++) {
+			for (int i2 = 0; i2 < GameInfo->config.max; i2++) {
+				fscanf(fp, "%d", &(GameInfo->chess->board[i][i2]));
+			}
+		}
+		if (fgetc(fp) == ' ' && fgetc(fp) != '\n') {
+			fseek(fp, -1L, 1);
+		}
+	}
+return;
+}
+

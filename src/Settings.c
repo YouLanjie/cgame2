@@ -4,14 +4,14 @@ void Settings() {
 	menuData data = menuDataInit();
 	FILE * fp;
 
-	fp = fopen(Config, "r"); /* 读取文件 */
+	fp = fopen(GameInfo->config.Config, "r"); /* 读取文件 */
 	ConfigRead;
 	fclose(fp);
 
 
 	data.title = "游戏设置";
 	data.cfg   = 3;
-	if (!config[2]) {
+	if (!GameInfo->config.debug) {
 		data.addText(&data,
 			"自动下棋",
 			"当前目录",
@@ -33,8 +33,12 @@ void Settings() {
 			2,  2, 1, 2, 2
 		);
 		data.addTextData(&data, menuTextDataSetVar,
-			"%s         %s          %s    %s          %s",
-			&config[0], &config[1], &Max, &config[7], &config[2]
+			"%s %s %s %s %s",
+			&GameInfo->config.use_AI,
+			&GameInfo->config.chdir,
+			&GameInfo->config.max,
+			&GameInfo->config.newest_history,
+			&GameInfo->config.debug
 		);
 	}
 	else {
@@ -71,20 +75,29 @@ void Settings() {
 			2,  2, 1, 2, 2, 2, 2, 2, 2, 2, 2
 		);
 		data.addTextData(&data, 2,
-			"%s         %s          %s    %s          %s          %s          %s          %s          %s          %s          %s",
-			&config[0], &config[1], &Max, &config[7], &config[2], &config[3], &config[4], &config[5], &config[6], &config[8], &config[9]
+			"%s %s %s %s %s %s %s %s %s %s %s",
+			&GameInfo->config.use_AI,
+			&GameInfo->config.chdir,
+			&GameInfo->config.max,
+			&GameInfo->config.newest_history,
+			&GameInfo->config.debug,
+			&GameInfo->config.all_AI,
+			&GameInfo->config.draw,
+			&GameInfo->config.draw_reset,
+			&GameInfo->config.more_max,
+			&GameInfo->config.show_count,
+			&GameInfo->config.show_under_number
 		);
 	}
 
 	/* 设置棋盘大小上下限 */
 	data.addTextData(&data, menuTextDataSetMax, "N N %s", 51);
-	if (config[6]) {
+	if (GameInfo->config.more_max) {
 		data.addTextData(&data, menuTextDataSetMin, "N N %s", 0);
-	}
-	else {
+	} else {
 		data.addTextData(&data, menuTextDataSetMin, "N N %s", 15);
-		if (Max < 15) {
-			Max = 15;
+		if (GameInfo->config.max < 15) {
+			GameInfo->config.max = 15;
 		}
 	}
 
@@ -93,23 +106,22 @@ void Settings() {
 #ifdef _WIN32
 	config[1] = 1;
 #endif
-
-	if (config[3] == 1) {
-		config[0] = 1;
+	if (GameInfo->config.all_AI == 1) {
+		GameInfo->config.use_AI = 1;
+	}
+	if (GameInfo->config.debug == 0) {
+		GameInfo->config.all_AI = 0;
+		GameInfo->config.draw   = 0;
+		GameInfo->config.draw_reset = 0;
+		GameInfo->config.more_max   = 0;
+		GameInfo->config.show_count = 0;
+		GameInfo->config.show_under_number = 0;
+	}
+	if (GameInfo->config.show_count) {
+		GameInfo->config.show_under_number = 0;
 	}
 
-	if (config[2] == 0) {
-		config[3] = 0;
-		config[4] = 0;
-		config[5] = 0;
-		config[6] = 0;
-	}
-
-	if (config[8]) {
-		config[9] = 0;
-	}
-
-	fp = fopen(Config, "w");
+	fp = fopen(GameInfo->config.Config, "w");
 	if (fp) {
 		ConfigWrite;
 		fclose(fp);

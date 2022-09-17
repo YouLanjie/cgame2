@@ -7,22 +7,22 @@ void AI() {
 	int x,           /* 坐标 */
 	    y,           /* 是以0为基准的数组坐标 */
 	    have = 0,    /* 连成一线的棋子数量 */
-	    sourceMapPlayer[Max][Max],
-	    sourceMapComputer[Max][Max];
+	    sourceMapPlayer[GameInfo->config.max][GameInfo->config.max],
+	    sourceMapComputer[GameInfo->config.max][GameInfo->config.max];
 	
-	for (y = 0; y < Max; y++) {
-		for (x = 0; x < Max; x++) {    /* 配置分数表 */
+	for (y = 0; y < GameInfo->config.max; y++) {
+		for (x = 0; x < GameInfo->config.max; x++) {    /* 配置分数表 */
 			/* 为电脑记分 */
 			sourceMapComputer[y][x] = 0;
-			sourceMapComputer[y][x] = getSource(y, x, computerChess);
+			sourceMapComputer[y][x] = getSource(y, x, myChess);
 			/* 为玩家记分 */
 			sourceMapPlayer[y][x] = 0;
-			sourceMapPlayer[y][x] = getSource(y, x, playerChess);
+			sourceMapPlayer[y][x] = getSource(y, x, otherChess);
 		}
 	}
 
-	for (int i = 0; i < Max; i++) {    /* 获得最高分 */
-		for (int i2 = 0; i2 < Max; i2++) {
+	for (int i = 0; i < GameInfo->config.max; i++) {    /* 获得最高分 */
+		for (int i2 = 0; i2 < GameInfo->config.max; i2++) {
 			if (sourceMapComputer[i][i2] > have) {
 				have = sourceMapComputer[i][i2];    /* 获取分数最高的 */
 				y = i;
@@ -37,11 +37,10 @@ void AI() {
 		}
 	}
 
-	if (p -> board[y][x] == spaceChess) {
-		p -> board[y][x] = computerChess;
+	if (GameInfo->chess->board[y][x] == spaceChess) {
+		GameInfo->chess->board[y][x] = GameInfo->chess->count;
+		GameInfo->chess->count++;
 	}
-	p -> x = x + 1;
-	p -> y = y + 1;
 	return;
 }
 
@@ -55,14 +54,14 @@ static int getSource(int y, int x, int who) {
 	    stat2     = 0,               /* 棋链另一侧的状态 */
 	    source[4] = {0, 0, 0, 0};    /* 存储各个方向的分数 */
 
-	if (p -> board[y][x] != spaceChess) {
+	if (GameInfo->chess->board[y][x] != spaceChess) {
 		return 0;
 	}
 
 	/* 横向判断 */
-	while (x > 0 && (p -> board[y][x - 1] == spaceChess || p -> board[y][x - 1] == who)) {
-		if (p -> board[y][x - 1] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
-			if (p -> board[y][x - 2] != who) {    /* 非同色子 */
+	while (x > 0 && (GameInfo->chess->board[y][x - 1] == spaceChess || GetChessPlayer(y, x - 1) == who)) {
+		if (GameInfo->chess->board[y][x - 1] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
+			if (GameInfo->chess->board[y][x - 2] != who) {    /* 非同色子 */
 				stat1 = 1;    /* 设置离开状态为1 */
 				break;
 			}
@@ -72,7 +71,7 @@ static int getSource(int y, int x, int who) {
 			/* x轴左移 */
 			x--;
 		}
-		else if (p -> board[y][x - 1] == who) {    /* 同子 -> ## */
+		else if (GameInfo->chess->board[y][x - 1] == who) {    /* 同子 -> ## */
 			had = 1;    /* 设置同子值为Ture */
 			/* x轴左移 */
 			x--;
@@ -92,16 +91,16 @@ static int getSource(int y, int x, int who) {
 
 	x = x2;    /* 重置x轴值 */
 
-	while (x < Max - 1 && (p -> board[y][x + 1] == spaceChess || p -> board[y][x + 1] == who)) {
-		if (p -> board[y][x + 1] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
-			if (p -> board[y][x + 2] != who) {    /* 右侧空白后遇挡/空白==结束 */
+	while (x < GameInfo->config.max - 1 && (GameInfo->chess->board[y][x + 1] == spaceChess || GameInfo->chess->board[y][x + 1] == who)) {
+		if (GameInfo->chess->board[y][x + 1] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
+			if (GameInfo->chess->board[y][x + 2] != who) {    /* 右侧空白后遇挡/空白==结束 */
 				stat2 = 1;
 				break;
 			}
 			spaceNum++;
 			x++;
 		}
-		else if (p -> board[y][x + 1] == spaceChess && spaceNum > 0) {    /* 第2个空白 */
+		else if (GameInfo->chess->board[y][x + 1] == spaceChess && spaceNum > 0) {    /* 第2个空白 */
 			stat2 = 1;
 			break;
 		}
@@ -117,9 +116,9 @@ static int getSource(int y, int x, int who) {
 	count = 1;
 	x = x2;
 	y = y2;
-	while (y > 0 && (p -> board[y - 1][x] == spaceChess || p -> board[y - 1][x] == who)) {
-		if (p -> board[y - 1][x] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
-			if (p -> board[y - 2][x] != who) {    /* 非同色子 */
+	while (y > 0 && (GameInfo->chess->board[y - 1][x] == spaceChess || GameInfo->chess->board[y - 1][x] == who)) {
+		if (GameInfo->chess->board[y - 1][x] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
+			if (GameInfo->chess->board[y - 2][x] != who) {    /* 非同色子 */
 				stat1 = 1;    /* 设置离开状态为1 */
 				break;
 			}
@@ -129,7 +128,7 @@ static int getSource(int y, int x, int who) {
 			/* y轴上移 */
 			y--;
 		}
-		else if (p -> board[y - 1][x] == who) {    /* 同子 -> ## */
+		else if (GameInfo->chess->board[y - 1][x] == who) {    /* 同子 -> ## */
 			had = 1;    /* 设置同子值为Ture */
 			/* y轴上移 */
 			y--;
@@ -150,16 +149,16 @@ static int getSource(int y, int x, int who) {
 	x = x2;    /* 重置x轴值 */
 	y = y2;    /* 重置y轴值 */
 
-	while (y < Max - 1 && (p -> board[y + 1][x] == spaceChess || p -> board[y + 1][x] == who)) {
-		if (p -> board[y + 1][x] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
-			if (p -> board[y + 2][x] != who) {    /* 下侧空白后遇挡/空白==结束 */
+	while (y < GameInfo->config.max - 1 && (GameInfo->chess->board[y + 1][x] == spaceChess || GameInfo->chess->board[y + 1][x] == who)) {
+		if (GameInfo->chess->board[y + 1][x] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
+			if (GameInfo->chess->board[y + 2][x] != who) {    /* 下侧空白后遇挡/空白==结束 */
 				stat2 = 1;
 				break;
 			}
 			spaceNum++;
 			y++;
 		}
-		else if (p -> board[y + 1][x] == spaceChess && spaceNum > 0) {    /* 第2个空白 */
+		else if (GameInfo->chess->board[y + 1][x] == spaceChess && spaceNum > 0) {    /* 第2个空白 */
 			stat2 = 1;
 			break;
 		}
@@ -175,9 +174,9 @@ static int getSource(int y, int x, int who) {
 	count = 1;
 	x = x2;
 	y = y2;
-	while (y < Max - 1 && x > 0 && (p -> board[y + 1][x - 1] == spaceChess || p -> board[y + 1][x - 1] == who)) {
-		if (p -> board[y + 1][x - 1] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
-			if (p -> board[y + 2][x - 2] != who) {    /* 非同色子 */
+	while (y < GameInfo->config.max - 1 && x > 0 && (GameInfo->chess->board[y + 1][x - 1] == spaceChess || GameInfo->chess->board[y + 1][x - 1] == who)) {
+		if (GameInfo->chess->board[y + 1][x - 1] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
+			if (GameInfo->chess->board[y + 2][x - 2] != who) {    /* 非同色子 */
 				stat1 = 1;    /* 设置离开状态为1 */
 				break;
 			}
@@ -188,7 +187,7 @@ static int getSource(int y, int x, int who) {
 			x--;
 			y++;
 		}
-		else if (p -> board[y + 1][x - 1] == who) {    /* 同子 -> ## */
+		else if (GameInfo->chess->board[y + 1][x - 1] == who) {    /* 同子 -> ## */
 			had = 1;    /* 设置同子值为Ture */
 			/* x轴左移 */
 			x--;
@@ -210,9 +209,9 @@ static int getSource(int y, int x, int who) {
 	x = x2;    /* 重置x轴值 */
 	y = y2;    /* 重置y轴值 */
 
-	while (y > 0 && x < Max - 1 && (p -> board[y - 1][x + 1] == spaceChess || p -> board[y - 1][x + 1] == who)) {
-		if (p -> board[y - 1][x + 1] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
-			if (p -> board[y - 2][x + 2] != who) {
+	while (y > 0 && x < GameInfo->config.max - 1 && (GameInfo->chess->board[y - 1][x + 1] == spaceChess || GameInfo->chess->board[y - 1][x + 1] == who)) {
+		if (GameInfo->chess->board[y - 1][x + 1] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
+			if (GameInfo->chess->board[y - 2][x + 2] != who) {
 				stat2 = 1;
 				break;
 			}
@@ -220,7 +219,7 @@ static int getSource(int y, int x, int who) {
 			x++;
 			y--;
 		}
-		else if (p -> board[y - 1][x + 1] == spaceChess && spaceNum > 0) {    /* 第2个空白 */
+		else if (GameInfo->chess->board[y - 1][x + 1] == spaceChess && spaceNum > 0) {    /* 第2个空白 */
 			stat2 = 1;
 			break;
 		}
@@ -237,9 +236,9 @@ static int getSource(int y, int x, int who) {
 	count = 1;
 	x = x2;
 	y = y2;
-	while (y > 0 && x > 0 && (p -> board[y - 1][x - 1] == spaceChess || p -> board[y - 1][x - 1] == who)) {
-		if (p -> board[y - 1][x - 1] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
-			if (p -> board[y - 2][x - 2] != who) {    /* 非同色子 */
+	while (y > 0 && x > 0 && (GameInfo->chess->board[y - 1][x - 1] == spaceChess || GameInfo->chess->board[y - 1][x - 1] == who)) {
+		if (GameInfo->chess->board[y - 1][x - 1] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
+			if (GameInfo->chess->board[y - 2][x - 2] != who) {    /* 非同色子 */
 				stat1 = 1;    /* 设置离开状态为1 */
 				break;
 			}
@@ -250,7 +249,7 @@ static int getSource(int y, int x, int who) {
 			x--;
 			y--;
 		}
-		else if (p -> board[y - 1][x - 1] == who) {    /* 同子 -> ## */
+		else if (GameInfo->chess->board[y - 1][x - 1] == who) {    /* 同子 -> ## */
 			had = 1;    /* 设置同子值为Ture */
 			/* x轴左移 */
 			x--;
@@ -272,10 +271,10 @@ static int getSource(int y, int x, int who) {
 	x = x2;    /* 重置x轴值 */
 	y = y2;    /* 重置y轴值 */
 
-	/*  Max:y == 13 与   右侧为空          或  右侧为同色 */
-	while (y < Max - 1 && x < Max - 1 && (p -> board[y + 1][x + 1] == spaceChess || p -> board[y + 1][x + 1] == who)) {
-		if (p -> board[y + 1][x + 1] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
-			if (p -> board[y + 2][x + 2] != who) {    /* 右侧空白后遇挡/空白==结束 */
+	/*  GameInfo->config.max:y == 13 与   右侧为空          或  右侧为同色 */
+	while (y < GameInfo->config.max - 1 && x < GameInfo->config.max - 1 && (GameInfo->chess->board[y + 1][x + 1] == spaceChess || GameInfo->chess->board[y + 1][x + 1] == who)) {
+		if (GameInfo->chess->board[y + 1][x + 1] == spaceChess && spaceNum < 1) {    /* 第一个空白 */
+			if (GameInfo->chess->board[y + 2][x + 2] != who) {    /* 右侧空白后遇挡/空白==结束 */
 				stat2 = 1;
 				break;
 			}
@@ -283,7 +282,7 @@ static int getSource(int y, int x, int who) {
 			x++;
 			y++;
 		}
-		else if (p -> board[y + 1][x + 1] == spaceChess && spaceNum > 0) {    /* 第2个空白 */
+		else if (GameInfo->chess->board[y + 1][x + 1] == spaceChess && spaceNum > 0) {    /* 第2个空白 */
 			stat2 = 1;
 			break;
 		}
@@ -307,10 +306,10 @@ static int sourceSum(int stat1, int stat2, int count, int spaceNum, int who) {
 				//电脑60
 				/* 电脑黑棋 */
 				/*     玩家是否为电脑 返回：是/否 */
-				return who == computerChess ? 60 : 50;
+				return who == myChess ? 60 : 50;
 			}
 			else {
-				return who == computerChess ? 40 : 35;
+				return who == myChess ? 40 : 35;
 			}
 		}
 		else if (!stat1 && !stat2) {    /* 没有满足任何条件 */
@@ -324,10 +323,10 @@ static int sourceSum(int stat1, int stat2, int count, int spaceNum, int who) {
 		if (stat1 && stat2) { //左右两边都是空的
 			if (spaceNum == 0) {
 				//电脑950
-				return who == computerChess ? 950 : 700;
+				return who == myChess ? 950 : 700;
 			}
 			else {
-				return who == computerChess ? 900 : 650;
+				return who == myChess ? 900 : 650;
 			}
 		}
 		else if (!stat1 && !stat2) {
@@ -340,10 +339,10 @@ static int sourceSum(int stat1, int stat2, int count, int spaceNum, int who) {
 	else if (count == 4) {
 		if (stat1 && stat2) { //左右两边都是空的
 			if (spaceNum == 0) {
-				return who == computerChess ? 6000 : 3500;
+				return who == myChess ? 6000 : 3500;
 			}
 			else {
-				return who == computerChess ? 5000 : 3000;
+				return who == myChess ? 5000 : 3000;
 			}
 		}
 		else if (!stat1 && !stat2) {
@@ -351,19 +350,19 @@ static int sourceSum(int stat1, int stat2, int count, int spaceNum, int who) {
 		}
 		else {
 			if (spaceNum == 0) {
-				return who == computerChess ? 4000 : 800;
+				return who == myChess ? 4000 : 800;
 			}
 			else {
-				return who == computerChess ? 3600 : 750;
+				return who == myChess ? 3600 : 750;
 			}
 		}
 	}
 	else {
 		if (spaceNum == 0) {
-			return who == computerChess ? 20000 : 15000;
+			return who == myChess ? 20000 : 15000;
 		}
 		else {
-			return who == computerChess ? 10000 : 3300;
+			return who == myChess ? 10000 : 3300;
 		}
 	}
 	return 0;

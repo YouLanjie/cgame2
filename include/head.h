@@ -4,18 +4,20 @@
 
 #define LANGFILELINE 33  /* 语言句数 */
 
-#define Time "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d",p -> t.year,p -> t.mon,p -> t.day,p -> t.hour,p -> t.min,p -> t.sec,Max,Max //开局时间标准格式
-#define NowTime "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d",p -> nt.year,p -> nt.mon,p -> nt.day,p -> nt.hour,p -> nt.min,p -> nt.sec,Max,Max //现在时间标准格式
+#define Time "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d", GameInfo->chess->t.year, GameInfo->chess->t.mon, GameInfo->chess->t.day, GameInfo->chess->t.hour, GameInfo->chess->t.min, GameInfo->chess->t.sec, GameInfo->config.max, GameInfo->config.max //开局时间标准格式
+#define NowTime "%04d-%02d-%02d %02d:%02d:%02d\t布局大小:%d×%d", GameInfo->chess->nt.year, GameInfo->chess->nt.mon, GameInfo->chess->nt.day, GameInfo->chess->nt.hour, GameInfo->chess->nt.min, GameInfo->chess->nt.sec, GameInfo->config.max, GameInfo->config.max //现在时间标准格式
 
 /* 选项的保存/读取格式 */
-#define ConfigWrite fprintf(fp, "%d %d %d %d %d %d %d %d %d %d %d",config[0], config[1], config[2], Max, config[3], config[4], config[5], config[6], config[7], config[8], config[9])  //保存选项格式
-#define ConfigRead fscanf(fp,"%d%d%d%d%d%d%d%d%d%d%d", &config[0], &config[1], &config[2], &Max, &config[3], &config[4], &config[5], &config[6], &config[7], &config[8], &config[9])  //读取选项格式
+#define ConfigWrite fprintf(fp, "%d %d %d %d %d %d %d %d %d %d %d", GameInfo->config.use_AI, GameInfo->config.chdir, GameInfo->config.debug, GameInfo->config.max, GameInfo->config.all_AI, GameInfo->config.draw, GameInfo->config.draw_reset, GameInfo->config.more_max, GameInfo->config.newest_history, GameInfo->config.show_count, GameInfo->config.show_under_number)  //保存选项格式
+#define ConfigRead fscanf(fp,"%d%d%d%d%d%d%d%d%d%d%d", &GameInfo->config.use_AI, &GameInfo->config.chdir, &GameInfo->config.debug, &GameInfo->config.max, &GameInfo->config.all_AI, &GameInfo->config.draw, &GameInfo->config.draw_reset, &GameInfo->config.more_max, &GameInfo->config.newest_history, &GameInfo->config.show_count, &GameInfo->config.show_under_number)  //读取选项格式
 
-#define spaceChess 0
-#define blackChess 1
-#define whiteChess 2
-#define playerChess (3 - p -> who)    /* 敌方 */
-#define computerChess (p -> who)      /* 我方 */
+#define spaceChess 0     /* 空棋 */
+#define blackChess 1     /* 黑棋 */
+#define whiteChess 2     /* 白棋 */
+#define errorChess -1    /* 错误 */
+
+#define otherChess (3 - GameInfo->chess->who)    /* 敌方 */
+#define myChess (GameInfo->chess->who)           /* 我方 */
 
 /* 定义结构体 */
 struct time {                                //存储时间信息
@@ -27,38 +29,60 @@ struct time {                                //存储时间信息
 	int sec;       //秒
 };
 
-struct Chess {                  //游戏信息大杂烩
-	struct time t;          //开局时间，精确到秒
-	struct time nt;         //现在时间，精确到分
-	char board[52][52];     //棋盘信息
-	int board2[52][52];    //棋盘信息
-	int count;              //序列数值
-	int way;                //方向值
-	int who;                //下棋的一方，1黑，2白
-	int x;                  //新棋子的x轴（1开始）
-	int y;                  //新棋子的y轴
-};
+typedef struct {              //游戏信息大杂烩
+	int board[52][52];    //棋盘信息
+	int who;              //下棋的一方，奇黑，偶白
+	int x;                //新棋子的x轴（1开始）
+	int y;                //新棋子的y轴
+	int way;              //记录连成一线的方向
+	int count;            //序列数值
+	struct time t;        //开局时间，精确到秒
+	struct time nt;       //现在时间，精确到分
+} Chess;
+
+typedef struct {
+	char *Save;       /* 保存文件路径 */
+	char *Config;     /* 选项文件路径 */
+	char *GameDir;    /* 使用的文件路径 */
+	int use_AI;
+	int chdir;
+	int max;
+	int newest_history;
+	int debug;
+	int all_AI;
+	int draw;
+	int draw_reset;
+	int more_max;
+	int show_count;
+	int show_under_number;
+} Config;
+
+typedef struct {           //游戏信息大杂烩
+	Config config;
+	Chess * chess;     /* 棋盘信息 */
+} Games;
 
 /* 定义结构体变量 */
-extern struct Chess *p;
-
-extern char Save[20];  /* 保存文件路径 */
-extern char Config[25];  /* 选项文件路径 */
-extern char * GameDir;  /* 使用的文件路径 */
-
-extern int config[];  /* 选项的保存 */
-extern int Max;  /* 棋盘大小 */
+extern Games *GameInfo;
 
 /* 定义函数 */
-int IfWin(int c);               //是否胜利，返回1黑方胜，返回2白方胜
-void Init();                    //初始化：创建文件、选择语言
+void Init();                    //初始化
+void readConfig();              //初始化：创建文件
 void changeDir(char * dir);     //用于更改游戏目录
+
+int GetChessPlayer(int y, int x);
+void InitChess();
+void PrintBoard();              //打印棋盘
+void hiChess();
+
 void Game();                    //游戏主体
 void AI();                      //AI下棋
-void History();                 //查看历史局数信息
-void Settings();                //设置
-void PrintBoard();              //打印棋盘
+int IfWin();                    //是否胜利，返回1黑方胜，返回2白方胜
 void GetTime();                 //获取开局时间
 void GetNowTime();              //获取现在时间
+
+void History();                 //查看历史局数信息
+void Settings();                //设置
+
 void stop();                    //退出程序执行的
 

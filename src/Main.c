@@ -1,14 +1,9 @@
 #include "../include/head.h"                           //导入头文件
 
-struct Chess *p;
+Games *GameInfo;
 
-/* 文件位置 */
-char Save[20] = "/etc/cgame2/save.txt";
-char Config[25] = "/etc/cgame2/config.txt";
-char * GameDir = "/etc/cgame2/";
-int config[] = {0, 0, 0, 0, 0, 0, 0, 1, 0, 0};    /* 配置选项 */
-int Max = 15;
-FILE * fp;
+/* 文件指针 */
+static FILE * fp;
 
 int main() {
 	int inputContent = 0; /* 输入的内容 */
@@ -26,13 +21,15 @@ int main() {
 	init_pair(7, COLOR_BLACK, COLOR_BLUE);
 	init_pair(8, COLOR_WHITE, COLOR_BLUE);
 
+	GameInfo = NULL;
+	Init();
+
 	signal(SIGINT, stop);
 	Clear2
-	Max = 15;
 	while (inputContent != 0x1B && inputContent != 0x30 && inputContent != 0x51 && inputContent != 0x71) {
-		Init();
-		if ((fp = fopen(Config, "r"))) {
-			fscanf(fp,"%d%d%d%d", &config[0], &config[1], &config[2], &Max);
+		readConfig();
+		if ((fp = fopen(GameInfo->config.Config, "r"))) {
+			ConfigRead;
 			fclose(fp);
 		}
 		inputContent = data.menuShow(&data);
@@ -50,10 +47,10 @@ int main() {
 				return 0;
 				break;
 			case '1':
-				Game(p);
+				Game();
 				break;
 			case '2':
-				History(p);
+				History();
 				break;
 			case '3':
 				help.menuShow(&help);
@@ -64,14 +61,14 @@ int main() {
 				printw("请确清除存档，您将失去您的所有记录！（y/N）");
 				inputContent = getch();
 				if (inputContent == 'y' || inputContent == 'Y') {
-					remove(Save);
-					remove(Config);
-					if (access("./cgame2-data/", 0) != EOF && config[1] == 1) {
+					remove(GameInfo->config.Save);
+					remove(GameInfo->config.Config);
+					if (access("./cgame2-data/", 0) != EOF && GameInfo->config.chdir == 1) {
 						remove("./cgame2-data");
-						config[1] = 0;
+						GameInfo->config.chdir = 0;
 						changeDir("/etc/cgame2/");
-						if ((fp = fopen(Config, "w"))) {
-							fprintf(fp,"%d %d %d", config[0], 0, Max);
+						if ((fp = fopen(GameInfo->config.Config, "w"))) {
+							ConfigWrite;
 							fclose(fp);
 						}
 						move(1, 0);
