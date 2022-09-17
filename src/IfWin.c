@@ -44,7 +44,7 @@ int IfWin() {
 
 	for (int i = 0; i < GameInfo->config.max && stat; i++) {
 		for (int i2 = 0; i2 < GameInfo->config.max && stat; i2++) {
-			if (stat && GetChessPlayer(i, i2) == 0) {
+			if (stat && GetChessPlayer(i + 1, i2 + 1) == spaceChess) {
 				stat = 0;
 			}
 		}
