@@ -20,6 +20,7 @@ void Init()
 		GameInfo->config.draw_reset = 0;
 		GameInfo->config.more_max   = 0;
 		GameInfo->config.show_count = 0;
+		GameInfo->config.more_info  = 0;
 	}
 	return;
 }

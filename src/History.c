@@ -62,7 +62,6 @@ void History() {
 		fseek(fp, 0L, 0);
 		readSave();
 		GameInfo->chess->way = 0;
-		GameInfo->chess->who = 0;
 		GameInfo->chess->count = 0;
 		GameInfo->chess->x = 0;
 		GameInfo->chess->y = 0;
@@ -74,12 +73,13 @@ void History() {
 				}
 			}
 		}
-		GameInfo->chess->who = (maxCount % 2 != 0 ? (blackChess) : (maxCount == 0 ? (spaceChess) : (whiteChess)));
 		maxCount++;
 		GameInfo->chess->count = maxCount;
 		IfWin();
 		PrintBoard();
+		GameInfo->chess->count--;
 		hiChess();
+		GameInfo->chess->count++;
 
 		attron(COLOR_PAIR(1));
 		move(1, 2);
@@ -181,7 +181,9 @@ void History() {
 					attroff(COLOR_PAIR(1));
 
 					if (GameInfo->chess->count == maxCount) {
+						GameInfo->chess->count--;
 						hiChess();
+						GameInfo->chess->count++;
 					}
 					chose = getch();
 					chose = fnKey(chose);

@@ -3,7 +3,12 @@
 static int sourceSum(int stat1, int stat2, int count, int spaceNum, int who);
 static int getSource(int y, int x, int who);
 
-void AI() {
+/* AI的调用程序
+ * 进行分数计算
+ * 遍历最高分值并下棋
+ */
+void AI()
+{
 	int x,           /* 坐标 */
 	    y,           /* 是以0为基准的数组坐标 */
 	    have = 0,    /* 连成一线的棋子数量 */
@@ -38,13 +43,16 @@ void AI() {
 	}
 
 	if (GetChessPlayer(y + 1, x + 1) == spaceChess) {
-		GameInfo->chess->board[y][x] = GameInfo->chess->count;
-		GameInfo->chess->count++;
+		GetChessVal2(y, x) = GameInfo->chess->count;
 	}
 	return;
 }
 
-static int getSource(int y, int x, int who) {
+/* 获得每个棋盘格的分数
+ * 通过4个方向轴的分数值相加记分
+ */
+static int getSource(int y, int x, int who)
+{
 	int spaceNum  = 0,               /* 空白数 */
 	    count     = 1,               /* 连接数 */
 	    had       = 0,               /* 上半侧拥有的同子数量 */
@@ -281,7 +289,10 @@ static int getSource(int y, int x, int who) {
 	return source[0] + source[1] + source[2] + source[3];
 }
 
-static int sourceSum(int stat1, int stat2, int count, int spaceNum, int who) {
+/* 求单个方向轴的分数值
+ */
+static int sourceSum(int stat1, int stat2, int count, int spaceNum, int who)
+{
 	if (count == 1) {
 		return 1;
 	}
