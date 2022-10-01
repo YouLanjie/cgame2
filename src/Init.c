@@ -4,9 +4,10 @@ void Init()
 {
 	if (GameInfo == NULL) {
 		GameInfo = (Games *)malloc(sizeof(Games));
-		GameInfo->config.GameDir = "/etc/cgame2/";
-		GameInfo->config.Config  = "/etc/cgame2/config.txt";
-		GameInfo->config.Save    = "/etc/cgame2/save.txt";
+		GameInfo->config.GameDir = (char *)malloc(40);
+		GameInfo->config.Config  = (char *)malloc(40);
+		GameInfo->config.Save    = (char *)malloc(40);
+		changeDir("/etc/cgame2/");
 	}
 	if (GameInfo != NULL) {
 		GameInfo->config.use_AI  = 0;
@@ -116,20 +117,15 @@ void readConfig()
 }
 
 void changeDir(char * dir) {    /* 更改文件夹的函数 */
-	char config[30],
-	     save[30];
-
 	if (dir != NULL) {
-		GameInfo->config.GameDir = dir;
+		strcpy(GameInfo->config.GameDir, dir);
 	}
 
-	strcpy(config, GameInfo->config.GameDir);
-	strcat(config, "config.txt");
-	GameInfo->config.Config = config;
+	strcpy(GameInfo->config.Config, GameInfo->config.GameDir);
+	strcat(GameInfo->config.Config, "config.txt");
 
-	strcpy(save, GameInfo->config.GameDir);
-	strcat(save, "save.txt");
-	GameInfo->config.Save = save;
+	strcpy(GameInfo->config.Save, GameInfo->config.GameDir);
+	strcat(GameInfo->config.Save, "save.txt");
 	return;
 }
 
