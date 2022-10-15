@@ -9,18 +9,19 @@ static int maxCount = 0;
 static FILE * fp;
 
 void History() {
-	int chose = 0;    //选择
+	int chose = 0;    /* 选择 */
 	int max = 0;      /* 备份GameInfo->config.max值 */
-	int maxLine = 0;     //文件的行数
+	int maxLine = 0;  /* 文件的行数 */
 	char *cp;
 
 	clear();
-	move(0, 0);
+	attron(COLOR_PAIR(1));
 	for (int i = 0; i < LINES; i++) {
 		for (int i2 = 0; i2 < COLS; i2++) {
 			mvaddch(i, i2, ' ');
 		}
 	}
+	attroff(COLOR_PAIR(1));
 	fp = fopen(GameInfo->config.Save,"rb");
 	if (!fp) {
 		move(0, 0);
@@ -94,26 +95,9 @@ void History() {
 		attroff(COLOR_PAIR(1));
 
 		chose = getch();
-		if (chose == 0x1B) {
-			if (kbhit() == 1) {
-				getchar();
-				chose = getchar();
-				if (chose == 0x41 || chose == 0x44) {
-					chose = 'w';
-				}
-				else if (chose == 0x42 || chose == 0x43) {
-					chose = 's';
-				}
-			}
-			else {
-				fclose(fp);
-				GameInfo->config.max = max;
-				free(GameInfo->chess);
-				GameInfo->chess = NULL;
-				return;
-			}
-		}
+		chose = fnKey(chose);
 		switch (chose) {
+			case 0x1B:
 			case 0x30:
 			case 0x51:
 			case 0x71:
@@ -235,6 +219,8 @@ void History() {
 static int fnKey(int ch)
 {
 	if (ch == 0x1B && kbhit()) {
+		getchar();
+		ch = getchar();
 		switch (ch) {
 		case 'A':
 			return 'w';

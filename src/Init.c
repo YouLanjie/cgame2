@@ -1,5 +1,9 @@
 #include "../include/head.h"
 
+static int cheak_file();
+
+static int cheak_path();
+
 void Init()
 {
 	if (GameInfo == NULL) {
@@ -27,17 +31,57 @@ void Init()
 
 void readConfig()
 {
-	int error = 0;
 	FILE * fp;
 
 #ifdef _WIN32
 	changeDir("./cgame2-data/");
 	GameInfo->config.chdir = 1;
 #endif
-	if (access(GameInfo->config.GameDir, 0) == EOF) {    /* 判断是否有数据目录 */
+	cheak_path();
+	cheak_file();
+	if (access("/etc/cgame2/", 0) == EOF) {    /* 判断是否有系统目录 */
+		/* 无时 */
 		changeDir("./cgame2-data/");
 		GameInfo->config.chdir = 1;
-		if (access(GameInfo->config.GameDir, 0) == EOF) {    /* 无则创建 */
+		if ((fp = fopen(GameInfo->config.Config, "w"))) {    /* 拷贝当前的设置数据到更改后的目录 */
+			ConfigWrite;
+			fclose(fp);
+		}
+	}
+
+	/* 设置与目录不匹配时 */
+	if (GameInfo->config.chdir == 1 && strcmp(GameInfo->config.GameDir, "/etc/cgame2/") == 0) {    /* 更改目录为当前目录 */
+		changeDir("./cgame2-data/");    /* 更该目录为当前目录 */
+		if ((fp = fopen(GameInfo->config.Config, "w"))) {    /* 拷贝当前的设置数据到更改后的目录 */
+			ConfigWrite;
+			fclose(fp);
+		}
+		cheak_file();    /* 重新读取 */
+	}
+#ifdef __linux
+	else if (GameInfo->config.chdir == 0 && strcmp(GameInfo->config.GameDir, "./cgame2-data/") == 0) {    /* 更改目录为系统目录（Linux限定） */
+		changeDir("/etc/cgame2/");    /* 更改目录为系统目录 */
+		if ((fp = fopen(GameInfo->config.Config, "w"))) {    /* 拷贝当前的设置数据到更改后的目录 */
+			ConfigWrite;
+			fclose(fp);
+		}
+		cheak_file();    /* 重新读取 */
+	}
+#endif
+	cheak_path();
+	return;
+}
+
+static int cheak_path()
+{
+	if (access("/etc/cgame2/", 0) == EOF) {    /* 判断是否有系统目录 */
+		/* 无时 */
+		changeDir("./cgame2-data/");
+		GameInfo->config.chdir = 1;
+	}
+	if (access(GameInfo->config.GameDir, 0) == EOF) {    /* 判断是否有数据目录 */
+		/* 无时 */
+		if (access(GameInfo->config.GameDir, 0) == EOF) {    /* 创建当前目录 */
 #ifdef __linux
 			mkdir(GameInfo->config.GameDir, 0777);
 #endif
@@ -50,11 +94,19 @@ void readConfig()
 			perror("无法创建游戏数据文件夹");
 			exit(-1);
 		}
-		GameInfo->config.chdir = 1;
 	}
+	return 0;
+}
 
-	if(access(GameInfo->config.Config,0) == EOF) {       /* 是否有Config文件 */
-		fp = fopen(GameInfo->config.Config, "w");    /* 创建Config文件 */
+static int cheak_file()
+{
+	FILE * fp;
+	int error = 0;
+
+	/* 读取配置文件 */
+	if(access(GameInfo->config.Config, 0) == EOF) {       /* 是否有Config文件 */
+		/* 无则创建Config文件 */
+		fp = fopen(GameInfo->config.Config, "w");
 		if (!fp) {    /* 是否无法创建 */
 #ifdef __linux
 			endwin();
@@ -64,8 +116,8 @@ void readConfig()
 		}
 		ConfigWrite;    /* 创建Config文件并写入配置 */
 		fclose(fp);
-	} else {
-		fp = fopen(GameInfo->config.Config, "r");    /* 打开Config文件 */
+	} else {    /* 有则打开Config文件 */
+		fp = fopen(GameInfo->config.Config, "r");
 		if (!fp) {
 #ifdef __linux
 			endwin();
@@ -73,38 +125,19 @@ void readConfig()
 			perror("Can't open file");
 			exit(-1);
 		}
-		error = ConfigRead;
-
-		if (error == EOF) {    /* 如果读取错误 */
+		error = ConfigRead;    /* 读取文件 */
+		if (error == EOF) {    /* 如果读取错误则写入数据 */
 			perror("[init](Config): fscanf");
 			fclose(fp);
-			fp = fopen(GameInfo->config.Config, "w");    /* 则写入数据 */
+			fp = fopen(GameInfo->config.Config, "w");
 			Init();
 			ConfigWrite;
 		}
 		fclose(fp);
 	}
-
-	if (GameInfo->config.chdir == 1 && strcmp(GameInfo->config.Config, "/etc/cgame2/config.txt") == 0) {    /* 更改目录为当前目录 */
-		changeDir("./cgame2-data/");    /* 更该目录为当前目录 */
-		if ((fp = fopen(GameInfo->config.Config, "w"))) {    /* 拷贝当前的设置数据到更改后的目录 */
-			ConfigWrite;
-			fclose(fp);
-		}
-		Init();    /* 重新读取 */
-	}
-#ifdef __linux
-	else if (GameInfo->config.chdir == 0 && strcmp(GameInfo->config.Config, "./cgame2-data/config.txt") == 0) {    /* 更改目录为系统目录（Linux限定） */
-		changeDir("/etc/cgame2/");    /* 更改目录为系统目录 */
-		if ((fp = fopen(GameInfo->config.Config, "w"))) {    /* 拷贝当前的设置数据到更改后的目录 */
-			ConfigWrite;
-			fclose(fp);
-		}
-		readConfig();    /* 重新读取 */
-	}
-#endif
+	/* 检查保存文件 */
 	if(access(GameInfo->config.Save, 0) == EOF) {       /* 如果没有Save文件则创建Save文件 */
-		fp = fopen(GameInfo->config.Save,"w");
+		fp = fopen(GameInfo->config.Save, "w");
 		if (!fp) {
 #ifdef __linux
 			endwin();
@@ -114,8 +147,10 @@ void readConfig()
 		}
 		fclose(fp);
 	}
-	return;
+	return 0;
 }
+
+
 
 void changeDir(char * dir) {    /* 更改文件夹的函数 */
 	if (dir != NULL) {
