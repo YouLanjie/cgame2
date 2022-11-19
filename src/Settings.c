@@ -1,7 +1,7 @@
 #include "../include/head.h"
 
 void Settings() {
-	menuData data = menuDataInit();
+	ctools_menu_t * data = NULL;
 	FILE * fp;
 
 	fp = fopen(GameInfo->config.Config, "r"); /* 读取文件 */
@@ -9,10 +9,12 @@ void Settings() {
 	fclose(fp);
 
 
-	data.title = "游戏设置";
-	data.cfg   = 3;
+	ctools_menu_t_init(&data);
+	data -> title = "游戏设置";
+	data -> cfg   = 3;
+	data -> text  = NULL;
 	if (!GameInfo->config.debug) {
-		data.addText(&data,
+		ctools_menu_AddText(data,
 			"自动下棋",
 			"当前目录",
 			"棋盘大小",
@@ -20,7 +22,7 @@ void Settings() {
 			"调试功能（扩展）",
 			NULL
 		);
-		data.addTextData(&data, menuTextDataDescribe,
+		ctools_menu_AddTextData(data, menuTextDataDescribe,
 			"%s %s %s %s %s",
 			"%z使用算法人机对战%z",
 			"%z更改游戏数据的目录为当前目录（仅在%zLinux%z安装了软件包后可以关闭）%z",
@@ -28,11 +30,11 @@ void Settings() {
 			"%z在查看历史记录时默认查看最后一个记录%z",
 			"%z调试选项显示开关%z"
 		);
-		data.addTextData(&data, menuTextDataSetType,
+		ctools_menu_AddTextData(data, menuTextDataSetType,
 			"%s %s %s %s %s",
 			2,  2, 1, 2, 2
 		);
-		data.addTextData(&data, menuTextDataSetVar,
+		ctools_menu_AddTextData(data, menuTextDataSetVar,
 			"%s %s %s %s %s",
 			&GameInfo->config.use_AI,
 			&GameInfo->config.chdir,
@@ -41,7 +43,7 @@ void Settings() {
 			&GameInfo->config.debug
 		);
 	} else {
-		data.addText(&data,
+		ctools_menu_AddText(data,
 			"自动下棋",
 			"当前目录",
 			"棋盘大小",
@@ -55,7 +57,7 @@ void Settings() {
 			"	显示调试信息",
 			NULL
 		);
-		data.addTextData(&data, 0,
+		ctools_menu_AddTextData(data, 0,
 			"%s %s %s %s %s %s %s %s %s %s",
 			"%z使用算法人机对战%z",
 			"%z更改游戏数据的目录为当前目录（仅在%zLinux%z安装了软件包后可以关闭）%z",
@@ -69,10 +71,10 @@ void Settings() {
 			"%z显示下棋的顺序%z",
 			"%z显示游戏内部的一些变量的值，方便调试%z"
 		);
-		data.addTextData(&data, 1,
+		ctools_menu_AddTextData(data, 1,
 			"%s %s %s %s %s %s %s %s %s %s %s",
 			2,  2, 1, 2, 2, 2, 2, 2, 2, 2, 2 );
-		data.addTextData(&data, 2,
+		ctools_menu_AddTextData(data, 2,
 			"%s %s %s %s %s %s %s %s %s %s %s",
 			&GameInfo->config.use_AI,
 			&GameInfo->config.chdir,
@@ -89,17 +91,17 @@ void Settings() {
 	}
 
 	/* 设置棋盘大小上下限 */
-	data.addTextData(&data, menuTextDataSetMax, "N N %s", 51);
+	ctools_menu_AddTextData(data, menuTextDataSetMax, "N N %s", 51);
 	if (GameInfo->config.more_max) {
-		data.addTextData(&data, menuTextDataSetMin, "N N %s", 0);
+		ctools_menu_AddTextData(data, menuTextDataSetMin, "N N %s", 0);
 	} else {
-		data.addTextData(&data, menuTextDataSetMin, "N N %s", 15);
+		ctools_menu_AddTextData(data, menuTextDataSetMin, "N N %s", 15);
 		if (GameInfo->config.max < 15) {
 			GameInfo->config.max = 15;
 		}
 	}
 
-	data.menuShow(&data);
+	ctools_menu_Show(data);
 
 #ifdef _WIN32
 	config[1] = 1;

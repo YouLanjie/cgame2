@@ -218,7 +218,7 @@ void History() {
 
 static int fnKey(int ch)
 {
-	if (ch == 0x1B && kbhit()) {
+	if (ch == 0x1B && ctools_kbhit()) {
 		getchar();
 		ch = getchar();
 		switch (ch) {

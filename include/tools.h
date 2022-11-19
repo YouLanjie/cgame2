@@ -41,8 +41,10 @@
 #endif
 
 /* kbhit */
-int kbhit();
+extern int ctools_kbhit();
+extern int ctools_getch();
 #endif
+
 /* 预定义windows要用到的东西 */
 #ifdef _WIN32
 #include <windows.h>
@@ -63,12 +65,12 @@ int kbhit();
 #endif
 
 /* kbhit */
-int kbhitGetchar();
+extern int ctools_kbhitGetchar();
 
 /* menu */
-int Menu(char *title, char *text[], int tl, int list);
-void Menu2(char title[], short p, short a);
-void Menu3(char title[]);
+extern int Menu(char *title, char *text[], int tl, int list);
+extern void Menu2(char title[], short p, short a);
+extern void Menu3(char title[]);
 
 
 // The new menu function.
@@ -86,18 +88,25 @@ struct Text {
 	struct Text * nextText;     /* 下一条例（链表） */
 };                                  /* 条例结构体 */
 
-typedef struct _menuData{
-	char         *       title;                                                                      /* 标题 */
-	struct Text  *       text;                                                                       /* 条例链表头 */
-	struct Text  *       focus;                                                                      /* 选中的条例 */
-	int                  cfg;                                                                        /* 菜单类型: 0.默认 1.仅显示主界面 2.显示帮助 3.显示设置 4.仅显示帮助，无输入处理 */
-	void        (* const addText)    (struct _menuData * data, ...);                                 /* 添加条例 */
-	void        (* const addTextData)(struct _menuData * data, int type, char * format, ...);        /* 添加条例信息 */
-	void        (* const getFocus)   (struct _menuData * data, int number);                          /* 更改焦点指针 */
-	int         (* const menuShow)   (struct _menuData * data);                                      /* 更改焦点指针 */
-}menuData;                                                                                        /* 菜单类/结构体 */
+typedef struct _ctools_menu_t{
+	char        * title;    /* 标题 */
+	struct Text * text;     /* 条例链表头 */
+	struct Text * focus;    /* 选中的条例 */
+	int           cfg;      /* 菜单类型: 0.默认 1.仅显示主界面 2.显示帮助 3.显示设置 4.仅显示帮助，无输入处理 */
+} ctools_menu_t;                /* 菜单类/结构体 */
 
-extern menuData menuDataInit();
+/* 初始化ncurse，设置语言、颜色对 */
+extern void ctools_menu_Init();
+/* 初始化变量 */
+extern void ctools_menu_t_init(ctools_menu_t ** tmp);
+/* 添加选项 */
+extern void ctools_menu_AddText(ctools_menu_t * data, ...);
+/* 添加描述信息 */
+extern void ctools_menu_AddTextData(ctools_menu_t * data, int type, char * format, ...);
+/* 移动焦点变量到指定节点 */
+extern void ctools_menu_GetFocus(ctools_menu_t * data, int number);
+/* 显示菜单 */
+extern int  ctools_menu_Show(ctools_menu_t * data);
 
 #define menuType_OnlyMain    1
 #define menuType_Help        2
