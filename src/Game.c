@@ -21,7 +21,7 @@ void Game() {
 	x   = &GameInfo->chess->x;
 	y   = &GameInfo->chess->y;
 
-	Clear
+	Clear;
 	GetTime();
 
 #ifdef __linux
@@ -43,7 +43,7 @@ void Game() {
 	}
 #endif
 #ifdef _WIN32
-	Clear
+	Clear;
 	gotoxy(1, 1);
 	fontColorSet(1,31);
 	printf(Time);
@@ -74,7 +74,7 @@ void Game() {
 			if (way == 0x59 || way == 0x79) {
 				free(GameInfo->chess);
 				GameInfo->chess = NULL;
-				Clear
+				Clear;
 				return;
 			} else {
 				way = 0x00;
@@ -84,9 +84,9 @@ void Game() {
 					getch();
 					return;
 				}
-				Clear2
+				Clear;
 #else
-				Clear
+				Clear;
 #endif
 			}
 			break;
@@ -106,7 +106,7 @@ void Game() {
 				way = getch();
 				if (way == 0x59 || way == 0x79) {
 					free(GameInfo->chess);
-					Clear2
+					Clear;
 					return;
 				} else {
 					way = 0x00;
@@ -116,9 +116,9 @@ void Game() {
 						getch();
 						return;
 					}
-					Clear2
+					Clear;
 #else
-					Clear
+					Clear;
 #endif
 				}
 				break;
@@ -304,7 +304,7 @@ void Game() {
 	fprintf(fp,"\n");
 	fclose(fp);
 	free(GameInfo->chess);
-	Clear
+	Clear;
 	return;
 }
 

@@ -30,7 +30,7 @@ int main() {
 	Init();
 
 	signal(SIGINT, stop);
-	Clear2
+	Clear;;
 	while (inputContent != 0x1B && inputContent != 0x30 && inputContent != 0x51 && inputContent != 0x71) {
 		readConfig();
 		if ((fp = fopen(GameInfo->config.Config, "r"))) {
@@ -82,13 +82,13 @@ int main() {
 						printw("是否直接退出游戏?否则将重新创建数据目录!(默认退出)Y/n");
 						inputContent = getch();
 						if (inputContent != 0x4E && inputContent != 0x6E) {
-							Clear
+							Clear;
 							endwin();
 							return 0;
 						}
 					}
 				}
-				Clear
+				Clear;
 				attroff(COLOR_PAIR(1));
 				break;
 			case '5':
@@ -97,9 +97,9 @@ int main() {
 			default:
 				break;
 		}
-		Clear2
+		Clear;
 	}
-	Clear2
+	Clear;
 	endwin();
 	free(data);
 	free(help);
