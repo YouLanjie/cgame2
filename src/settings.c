@@ -22,19 +22,19 @@ void Settings() {
 			"调试功能（扩展）",
 			NULL
 		);
-		ctools_menu_AddTextData(data, menuTextDataDescribe,
+		ctools_menu_AddTextData(data, ctools_menu_TextDataDescribe,
 			"%s %s %s %s %s",
-			"%z使用算法人机对战%z",
-			"%z更改游戏数据的目录为当前目录（仅在%zLinux%z安装了软件包后可以关闭）%z",
-			"%z更改棋盘的大小%zN%z的值（格式为%zN x N%z）%z",
-			"%z在查看历史记录时默认查看最后一个记录%z",
-			"%z调试选项显示开关%z"
+			"使用算法人机对战",
+			"更改游戏数据的目录为当前目录（仅在Linux安装了软件包后可以关闭）",
+			"更改棋盘的大小N的值（格式为N x N）",
+			"在查看历史记录时默认查看最后一个记录",
+			"调试选项显示开关"
 		);
-		ctools_menu_AddTextData(data, menuTextDataSetType,
+		ctools_menu_AddTextData(data, ctools_menu_TextDataSetType,
 			"%s %s %s %s %s",
 			2,  2, 1, 2, 2
 		);
-		ctools_menu_AddTextData(data, menuTextDataSetVar,
+		ctools_menu_AddTextData(data, ctools_menu_TextDataSetVar,
 			"%s %s %s %s %s",
 			&GameInfo->config.use_AI,
 			&GameInfo->config.chdir,
@@ -59,17 +59,17 @@ void Settings() {
 		);
 		ctools_menu_AddTextData(data, 0,
 			"%s %s %s %s %s %s %s %s %s %s",
-			"%z使用算法人机对战%z",
-			"%z更改游戏数据的目录为当前目录（仅在%zLinux%z安装了软件包后可以关闭）%z",
-			"%z更改棋盘的大小（格式为%znxn%z）%z",
-			"%z在查看历史记录时默认查看最后一个记录%z",
-			"%z调试选项显示开关%z",
-			"%z测试功能，两方均使用自动下棋，会自动开启自动下棋\n按下空格让系统下棋，按下回车人工干预手动下棋%z",
-			"%z测试功能，抛弃五子棋胜负判断而保存棋盘形状注意，该功能可能与棋局回放冲突。%z",
-			"%z在开启绘图后，每切换到新的棋盘时清空整个棋盘。注意，该功能可能与棋局回放冲突。%z",
-			"%z部分解除棋盘大小的限制，最小值由%z15%z减少至%z0%z，最大值则不变（主要是因为棋盘的数组没有预设很多）%z",
-			"%z显示下棋的顺序%z",
-			"%z显示游戏内部的一些变量的值，方便调试%z"
+			"使用算法人机对战",
+			"更改游戏数据的目录为当前目录（仅在Linux安装了软件包后可以关闭）",
+			"更改棋盘的大小（格式为nxn）",
+			"在查看历史记录时默认查看最后一个记录",
+			"调试选项显示开关",
+			"测试功能，两方均使用自动下棋，会自动开启自动下棋\n按下空格让系统下棋，按下回车人工干预手动下棋",
+			"测试功能，抛弃五子棋胜负判断而保存棋盘形状注意，该功能可能与棋局回放冲突。",
+			"在开启绘图后，每切换到新的棋盘时清空整个棋盘。注意，该功能可能与棋局回放冲突。",
+			"部分解除棋盘大小的限制，最小值由15减少至0，最大值则不变（主要是因为棋盘的数组没有预设很多）",
+			"显示下棋的顺序",
+			"显示游戏内部的一些变量的值，方便调试"
 		);
 		ctools_menu_AddTextData(data, 1,
 			"%s %s %s %s %s %s %s %s %s %s %s",
@@ -91,11 +91,11 @@ void Settings() {
 	}
 
 	/* 设置棋盘大小上下限 */
-	ctools_menu_AddTextData(data, menuTextDataSetMax, "N N %s", 51);
+	ctools_menu_AddTextData(data, ctools_menu_TextDataSetMax, "N N %s", 51);
 	if (GameInfo->config.more_max) {
-		ctools_menu_AddTextData(data, menuTextDataSetMin, "N N %s", 0);
+		ctools_menu_AddTextData(data, ctools_menu_TextDataSetMin, "N N %s", 0);
 	} else {
-		ctools_menu_AddTextData(data, menuTextDataSetMin, "N N %s", 15);
+		ctools_menu_AddTextData(data, ctools_menu_TextDataSetMin, "N N %s", 15);
 		if (GameInfo->config.max < 15) {
 			GameInfo->config.max = 15;
 		}
