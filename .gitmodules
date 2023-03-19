@@ -1,0 +1,3 @@
+[submodule "include/lib"]
+	path = include/lib
+	url = git@github.com:YouLanjie/C-head.git
