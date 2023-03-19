@@ -21,10 +21,15 @@
     - 使用git克隆此仓库到本地：
 
       ``` sh
-      git clone https://github.com/youlanjie/cgame2.git
+      git clone https://github.com/youlanjie/cgame2.git --recurse-submodules
       ```
-
-    - 或者从[这里下载压缩包](https://github.com/YouLanjie/cgame2/archive/refs/heads/main.zip)并解压
+	- 倘若没有获取到子模块，请在仓库主目录内使用以下命令：
+	
+	  ```sh
+	  git submodule init
+	  git submodule update
+	  ```
+	
   - 编译
     - 使用make编译，文件会生成在bin目录下：
 
@@ -32,13 +37,6 @@
       make
       ```
 
-    - 或者在 *cgame2* 文件夹下直接使用gcc编译所有c文件：
-
-      ``` sh
-      gcc include/tools.c *.c -o main
-      ```
-
     - Arch用户可以使用[PKGBUILD文件](https://github.com/YouLanjie/cgame2/blob/arch-package/PKGBUILD)运行`makepkg`构建软件包再运行Pacman进行安装，也可以从[AUR](https://aur.archlinux.org/packages/cgame2)上安装
-
 
 - 手动编译好的文件(**bin/main**)应可以直接执行，~~程序做过兼容性的加强~~
