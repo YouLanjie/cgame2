@@ -100,7 +100,7 @@ void Game() {
 					break;
 				}
 				attron(COLOR_PAIR(1));
-				move(0, 0);
+				move(GameInfo->config.max + 5, 3);
 				printw("请确认退出！本次游戏将不会记录！（y/N）");
 				attroff(COLOR_PAIR(1));
 				way = getch();
