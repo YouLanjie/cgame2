@@ -1,4 +1,5 @@
 #include "../include/head.h"
+#include <stdio.h>
 
 static void PrintInfo();
 
@@ -21,7 +22,7 @@ void Game() {
 	x   = &GameInfo->chess->x;
 	y   = &GameInfo->chess->y;
 
-	Clear;
+	clear();
 	GetTime();
 
 #ifdef __linux
@@ -43,7 +44,7 @@ void Game() {
 	}
 #endif
 #ifdef _WIN32
-	Clear;
+	clear();
 	gotoxy(1, 1);
 	fontColorSet(1,31);
 	printf(Time);
@@ -74,7 +75,7 @@ void Game() {
 			if (way == 0x59 || way == 0x79) {
 				free(GameInfo->chess);
 				GameInfo->chess = NULL;
-				Clear;
+				clear();
 				return;
 			} else {
 				way = 0x00;
@@ -84,9 +85,9 @@ void Game() {
 					getch();
 					return;
 				}
-				Clear;
+				clear();
 #else
-				Clear;
+				clear();
 #endif
 			}
 			break;
@@ -106,7 +107,7 @@ void Game() {
 				way = getch();
 				if (way == 0x59 || way == 0x79) {
 					free(GameInfo->chess);
-					Clear;
+					clear();
 					return;
 				} else {
 					way = 0x00;
@@ -116,9 +117,9 @@ void Game() {
 						getch();
 						return;
 					}
-					Clear;
+					clear();
 #else
-					Clear;
+					clear();
 #endif
 				}
 				break;
@@ -254,9 +255,7 @@ void Game() {
 			if (GameInfo->config.draw) {
 				fp = fopen(GameInfo->config.Save,"a");
 				if (!fp) {
-					fontColorSet(1,31);
-					perror("[save]");
-					fontColorSet(0,0);
+					fputs("\033[0;1;31m[save]\033[0m", stderr);
 					return;
 				}
 
@@ -290,9 +289,7 @@ void Game() {
 	}
 	fp = fopen(GameInfo->config.Save,"a");
 	if (!fp) {
-		fontColorSet(1,31);
-		perror("[save]");
-		fontColorSet(0,0);
+		fputs("\033[0;1;31m[save]\033[0m", stderr);
 		return;
 	}
 	fprintf(fp,"%d %d %d %d %d %d %d", GameInfo->chess->t.year, GameInfo->chess->t.mon, GameInfo->chess->t.day, GameInfo->chess->t.hour, GameInfo->chess->t.min, GameInfo->chess->t.sec, GameInfo->config.max);
@@ -304,7 +301,7 @@ void Game() {
 	fprintf(fp,"\n");
 	fclose(fp);
 	free(GameInfo->chess);
-	Clear;
+	clear();
 	return;
 }
 
