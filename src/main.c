@@ -1,5 +1,4 @@
 #include "../include/head.h"                           //导入头文件
-#include <ctools.h>
 
 Games *GameInfo;
 
