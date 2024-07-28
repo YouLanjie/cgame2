@@ -92,7 +92,7 @@ void Game() {
 			}
 			break;
 		case 0x1B:  /* 在Linux中的Esc键 */
-			if (!ctools_kbhit()) { /* 判断在esc符号后还有没有字符 */
+			if (!kbhit()) { /* 判断在esc符号后还有没有字符 */
 				way = 0x1B;
 #ifdef __linux
 				alarm(0);
