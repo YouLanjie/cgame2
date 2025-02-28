@@ -79,7 +79,7 @@ int main() {
 				History();
 				break;
 			case 3:
-				cmenu_show(data);
+				cmenu_show(help);
 				break;
 			case 4:
 				attron(COLOR_PAIR(1));
